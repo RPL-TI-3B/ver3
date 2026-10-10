@@ -1,0 +1,4217 @@
+Directory structure:
+└── Siperpus-repo(ver3.0)/
+    ├── AGENTS.md
+    ├── CLAUDE.md
+    ├── index.html
+    ├── package.json
+    ├── pnpm-lock.yaml
+    ├── Siperpus-Repo (ver3).zip
+    ├── tsconfig.json
+    ├── vite.config.ts
+    ├── .mcp.json
+    ├── .mise.toml
+    ├── src/
+    │   ├── App.tsx
+    │   ├── index.css
+    │   ├── LibrarianPortal.tsx
+    │   ├── main.tsx
+    │   ├── StudentPortal.tsx
+    │   └── vite-env.d.ts
+    ├── supabase/
+    │   └── functions/
+    │       └── server/
+    │           ├── index.tsx
+    │           └── kv_store.tsx
+    ├── utils/
+    │   └── supabase/
+    │       └── info.tsx
+    └── .figma/
+        └── make/
+            ├── analyze-routes
+            ├── deploy
+            ├── deploy-preview
+            ├── dev
+            ├── dev.json
+            ├── format
+            ├── import-assets.mjs
+            ├── install
+            ├── langserver
+            └── site.json
+
+================================================
+FILE: AGENTS.md
+================================================
+# figma-make-app
+
+React + Vite + Tailwind CSS project running inside Figma Make.
+
+## Development Server
+
+A Vite development server is **already running** on `$PORT` (default 8443). You don't need to start it manually.
+
+- Preview URL: The user can access the running app through the preview panel
+- Hot reload: Changes to source files are reflected immediately
+
+## Project Structure
+
+This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
+
+- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
+- `src/App.tsx` - Primary application component and the usual starting point for UI work
+- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
+- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
+- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
+- `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and Figma Make plugins plus the `@` alias for `src`
+- `.mise.toml` - Toolchain versions for Node.js and pnpm
+
+## Dependencies
+
+- Runtime: React 19 and React DOM 19
+- Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
+- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
+- Formatting: oxfmt
+
+## Styling
+
+This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
+
+`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
+
+## Code quality
+
+- Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
+- Ensure JSX tags are closed and braces are balanced.
+- Export components as default exports.
+
+
+
+================================================
+FILE: CLAUDE.md
+================================================
+@AGENTS.md
+
+
+
+================================================
+FILE: index.html
+================================================
+<!doctype html>
+<html lang="<!-- figma:lang -->">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><!-- figma:title --></title>
+    <!-- figma:head-end -->
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- figma:body-end -->
+  </body>
+</html>
+
+
+
+================================================
+FILE: package.json
+================================================
+{
+  "name": "figma-make-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "oxfmt"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "oxfmt": "^0.2.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.5"
+  }
+}
+
+
+
+================================================
+FILE: pnpm-lock.yaml
+================================================
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@tailwindcss/vite':
+        specifier: ^4.0.0
+        version: 4.2.2(vite@8.0.5(jiti@2.6.1))
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.17
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.0
+        version: 6.0.1(vite@8.0.5(jiti@2.6.1))
+      oxfmt:
+        specifier: ^0.2.0
+        version: 0.2.0
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.2.2
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+      vite:
+        specifier: ^8.0.5
+        version: 8.0.5(jiti@2.6.1)
+
+packages:
+
+  '@emnapi/core@1.9.1':
+    resolution: {integrity: sha512-mukuNALVsoix/w1BJwFzwXBN/dHeejQtuVzcDsfOEsdpCumXb/E9j8w11h5S54tT1xhifGfbbSm/ICrObRb3KA==}
+
+  '@emnapi/runtime@1.9.1':
+    resolution: {integrity: sha512-VYi5+ZVLhpgK4hQ0TAjiQiZ6ol0oe4mBx7mVv7IflsiEp0OWoVsp/+f9Vc1hOhE0TtkORVrI1GvzyreqpgWtkA==}
+
+  '@emnapi/wasi-threads@1.2.0':
+    resolution: {integrity: sha512-N10dEJNSsUx41Z6pZsXU8FjPjpBEplgH24sfkmITrBED1/U2Esum9F3lfLrMjKHHjmi557zQn7kR9R+XWXu5Rg==}
+
+  '@jridgewell/gen-mapping@0.3.13':
+    resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
+
+  '@jridgewell/remapping@2.3.5':
+    resolution: {integrity: sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==}
+
+  '@jridgewell/resolve-uri@3.1.2':
+    resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
+    engines: {node: '>=6.0.0'}
+
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@napi-rs/wasm-runtime@1.1.1':
+    resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
+
+  '@oxc-project/types@0.122.0':
+    resolution: {integrity: sha512-oLAl5kBpV4w69UtFZ9xqcmTi+GENWOcPF7FCrczTiBbmC0ibXxCwyvZGbO39rCVEuLGAZM84DH0pUIyyv/YJzA==}
+
+  '@oxfmt/darwin-arm64@0.2.0':
+    resolution: {integrity: sha512-NK7iEPqRovUvKac+4dn2ui8v5Y5q6UJ9v4z5Zjr5lmEzTlBwXToP3TwY75IAaCYeu0g8Es7ToJpS7qCQuxUhuA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oxfmt/darwin-x64@0.2.0':
+    resolution: {integrity: sha512-eXDgT+DbIMnA3sWE+w38rOvXaxkP4RvHi41rPpWb9XoRGbM+tOo0c8RYqCIX39n7PizOlbF/xUBh9nMhiW01wQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oxfmt/linux-arm64-gnu@0.2.0':
+    resolution: {integrity: sha512-h4mw9/Lck5X/SU1RPE26VraoBJgn9SOoLl8GnaYvtmRBFHK0v+2KpnBSwMWeiaIxCdJSsrVc9mpKSOcPsen7Cg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oxfmt/linux-arm64-musl@0.2.0':
+    resolution: {integrity: sha512-kDZ/kVCgh9kSczMH2gPXZs+rsY/VcCQ1BoQnND8D3v1Le91LceJ5s/a4XBBA3ADI3NiPdqNmK2ssaxY4BfgXDg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oxfmt/linux-x64-gnu@0.2.0':
+    resolution: {integrity: sha512-qvf6cNuf4z3yjzjSvg4Jwr88jDyeFaYPU+4dBWVr6fdWhAA+BIuIvurJWYQGvWNNSkobVWH3A7m+wp+h5fNsSg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oxfmt/linux-x64-musl@0.2.0':
+    resolution: {integrity: sha512-D0rw4BVLHEbtMB6p9e+Ph7Y/56oD1DRP4Qcbbv1B1w0kJanWBB3vMH+v2rqgeYsErqJOtLpYRkPFmJSU9In2HA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oxfmt/win32-arm64@0.2.0':
+    resolution: {integrity: sha512-QM0fP8YUvBNyuNa6d+jNonV34A6zGvvQ2mX93wnERpX25jIbFKljKiKDiWo2M1nUsW8zL2z4ESEeaLO9bx8djg==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@oxfmt/win32-x64@0.2.0':
+    resolution: {integrity: sha512-WkFXliDbwFiziBSfvWXeM0Y3x07Kxxrl39kgsp+N3n5QgzsM8q6qe094+OW+hItDQ+9SSd2y9u231sMCsKxlog==}
+    cpu: [x64]
+    os: [win32]
+
+  '@rolldown/binding-android-arm64@1.0.0-rc.12':
+    resolution: {integrity: sha512-pv1y2Fv0JybcykuiiD3qBOBdz6RteYojRFY1d+b95WVuzx211CRh+ytI/+9iVyWQ6koTh5dawe4S/yRfOFjgaA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [android]
+
+  '@rolldown/binding-darwin-arm64@1.0.0-rc.12':
+    resolution: {integrity: sha512-cFYr6zTG/3PXXF3pUO+umXxt1wkRK/0AYT8lDwuqvRC+LuKYWSAQAQZjCWDQpAH172ZV6ieYrNnFzVVcnSflAg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rolldown/binding-darwin-x64@1.0.0-rc.12':
+    resolution: {integrity: sha512-ZCsYknnHzeXYps0lGBz8JrF37GpE9bFVefrlmDrAQhOEi4IOIlcoU1+FwHEtyXGx2VkYAvhu7dyBf75EJQffBw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rolldown/binding-freebsd-x64@1.0.0-rc.12':
+    resolution: {integrity: sha512-dMLeprcVsyJsKolRXyoTH3NL6qtsT0Y2xeuEA8WQJquWFXkEC4bcu1rLZZSnZRMtAqwtrF/Ib9Ddtpa/Gkge9Q==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.12':
+    resolution: {integrity: sha512-YqWjAgGC/9M1lz3GR1r1rP79nMgo3mQiiA+Hfo+pvKFK1fAJ1bCi0ZQVh8noOqNacuY1qIcfyVfP6HoyBRZ85Q==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm]
+    os: [linux]
+
+  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.12':
+    resolution: {integrity: sha512-/I5AS4cIroLpslsmzXfwbe5OmWvSsrFuEw3mwvbQ1kDxJ822hFHIx+vsN/TAzNVyepI/j/GSzrtCIwQPeKCLIg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.12':
+    resolution: {integrity: sha512-V6/wZztnBqlx5hJQqNWwFdxIKN0m38p8Jas+VoSfgH54HSj9tKTt1dZvG6JRHcjh6D7TvrJPWFGaY9UBVOaWPw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rolldown/binding-linux-ppc64-gnu@1.0.0-rc.12':
+    resolution: {integrity: sha512-AP3E9BpcUYliZCxa3w5Kwj9OtEVDYK6sVoUzy4vTOJsjPOgdaJZKFmN4oOlX0Wp0RPV2ETfmIra9x1xuayFB7g==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@rolldown/binding-linux-s390x-gnu@1.0.0-rc.12':
+    resolution: {integrity: sha512-nWwpvUSPkoFmZo0kQazZYOrT7J5DGOJ/+QHHzjvNlooDZED8oH82Yg67HvehPPLAg5fUff7TfWFHQS8IV1n3og==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [s390x]
+    os: [linux]
+
+  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.12':
+    resolution: {integrity: sha512-RNrafz5bcwRy+O9e6P8Z/OCAJW/A+qtBczIqVYwTs14pf4iV1/+eKEjdOUta93q2TsT/FI0XYDP3TCky38LMAg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [linux]
+
+  '@rolldown/binding-linux-x64-musl@1.0.0-rc.12':
+    resolution: {integrity: sha512-Jpw/0iwoKWx3LJ2rc1yjFrj+T7iHZn2JDg1Yny1ma0luviFS4mhAIcd1LFNxK3EYu3DHWCps0ydXQ5i/rrJ2ig==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [linux]
+
+  '@rolldown/binding-openharmony-arm64@1.0.0-rc.12':
+    resolution: {integrity: sha512-vRugONE4yMfVn0+7lUKdKvN4D5YusEiPilaoO2sgUWpCvrncvWgPMzK00ZFFJuiPgLwgFNP5eSiUlv2tfc+lpA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [openharmony]
+
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.12':
+    resolution: {integrity: sha512-ykGiLr/6kkiHc0XnBfmFJuCjr5ZYKKofkx+chJWDjitX+KsJuAmrzWhwyOMSHzPhzOHOy7u9HlFoa5MoAOJ/Zg==}
+    engines: {node: '>=14.0.0'}
+    cpu: [wasm32]
+
+  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.12':
+    resolution: {integrity: sha512-5eOND4duWkwx1AzCxadcOrNeighiLwMInEADT0YM7xeEOOFcovWZCq8dadXgcRHSf3Ulh1kFo/qvzoFiCLOL1Q==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.12':
+    resolution: {integrity: sha512-PyqoipaswDLAZtot351MLhrlrh6lcZPo2LSYE+VDxbVk24LVKAGOuE4hb8xZQmrPAuEtTZW8E6D2zc5EUZX4Lw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [win32]
+
+  '@rolldown/pluginutils@1.0.0-rc.12':
+    resolution: {integrity: sha512-HHMwmarRKvoFsJorqYlFeFRzXZqCt2ETQlEDOb9aqssrnVBB1/+xgTGtuTrIk5vzLNX1MjMtTf7W9z3tsSbrxw==}
+
+  '@rolldown/pluginutils@1.0.0-rc.7':
+    resolution: {integrity: sha512-qujRfC8sFVInYSPPMLQByRh7zhwkGFS4+tyMQ83srV1qrxL4g8E2tyxVVyxd0+8QeBM1mIk9KbWxkegRr76XzA==}
+
+  '@tailwindcss/node@4.2.2':
+    resolution: {integrity: sha512-pXS+wJ2gZpVXqFaUEjojq7jzMpTGf8rU6ipJz5ovJV6PUGmlJ+jvIwGrzdHdQ80Sg+wmQxUFuoW1UAAwHNEdFA==}
+
+  '@tailwindcss/oxide-android-arm64@4.2.2':
+    resolution: {integrity: sha512-dXGR1n+P3B6748jZO/SvHZq7qBOqqzQ+yFrXpoOWWALWndF9MoSKAT3Q0fYgAzYzGhxNYOoysRvYlpixRBBoDg==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [android]
+
+  '@tailwindcss/oxide-darwin-arm64@4.2.2':
+    resolution: {integrity: sha512-iq9Qjr6knfMpZHj55/37ouZeykwbDqF21gPFtfnhCCKGDcPI/21FKC9XdMO/XyBM7qKORx6UIhGgg6jLl7BZlg==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@tailwindcss/oxide-darwin-x64@4.2.2':
+    resolution: {integrity: sha512-BlR+2c3nzc8f2G639LpL89YY4bdcIdUmiOOkv2GQv4/4M0vJlpXEa0JXNHhCHU7VWOKWT/CjqHdTP8aUuDJkuw==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@tailwindcss/oxide-freebsd-x64@4.2.2':
+    resolution: {integrity: sha512-YUqUgrGMSu2CDO82hzlQ5qSb5xmx3RUrke/QgnoEx7KvmRJHQuZHZmZTLSuuHwFf0DJPybFMXMYf+WJdxHy/nQ==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@tailwindcss/oxide-linux-arm-gnueabihf@4.2.2':
+    resolution: {integrity: sha512-FPdhvsW6g06T9BWT0qTwiVZYE2WIFo2dY5aCSpjG/S/u1tby+wXoslXS0kl3/KXnULlLr1E3NPRRw0g7t2kgaQ==}
+    engines: {node: '>= 20'}
+    cpu: [arm]
+    os: [linux]
+
+  '@tailwindcss/oxide-linux-arm64-gnu@4.2.2':
+    resolution: {integrity: sha512-4og1V+ftEPXGttOO7eCmW7VICmzzJWgMx+QXAJRAhjrSjumCwWqMfkDrNu1LXEQzNAwz28NCUpucgQPrR4S2yw==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@tailwindcss/oxide-linux-arm64-musl@4.2.2':
+    resolution: {integrity: sha512-oCfG/mS+/+XRlwNjnsNLVwnMWYH7tn/kYPsNPh+JSOMlnt93mYNCKHYzylRhI51X+TbR+ufNhhKKzm6QkqX8ag==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@tailwindcss/oxide-linux-x64-gnu@4.2.2':
+    resolution: {integrity: sha512-rTAGAkDgqbXHNp/xW0iugLVmX62wOp2PoE39BTCGKjv3Iocf6AFbRP/wZT/kuCxC9QBh9Pu8XPkv/zCZB2mcMg==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [linux]
+
+  '@tailwindcss/oxide-linux-x64-musl@4.2.2':
+    resolution: {integrity: sha512-XW3t3qwbIwiSyRCggeO2zxe3KWaEbM0/kW9e8+0XpBgyKU4ATYzcVSMKteZJ1iukJ3HgHBjbg9P5YPRCVUxlnQ==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [linux]
+
+  '@tailwindcss/oxide-wasm32-wasi@4.2.2':
+    resolution: {integrity: sha512-eKSztKsmEsn1O5lJ4ZAfyn41NfG7vzCg496YiGtMDV86jz1q/irhms5O0VrY6ZwTUkFy/EKG3RfWgxSI3VbZ8Q==}
+    engines: {node: '>=14.0.0'}
+    cpu: [wasm32]
+    bundledDependencies:
+      - '@napi-rs/wasm-runtime'
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+      - '@tybys/wasm-util'
+      - '@emnapi/wasi-threads'
+      - tslib
+
+  '@tailwindcss/oxide-win32-arm64-msvc@4.2.2':
+    resolution: {integrity: sha512-qPmaQM4iKu5mxpsrWZMOZRgZv1tOZpUm+zdhhQP0VhJfyGGO3aUKdbh3gDZc/dPLQwW4eSqWGrrcWNBZWUWaXQ==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@tailwindcss/oxide-win32-x64-msvc@4.2.2':
+    resolution: {integrity: sha512-1T/37VvI7WyH66b+vqHj/cLwnCxt7Qt3WFu5Q8hk65aOvlwAhs7rAp1VkulBJw/N4tMirXjVnylTR72uI0HGcA==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [win32]
+
+  '@tailwindcss/oxide@4.2.2':
+    resolution: {integrity: sha512-qEUA07+E5kehxYp9BVMpq9E8vnJuBHfJEC0vPC5e7iL/hw7HR61aDKoVoKzrG+QKp56vhNZe4qwkRmMC0zDLvg==}
+    engines: {node: '>= 20'}
+
+  '@tailwindcss/vite@4.2.2':
+    resolution: {integrity: sha512-mEiF5HO1QqCLXoNEfXVA1Tzo+cYsrqV7w9Juj2wdUFyW07JRenqMG225MvPwr3ZD9N1bFQj46X7r33iHxLUW0w==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6 || ^7 || ^8
+
+  '@tybys/wasm-util@0.10.1':
+    resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
+
+  '@types/react-dom@19.2.3':
+    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
+    peerDependencies:
+      '@types/react': ^19.2.0
+
+  '@types/node@22.19.17':
+    resolution: {integrity: sha512-wGdMcf+vPYM6jikpS/qhg6WiqSV/OhG+jeeHT/KlVqxYfD40iYJf9/AE1uQxVWFvU7MipKRkRv8NSHiCGgPr8Q==}
+
+  '@types/react@19.2.14':
+    resolution: {integrity: sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==}
+
+  '@vitejs/plugin-react@6.0.1':
+    resolution: {integrity: sha512-l9X/E3cDb+xY3SWzlG1MOGt2usfEHGMNIaegaUGFsLkb3RCn/k8/TOXBcab+OndDI4TBtktT8/9BwwW8Vi9KUQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
+      babel-plugin-react-compiler: ^1.0.0
+      vite: ^8.0.0
+    peerDependenciesMeta:
+      '@rolldown/plugin-babel':
+        optional: true
+      babel-plugin-react-compiler:
+        optional: true
+
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  detect-libc@2.1.2:
+    resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
+    engines: {node: '>=8'}
+
+  enhanced-resolve@5.20.1:
+    resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
+    engines: {node: '>=10.13.0'}
+
+  fdir@6.5.0:
+    resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      picomatch: ^3 || ^4
+    peerDependenciesMeta:
+      picomatch:
+        optional: true
+
+  fsevents@2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
+  graceful-fs@4.2.11:
+    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  jiti@2.6.1:
+    resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
+    hasBin: true
+
+  lightningcss-android-arm64@1.32.0:
+    resolution: {integrity: sha512-YK7/ClTt4kAK0vo6w3X+Pnm0D2cf2vPHbhOXdoNti1Ga0al1P4TBZhwjATvjNwLEBCnKvjJc2jQgHXH0NEwlAg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [android]
+
+  lightningcss-darwin-arm64@1.32.0:
+    resolution: {integrity: sha512-RzeG9Ju5bag2Bv1/lwlVJvBE3q6TtXskdZLLCyfg5pt+HLz9BqlICO7LZM7VHNTTn/5PRhHFBSjk5lc4cmscPQ==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  lightningcss-darwin-x64@1.32.0:
+    resolution: {integrity: sha512-U+QsBp2m/s2wqpUYT/6wnlagdZbtZdndSmut/NJqlCcMLTWp5muCrID+K5UJ6jqD2BFshejCYXniPDbNh73V8w==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  lightningcss-freebsd-x64@1.32.0:
+    resolution: {integrity: sha512-JCTigedEksZk3tHTTthnMdVfGf61Fky8Ji2E4YjUTEQX14xiy/lTzXnu1vwiZe3bYe0q+SpsSH/CTeDXK6WHig==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [freebsd]
+
+  lightningcss-linux-arm-gnueabihf@1.32.0:
+    resolution: {integrity: sha512-x6rnnpRa2GL0zQOkt6rts3YDPzduLpWvwAF6EMhXFVZXD4tPrBkEFqzGowzCsIWsPjqSK+tyNEODUBXeeVHSkw==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm]
+    os: [linux]
+
+  lightningcss-linux-arm64-gnu@1.32.0:
+    resolution: {integrity: sha512-0nnMyoyOLRJXfbMOilaSRcLH3Jw5z9HDNGfT/gwCPgaDjnx0i8w7vBzFLFR1f6CMLKF8gVbebmkUN3fa/kQJpQ==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  lightningcss-linux-arm64-musl@1.32.0:
+    resolution: {integrity: sha512-UpQkoenr4UJEzgVIYpI80lDFvRmPVg6oqboNHfoH4CQIfNA+HOrZ7Mo7KZP02dC6LjghPQJeBsvXhJod/wnIBg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  lightningcss-linux-x64-gnu@1.32.0:
+    resolution: {integrity: sha512-V7Qr52IhZmdKPVr+Vtw8o+WLsQJYCTd8loIfpDaMRWGUZfBOYEJeyJIkqGIDMZPwPx24pUMfwSxxI8phr/MbOA==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  lightningcss-linux-x64-musl@1.32.0:
+    resolution: {integrity: sha512-bYcLp+Vb0awsiXg/80uCRezCYHNg1/l3mt0gzHnWV9XP1W5sKa5/TCdGWaR/zBM2PeF/HbsQv/j2URNOiVuxWg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  lightningcss-win32-arm64-msvc@1.32.0:
+    resolution: {integrity: sha512-8SbC8BR40pS6baCM8sbtYDSwEVQd4JlFTOlaD3gWGHfThTcABnNDBda6eTZeqbofalIJhFx0qKzgHJmcPTnGdw==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  lightningcss-win32-x64-msvc@1.32.0:
+    resolution: {integrity: sha512-Amq9B/SoZYdDi1kFrojnoqPLxYhQ4Wo5XiL8EVJrVsB8ARoC1PWW6VGtT0WKCemjy8aC+louJnjS7U18x3b06Q==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [win32]
+
+  lightningcss@1.32.0:
+    resolution: {integrity: sha512-NXYBzinNrblfraPGyrbPoD19C1h9lfI/1mzgWYvXUTe414Gz/X1FD2XBZSZM7rRTrMA8JL3OtAaGifrIKhQ5yQ==}
+    engines: {node: '>= 12.0.0'}
+
+  magic-string@0.30.21:
+    resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  nanoid@3.3.11:
+    resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  oxfmt@0.2.0:
+    resolution: {integrity: sha512-99bPAiYDiYikUej8U0Slv8pcFVbMe38Ulm+T6bJ4KQgm+UsbgTKCBpWxbD/LRz1CuYw3PRpqfPv6AkQsIAo3Ag==}
+    engines: {node: '>=8.*'}
+    hasBin: true
+
+  picocolors@1.1.1:
+    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+
+  picomatch@4.0.4:
+    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+    engines: {node: '>=12'}
+
+  postcss@8.5.8:
+    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  react-dom@19.2.4:
+    resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
+    peerDependencies:
+      react: ^19.2.4
+
+  react@19.2.4:
+    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
+    engines: {node: '>=0.10.0'}
+
+  rolldown@1.0.0-rc.12:
+    resolution: {integrity: sha512-yP4USLIMYrwpPHEFB5JGH1uxhcslv6/hL0OyvTuY+3qlOSJvZ7ntYnoWpehBxufkgN0cvXxppuTu5hHa/zPh+A==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+
+  scheduler@0.27.0:
+    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+
+  source-map-js@1.2.1:
+    resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
+    engines: {node: '>=0.10.0'}
+
+  tailwindcss@4.2.2:
+    resolution: {integrity: sha512-KWBIxs1Xb6NoLdMVqhbhgwZf2PGBpPEiwOqgI4pFIYbNTfBXiKYyWoTsXgBQ9WFg/OlhnvHaY+AEpW7wSmFo2Q==}
+
+  tapable@2.3.2:
+    resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==}
+    engines: {node: '>=6'}
+
+  tinyglobby@0.2.15:
+    resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
+    engines: {node: '>=12.0.0'}
+
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  vite@8.0.5:
+    resolution: {integrity: sha512-nmu43Qvq9UopTRfMx2jOYW5l16pb3iDC1JH6yMuPkpVbzK0k+L7dfsEDH4jRgYFmsg0sTAqkojoZgzLMlwHsCQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^20.19.0 || >=22.12.0
+      '@vitejs/devtools': ^0.1.0
+      esbuild: ^0.27.0 || ^0.28.0
+      jiti: '>=1.21.0'
+      less: ^4.0.0
+      sass: ^1.70.0
+      sass-embedded: ^1.70.0
+      stylus: '>=0.54.8'
+      sugarss: ^5.0.0
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      '@vitejs/devtools':
+        optional: true
+      esbuild:
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+
+snapshots:
+
+  '@emnapi/core@1.9.1':
+    dependencies:
+      '@emnapi/wasi-threads': 1.2.0
+      tslib: 2.8.1
+    optional: true
+
+  '@emnapi/runtime@1.9.1':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@emnapi/wasi-threads@1.2.0':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@jridgewell/gen-mapping@0.3.13':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/trace-mapping': 0.3.31
+
+  '@jridgewell/remapping@2.3.5':
+    dependencies:
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
+
+  '@jridgewell/resolve-uri@3.1.2': {}
+
+  '@jridgewell/sourcemap-codec@1.5.5': {}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@napi-rs/wasm-runtime@1.1.1':
+    dependencies:
+      '@emnapi/core': 1.9.1
+      '@emnapi/runtime': 1.9.1
+      '@tybys/wasm-util': 0.10.1
+    optional: true
+
+  '@oxc-project/types@0.122.0': {}
+
+  '@oxfmt/darwin-arm64@0.2.0':
+    optional: true
+
+  '@oxfmt/darwin-x64@0.2.0':
+    optional: true
+
+  '@oxfmt/linux-arm64-gnu@0.2.0':
+    optional: true
+
+  '@oxfmt/linux-arm64-musl@0.2.0':
+    optional: true
+
+  '@oxfmt/linux-x64-gnu@0.2.0':
+    optional: true
+
+  '@oxfmt/linux-x64-musl@0.2.0':
+    optional: true
+
+  '@oxfmt/win32-arm64@0.2.0':
+    optional: true
+
+  '@oxfmt/win32-x64@0.2.0':
+    optional: true
+
+  '@rolldown/binding-android-arm64@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-darwin-arm64@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-darwin-x64@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-freebsd-x64@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-ppc64-gnu@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-s390x-gnu@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-linux-x64-musl@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-openharmony-arm64@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.12':
+    dependencies:
+      '@napi-rs/wasm-runtime': 1.1.1
+    optional: true
+
+  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.12':
+    optional: true
+
+  '@rolldown/pluginutils@1.0.0-rc.12': {}
+
+  '@rolldown/pluginutils@1.0.0-rc.7': {}
+
+  '@tailwindcss/node@4.2.2':
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      enhanced-resolve: 5.20.1
+      jiti: 2.6.1
+      lightningcss: 1.32.0
+      magic-string: 0.30.21
+      source-map-js: 1.2.1
+      tailwindcss: 4.2.2
+
+  '@tailwindcss/oxide-android-arm64@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-darwin-arm64@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-darwin-x64@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-freebsd-x64@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm-gnueabihf@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm64-gnu@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm64-musl@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-linux-x64-gnu@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-linux-x64-musl@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-wasm32-wasi@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-win32-arm64-msvc@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide-win32-x64-msvc@4.2.2':
+    optional: true
+
+  '@tailwindcss/oxide@4.2.2':
+    optionalDependencies:
+      '@tailwindcss/oxide-android-arm64': 4.2.2
+      '@tailwindcss/oxide-darwin-arm64': 4.2.2
+      '@tailwindcss/oxide-darwin-x64': 4.2.2
+      '@tailwindcss/oxide-freebsd-x64': 4.2.2
+      '@tailwindcss/oxide-linux-arm-gnueabihf': 4.2.2
+      '@tailwindcss/oxide-linux-arm64-gnu': 4.2.2
+      '@tailwindcss/oxide-linux-arm64-musl': 4.2.2
+      '@tailwindcss/oxide-linux-x64-gnu': 4.2.2
+      '@tailwindcss/oxide-linux-x64-musl': 4.2.2
+      '@tailwindcss/oxide-wasm32-wasi': 4.2.2
+      '@tailwindcss/oxide-win32-arm64-msvc': 4.2.2
+      '@tailwindcss/oxide-win32-x64-msvc': 4.2.2
+
+  '@tailwindcss/vite@4.2.2(vite@8.0.5(jiti@2.6.1))':
+    dependencies:
+      '@tailwindcss/node': 4.2.2
+      '@tailwindcss/oxide': 4.2.2
+      tailwindcss: 4.2.2
+      vite: 8.0.5(jiti@2.6.1)
+
+  '@tybys/wasm-util@0.10.1':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@types/react-dom@19.2.3(@types/react@19.2.14)':
+    dependencies:
+      '@types/react': 19.2.14
+
+  '@types/node@22.19.17':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/react@19.2.14':
+    dependencies:
+      csstype: 3.2.3
+
+  '@vitejs/plugin-react@6.0.1(vite@8.0.5(jiti@2.6.1))':
+    dependencies:
+      '@rolldown/pluginutils': 1.0.0-rc.7
+      vite: 8.0.5(jiti@2.6.1)
+
+  csstype@3.2.3: {}
+
+  detect-libc@2.1.2: {}
+
+  enhanced-resolve@5.20.1:
+    dependencies:
+      graceful-fs: 4.2.11
+      tapable: 2.3.2
+
+  fdir@6.5.0(picomatch@4.0.4):
+    optionalDependencies:
+      picomatch: 4.0.4
+
+  fsevents@2.3.3:
+    optional: true
+
+  graceful-fs@4.2.11: {}
+
+  jiti@2.6.1: {}
+
+  lightningcss-android-arm64@1.32.0:
+    optional: true
+
+  lightningcss-darwin-arm64@1.32.0:
+    optional: true
+
+  lightningcss-darwin-x64@1.32.0:
+    optional: true
+
+  lightningcss-freebsd-x64@1.32.0:
+    optional: true
+
+  lightningcss-linux-arm-gnueabihf@1.32.0:
+    optional: true
+
+  lightningcss-linux-arm64-gnu@1.32.0:
+    optional: true
+
+  lightningcss-linux-arm64-musl@1.32.0:
+    optional: true
+
+  lightningcss-linux-x64-gnu@1.32.0:
+    optional: true
+
+  lightningcss-linux-x64-musl@1.32.0:
+    optional: true
+
+  lightningcss-win32-arm64-msvc@1.32.0:
+    optional: true
+
+  lightningcss-win32-x64-msvc@1.32.0:
+    optional: true
+
+  lightningcss@1.32.0:
+    dependencies:
+      detect-libc: 2.1.2
+    optionalDependencies:
+      lightningcss-android-arm64: 1.32.0
+      lightningcss-darwin-arm64: 1.32.0
+      lightningcss-darwin-x64: 1.32.0
+      lightningcss-freebsd-x64: 1.32.0
+      lightningcss-linux-arm-gnueabihf: 1.32.0
+      lightningcss-linux-arm64-gnu: 1.32.0
+      lightningcss-linux-arm64-musl: 1.32.0
+      lightningcss-linux-x64-gnu: 1.32.0
+      lightningcss-linux-x64-musl: 1.32.0
+      lightningcss-win32-arm64-msvc: 1.32.0
+      lightningcss-win32-x64-msvc: 1.32.0
+
+  magic-string@0.30.21:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+
+  nanoid@3.3.11: {}
+
+  oxfmt@0.2.0:
+    optionalDependencies:
+      '@oxfmt/darwin-arm64': 0.2.0
+      '@oxfmt/darwin-x64': 0.2.0
+      '@oxfmt/linux-arm64-gnu': 0.2.0
+      '@oxfmt/linux-arm64-musl': 0.2.0
+      '@oxfmt/linux-x64-gnu': 0.2.0
+      '@oxfmt/linux-x64-musl': 0.2.0
+      '@oxfmt/win32-arm64': 0.2.0
+      '@oxfmt/win32-x64': 0.2.0
+
+  picocolors@1.1.1: {}
+
+  picomatch@4.0.4: {}
+
+  postcss@8.5.8:
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  react-dom@19.2.4(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+      scheduler: 0.27.0
+
+  react@19.2.4: {}
+
+  rolldown@1.0.0-rc.12:
+    dependencies:
+      '@oxc-project/types': 0.122.0
+      '@rolldown/pluginutils': 1.0.0-rc.12
+    optionalDependencies:
+      '@rolldown/binding-android-arm64': 1.0.0-rc.12
+      '@rolldown/binding-darwin-arm64': 1.0.0-rc.12
+      '@rolldown/binding-darwin-x64': 1.0.0-rc.12
+      '@rolldown/binding-freebsd-x64': 1.0.0-rc.12
+      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.12
+      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.12
+      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.12
+      '@rolldown/binding-linux-ppc64-gnu': 1.0.0-rc.12
+      '@rolldown/binding-linux-s390x-gnu': 1.0.0-rc.12
+      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.12
+      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.12
+      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.12
+      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.12
+      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.12
+      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.12
+
+  scheduler@0.27.0: {}
+
+  source-map-js@1.2.1: {}
+
+  tailwindcss@4.2.2: {}
+
+  tapable@2.3.2: {}
+
+  tinyglobby@0.2.15:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+
+  tslib@2.8.1:
+    optional: true
+
+  typescript@5.9.3: {}
+
+  undici-types@6.21.0: {}
+
+  vite@8.0.5(jiti@2.6.1):
+    dependencies:
+      lightningcss: 1.32.0
+      picomatch: 4.0.4
+      postcss: 8.5.8
+      rolldown: 1.0.0-rc.12
+      tinyglobby: 0.2.15
+    optionalDependencies:
+      fsevents: 2.3.3
+      jiti: 2.6.1
+
+
+
+================================================
+FILE: Siperpus-Repo (ver3).zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: tsconfig.json
+================================================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "strict": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "vite.config.ts"]
+}
+
+
+
+================================================
+FILE: vite.config.ts
+================================================
+import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import path from 'node:path'
+
+import siteConfiguration from './.figma/make/site.json'
+
+
+// Vite config — https://vitejs.dev/config/
+export default defineConfig(({ mode }) => {
+  // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
+  const emitSourcemaps = mode === 'development'
+
+  return {
+    base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : '/',
+    build: {
+      sourcemap: emitSourcemaps ? 'inline' : false,
+      minify: !emitSourcemaps,
+    },
+    plugins: [
+react(),
+      tailwindcss(),
+      figmaSiteConfiguration(siteConfiguration),
+      figmaErrorOverlayReplay(),
+      figmaReactRefreshBoundaryFallback(),
+      figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
+    ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    server: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
+      port: parseInt(process.env.PORT || '8443'),
+      strictPort: true,
+      watch: {
+        ignored: [
+          '**/.figma/**',
+],
+      },
+    },
+    preview: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
+      port: parseInt(process.env.PORT || '8443'),
+    },
+  }
+})
+
+type FigmaSiteConfiguration = {
+  title?: string
+  description?: string
+  language?: string
+  robots?: {
+    index?: boolean
+  }
+  icons?: {
+    icon?: string
+  }
+  openGraph?: {
+    image?: string
+  }
+  analytics?: {
+    googleAnalyticsId?: string
+  }
+  customScripts?: {
+    headStart?: string
+    headEnd?: string
+    bodyStart?: string
+    bodyEnd?: string
+  }
+  accessibility?: {
+    addBypassLinks?: boolean
+  }
+}
+
+/** Applies /.figma/make/site.json to the generated document shell. */
+function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
+  function sanitizeHtmlValue(value: string | undefined): string {
+    return value?.replace(/[^a-zA-Z0-9_-]/g, '') || ''
+  }
+  function escapeHtmlText(value: string): string {
+    return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  }
+  function replaceHtmlCommentSlot(html: string, slotName: string, content: string): string {
+    return html.replace(`<!-- ${slotName} -->`, content)
+  }
+
+  const title = config.title ?? "Figma Make App"
+  const description = config.description ?? ''
+  const favicon = config.icons?.icon ?? ''
+  const socialImage = config.openGraph?.image ?? ''
+  const language = sanitizeHtmlValue(config.language) || 'en'
+  const googleAnalyticsId = sanitizeHtmlValue(config.analytics?.googleAnalyticsId)
+  const headStart = config.customScripts?.headStart ?? ''
+  const headEnd = config.customScripts?.headEnd ?? ''
+  const bodyStart = config.customScripts?.bodyStart ?? ''
+  const bodyEnd = config.customScripts?.bodyEnd ?? ''
+  const robotsTxt = config.robots?.index === false ? 'User-agent: *\nDisallow: /\n' : ''
+
+  return {
+    name: 'figma-site-configuration',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (!robotsTxt || req.url?.split('?')[0] !== '/robots.txt') return next()
+
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+        res.end(robotsTxt)
+      })
+    },
+    generateBundle() {
+      if (!robotsTxt) return
+
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: robotsTxt,
+      })
+    },
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        let result = html
+        result = replaceHtmlCommentSlot(result, 'figma:lang', language)
+        result = replaceHtmlCommentSlot(result, 'figma:title', escapeHtmlText(title))
+        result = replaceHtmlCommentSlot(result, 'figma:head-start', headStart)
+        result = replaceHtmlCommentSlot(result, 'figma:head-end', headEnd)
+        result = replaceHtmlCommentSlot(result, 'figma:body-start', bodyStart)
+        result = replaceHtmlCommentSlot(result, 'figma:body-end', bodyEnd)
+
+        const tags: HtmlTagDescriptor[] = []
+        if (description) {
+          tags.push({ tag: 'meta', attrs: { name: 'description', content: description }, injectTo: 'head' })
+        }
+        if (config.robots?.index === false) {
+          tags.push({ tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' }, injectTo: 'head' })
+        }
+        if (favicon) {
+          tags.push({ tag: 'link', attrs: { rel: 'icon', href: favicon }, injectTo: 'head' })
+        }
+        if (title) {
+          tags.push({ tag: 'meta', attrs: { property: 'og:title', content: title }, injectTo: 'head' })
+        }
+        if (description) {
+          tags.push({ tag: 'meta', attrs: { property: 'og:description', content: description }, injectTo: 'head' })
+        }
+        if (socialImage) {
+          tags.push(
+            { tag: 'meta', attrs: { property: 'og:image', content: socialImage }, injectTo: 'head' },
+            { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' }, injectTo: 'head' },
+            { tag: 'meta', attrs: { name: 'twitter:image', content: socialImage }, injectTo: 'head' },
+          )
+        }
+
+        if (googleAnalyticsId) {
+          tags.push(
+            {
+              tag: 'script',
+              attrs: {
+                async: true,
+                src: `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`,
+              },
+              injectTo: 'head',
+            },
+            {
+              tag: 'script',
+              children: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', ${JSON.stringify(googleAnalyticsId)});
+`,
+              injectTo: 'head',
+            },
+          )
+        }
+
+        if (config.accessibility?.addBypassLinks) {
+          tags.push(
+            {
+              tag: 'style',
+              children: `
+  .figma-bypass-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 2147483647;
+    transform: translateY(-150%);
+    border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    padding: 8px 12px;
+    font: 600 14px/1.2 system-ui, sans-serif;
+    text-decoration: none;
+  }
+  .figma-bypass-link:focus {
+    transform: translateY(0);
+  }
+`,
+              injectTo: 'head',
+            },
+            {
+              tag: 'a',
+              attrs: { class: 'figma-bypass-link', href: '#root' },
+              children: 'Skip to content',
+              injectTo: 'body-prepend',
+            },
+          )
+        }
+
+        return {
+          html: result,
+          tags,
+        }
+      },
+    },
+  }
+}
+
+/**
+ * Replay the most recent build error to clients that connect after
+ * it was first broadcast. Vite buffers an error payload only while
+ * no clients are connected and clears the buffer on the first
+ * reconnect (see `bufferedMessage` in `createWebSocketServer`), so
+ * if the preview iframe reloads after Vite already delivered an
+ * error to a live socket, the new socket misses the payload and
+ * the overlay stays hidden even though the build is still broken.
+ * We intercept `ws.send` to remember the latest error and replay
+ * it on every new connection; the cache clears on a successful
+ * `update` or `full-reload` so a stale overlay can't survive a
+ * fixed build.
+ */
+function figmaErrorOverlayReplay(): Plugin {
+  return {
+    name: 'figma-error-overlay-replay',
+    apply: 'serve',
+    configureServer(server) {
+      let lastError: object | null = null
+
+      const origSend = server.ws.send.bind(server.ws) as (...args: any[]) => void
+      server.ws.send = ((...args: any[]) => {
+        const payload = args[0]
+        if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+          const type = (payload as { type?: string }).type
+          if (type === 'error') {
+            lastError = payload as object
+          } else if (type === 'update' || type === 'full-reload') {
+            lastError = null
+          }
+        }
+        return origSend(...args)
+      }) as typeof server.ws.send
+
+      server.ws.on('connection', (socket) => {
+        if (lastError !== null) {
+          socket.send(JSON.stringify(lastError))
+        }
+      })
+    },
+  }
+}
+
+/**
+ * Reload when a module that previously defined a React Refresh boundary stops
+ * defining one. This happens when an agent moves a component into a new file
+ * and replaces the old module with a re-export:
+ *
+ *   export { default } from './app/App'
+ *
+ * Vite otherwise accepts the update using the previous module's HMR boundary,
+ * but the re-export-only transform no longer registers a replacement for the
+ * mounted component family. React reports a successful refresh while leaving
+ * the old tree mounted until the page is reloaded.
+ */
+function figmaReactRefreshBoundaryFallback(): Plugin {
+  const hadRefreshBoundary = new Map<string, boolean>()
+  let sendFullReload: (() => void) | null = null
+
+  return {
+    name: 'figma-react-refresh-boundary-fallback',
+    apply: 'serve',
+    enforce: 'post',
+    configureServer(server) {
+      sendFullReload = () => server.ws.send({ type: 'full-reload', path: '*' })
+    },
+    transform(code, id) {
+      if (!/\.[jt]sx?(?:\?|$)/.test(id) || id.includes('/node_modules/')) return null
+
+      const moduleId = id.split('?')[0] ?? id
+      const hasRefreshBoundary = code.includes('registerExportsForReactRefresh')
+      const previousHadRefreshBoundary = hadRefreshBoundary.get(moduleId)
+      hadRefreshBoundary.set(moduleId, hasRefreshBoundary)
+
+      if (previousHadRefreshBoundary && !hasRefreshBoundary) {
+        queueMicrotask(() => sendFullReload?.())
+      }
+
+      return null
+    },
+  }
+}
+
+/**
+ * Serves a blank render-target page at /.figma/make/kit.html that
+ * the Figma preview script drives directly. The page exposes a
+ * registry of every file matching `storiesGlob` on
+ * window.__FIGMA__.stories so the design surface can dynamically
+ * import + mount each entry into its own grid view.
+ *
+ * Dev-only: `apply: 'serve'` gates the plugin to `vite dev`. Prod
+ * builds (`vite build`) skip it entirely so the route doesn't leak
+ * into shipped bundles.
+ */
+function figmaMakeKitPlugin(options: { storiesGlob: string | string[] }): Plugin {
+  const storiesGlob = Array.isArray(options.storiesGlob) ? options.storiesGlob : [options.storiesGlob]
+  const ROUTE = '/.figma/make/kit.html'
+  const VIRTUAL_ID = 'virtual:figma-stories'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  const STORIES_MODULE = `export const stories = import.meta.glob(${JSON.stringify(storiesGlob)})`
+  const HTML_BOOTSTRAP = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<div id="figma-make-kit-root"></div>
+<script type="module">
+  import { stories } from 'virtual:figma-stories'
+  window.__FIGMA__ = Object.assign(window.__FIGMA__ ?? {}, { stories })
+  window.dispatchEvent(new CustomEvent('figma.ready'))
+</script>
+</body>
+</html>`
+
+  return {
+    name: 'figma-make-kit',
+    apply: 'serve',
+    resolveId(id) {
+      if (id === VIRTUAL_ID) return RESOLVED_ID
+      return null
+    },
+    load(id) {
+      if (id !== RESOLVED_ID) return null
+      return STORIES_MODULE
+    },
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url || ''
+        if (url.split('?')[0] !== ROUTE) return next()
+
+        try {
+          res.setHeader('Content-Type', 'text/html')
+          res.end(await server.transformIndexHtml(url, HTML_BOOTSTRAP))
+        } catch (err) {
+          next(err as Error)
+        }
+      })
+    },
+  }
+}
+
+
+
+================================================
+FILE: .mcp.json
+================================================
+{
+  "mcpServers": {
+    "Notion__6be2f2bc": {
+      "type": "http",
+      "url": "${MCP_PROXY_BASE_URL}/proxy/6be2f2bc-0ccf-4160-b968-50a094947284",
+      "headers": {
+        "Authorization": "Bearer ${MCP_PROXY_AUTH_TOKEN}"
+      }
+    }
+  }
+}
+
+
+================================================
+FILE: .mise.toml
+================================================
+[tools]
+node = "22"
+"npm:pnpm" = "10.34.3"
+
+
+
+================================================
+FILE: src/App.tsx
+================================================
+import { useState, type ReactNode } from "react";
+import StudentPortal from "./StudentPortal";
+import LibrarianPortal from "./LibrarianPortal";
+
+type Tab = "books" | "erepo" | "about";
+type Layout = "list" | "grid4" | "grid5" | "grid6";
+type LoginRole = "student" | "staff";
+type ModalSource = "navbar" | "reservation" | "download";
+type IconName =
+  | "arrowDown"
+  | "book"
+  | "books"
+  | "building"
+  | "calendar"
+  | "check"
+  | "clock"
+  | "close"
+  | "download"
+  | "file"
+  | "grid4"
+  | "grid5"
+  | "grid6"
+  | "info"
+  | "layers"
+  | "list"
+  | "location"
+  | "lock"
+  | "mail"
+  | "map"
+  | "phone"
+  | "search"
+  | "shield"
+  | "user";
+
+export type Book = {
+  title: string;
+  author: string;
+  shelf: string;
+  stock: number;
+  department: string;
+  theme: string;
+  cover: string;
+  code: string;
+};
+
+type RepoItem = {
+  title: string;
+  author: string;
+  department: string;
+  size: string;
+  category: "nonfiction" | "fiction";
+  type: string;
+  accent: string;
+};
+
+export const books: Book[] = [
+  {
+    title: "Algoritma dan Pemrograman Modern",
+    author: "Dr. Rinaldi Munir",
+    shelf: "Rak A1 - TIK",
+    stock: 4,
+    department: "Teknik Informatika (TIK)",
+    theme: "Algoritma & RPL",
+    cover: "from-forest to-emerald-800",
+    code: "ALGO / 01",
+  },
+  {
+    title: "Keamanan Jaringan Komputer",
+    author: "Iwan Sofana",
+    shelf: "Rak A3 - TIK",
+    stock: 2,
+    department: "Teknik Informatika (TIK)",
+    theme: "Cybersecurity",
+    cover: "from-emerald-950 to-emerald-700",
+    code: "CYBER / 02",
+  },
+  {
+    title: "Struktur Beton Bertulang",
+    author: "Prof. H. Sunggono",
+    shelf: "Rak B2 - SIPIL",
+    stock: 3,
+    department: "Teknik Sipil",
+    theme: "Konstruksi",
+    cover: "from-forest-light to-teal-700",
+    code: "SIPIL / 03",
+  },
+  {
+    title: "Dasar Teknik Tenaga Listrik",
+    author: "Zuhal",
+    shelf: "Rak C1 - ELEKTRO",
+    stock: 5,
+    department: "Teknik Elektro",
+    theme: "Kelistrikan",
+    cover: "from-emerald-900 to-green-600",
+    code: "ELEKTRO / 04",
+  },
+  {
+    title: "Teknologi Manufaktur",
+    author: "Sriati Djaprie",
+    shelf: "Rak D4 - MESIN",
+    stock: 0,
+    department: "Teknik Mesin",
+    theme: "Manufaktur",
+    cover: "from-teal-950 to-teal-700",
+    code: "MESIN / 05",
+  },
+  {
+    title: "Akuntansi Manajemen",
+    author: "Mulyadi",
+    shelf: "Rak F2 - BISNIS",
+    stock: 6,
+    department: "Tata Niaga / Bisnis",
+    theme: "Akuntansi & Bisnis",
+    cover: "from-green-950 to-emerald-700",
+    code: "BISNIS / 06",
+  },
+];
+
+const repoItems: RepoItem[] = [
+  {
+    title: "Implementasi Sistem Monitoring Jaringan Berbasis IoT di Laboratorium PNL",
+    author: "Muhammad Fajri",
+    department: "Teknik Informatika",
+    size: "4.2 MB PDF",
+    category: "nonfiction",
+    type: "Laporan Magang",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Analisis Kuat Tekan Beton Menggunakan Campuran Abu Sekam Padi",
+    author: "Nurul Aini",
+    department: "Teknik Sipil",
+    size: "7.8 MB PDF",
+    category: "nonfiction",
+    type: "Makalah",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Rancang Bangun Smart Energy Meter untuk Gedung Kampus",
+    author: "M. Rizky Akbar",
+    department: "Teknik Elektro",
+    size: "5.1 MB PDF",
+    category: "nonfiction",
+    type: "Laporan Praktikum",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Senja di Pelabuhan Krueng Geukueh",
+    author: "Cut Nabila",
+    department: "Tata Niaga",
+    size: "2.4 MB PDF",
+    category: "fiction",
+    type: "Cerpen",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Jejak yang Tertinggal di Bukit Cot Panggoi",
+    author: "Fadhlurrahman",
+    department: "Teknik Mesin",
+    size: "3.1 MB PDF",
+    category: "fiction",
+    type: "Karya Kreatif",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Jomofikasi pada warga dari bangsa TIB",
+    author: "Raja Maulidinsyah Putra",
+    department: "TIK",
+    size: "3.1 MB PDF",
+    category: "fiction",
+    type: "Karya Kreatif",
+    accent: "bg-accent-soft text-forest",
+  },
+  {
+    title: "Tidak Pernah Kosong ku PUSH!",
+    author: "Muhammad Dhiyaul Atha",
+    department: "TIK",
+    size: "3.1 MB PDF",
+    category: "fiction",
+    type: "Karya Kreatif",
+    accent: "bg-accent-soft text-forest",
+  },
+];
+
+function Icon({ name, size = "size-5" }: { name: IconName; size?: string }) {
+  const paths: Record<IconName, ReactNode> = {
+    arrowDown: <path d="m6 9 6 6 6-6" />,
+    book: <><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></>,
+    books: <><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" /><path d="M8 7h8M8 11h6" /></>,
+    building: <><path d="M3 21h18M6 18V9m4 9V9m4 9V9m4 9V9M4 6l8-4 8 4v3H4V6Z" /></>,
+    calendar: <><path d="M8 2v4m8-4v4M3 10h18" /><rect x="3" y="4" width="18" height="18" rx="2" /></>,
+    check: <path d="m5 12 4 4L19 6" />,
+    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    close: <path d="m6 6 12 12M18 6 6 18" />,
+    download: <><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></>,
+    file: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6M8 13h8M8 17h5" /></>,
+    grid4: <><path d="M3 3h3v3H3zM8 3h3v3H8zM13 3h3v3h-3zM18 3h3v3h-3zM3 8h3v3H3zM8 8h3v3H8zM13 8h3v3h-3zM18 8h3v3h-3zM3 13h3v3H3zM8 13h3v3H8zM13 13h3v3h-3zM18 13h3v3h-3zM3 18h3v3H3zM8 18h3v3H8zM13 18h3v3h-3zM18 18h3v3h-3z" /></>,
+    grid5: <><path d="M3 4v16M7.5 4v16M12 4v16M16.5 4v16M21 4v16M3 8h18M3 12h18M3 16h18" /></>,
+    grid6: <><path d="M2 4v16M6 4v16M10 4v16M14 4v16M18 4v16M22 4v16M2 8h20M2 12h20M2 16h20" /></>,
+    info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5m0-9h.01" /></>,
+    layers: <><path d="m12 2 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 17l9 5 9-5" /></>,
+    list: <><path d="M8 6h13M8 12h13M8 18h13" /><path d="M3 6h.01M3 12h.01M3 18h.01" /></>,
+    location: <><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
+    lock: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    map: <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z" /><path d="M9 3v15m6-12v15" /></>,
+    phone: <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7 2 2 0 0 1 1.8 2.1Z" />,
+    search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></>,
+    shield: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-4" /></>,
+    user: <><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>,
+  };
+
+  return (
+    <svg className={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
+    </svg>
+  );
+}
+
+function Button({
+  children,
+  onClick,
+  variant = "primary",
+  className = "",
+  disabled = false,
+  type = "button",
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  variant?: "primary" | "secondary" | "ghost" | "dark";
+  className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit";
+}) {
+  const styles = {
+    primary: "bg-accent text-ink hover:bg-accent-hover shadow-sm",
+    secondary: "border border-emerald-950/10 bg-white text-muted hover:border-forest/20 hover:bg-canvas",
+    ghost: "text-muted hover:bg-canvas hover:text-ink",
+    dark: "bg-forest text-white hover:bg-forest-light",
+  };
+  return (
+    <button type={type} onClick={onClick} disabled={disabled} className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all focus:outline-none focus:ring-4 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-45 ${styles[variant]} ${className}`}>
+      {children}
+    </button>
+  );
+}
+
+function Brand() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-accent text-ink shadow-sm">
+        <Icon name="building" size="size-7" />
+        <div className="absolute inset-x-0 bottom-0 h-1 bg-forest" />
+      </div>
+      <div>
+        <div className="text-lg font-black leading-none tracking-tight text-ink">SIPERPUS-REPO</div>
+        <div className="mt-1 text-xs font-medium text-muted">Politeknik Negeri Lhokseumawe</div>
+      </div>
+    </div>
+  );
+}
+
+function LayoutSwitcher({ value, onChange }: { value: Layout; onChange: (layout: Layout) => void }) {
+  const layouts: { id: Layout; icon: IconName; label: string }[] = [
+    { id: "list", icon: "list", label: "Daftar" },
+    { id: "grid4", icon: "grid4", label: "Grid 4" },
+    { id: "grid5", icon: "grid5", label: "Grid 5" },
+    { id: "grid6", icon: "grid6", label: "Grid 6" },
+  ];
+  return (
+    <div className="flex rounded-xl border border-emerald-950/10 bg-canvas p-1" aria-label="Pilih tampilan">
+      {layouts.map((layout) => (
+        <button
+          key={layout.id}
+          type="button"
+          title={layout.label}
+          aria-label={layout.label}
+          onClick={() => onChange(layout.id)}
+          className={`flex size-9 items-center justify-center rounded-lg transition ${value === layout.id ? "bg-forest text-accent shadow-sm" : "text-slate-400 hover:bg-white hover:text-forest"}`}
+        >
+          <Icon name={layout.icon} size="size-4" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Hero({ eyebrow, title, subtitle, icon }: { eyebrow: string; title: string; subtitle: string; icon: IconName }) {
+  return (
+    <section className="relative overflow-hidden rounded-3xl bg-forest px-6 py-10 text-white shadow-xl shadow-forest/10 md:px-10 md:py-12">
+      <div className="absolute -right-16 -top-24 size-72 rounded-full border border-accent/20 bg-accent/10" />
+      <div className="absolute -bottom-24 right-32 size-48 rounded-full border border-white/10" />
+      <div className="relative max-w-3xl">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent">
+          <Icon name={icon} size="size-4" />
+          {eyebrow}
+        </div>
+        <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl">{title}</h1>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-300 md:text-lg">{subtitle}</p>
+      </div>
+    </section>
+  );
+}
+
+function SelectField({
+  value,
+  onChange,
+  label,
+  options,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+  options: string[];
+}) {
+  return (
+    // Ganti 'flex-1' dengan 'w-full md:w-52 shrink-0'
+    <label className="relative block w-full shrink-0 md:w-52">
+      <span className="sr-only">{label}</span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-12 w-full appearance-none truncate rounded-xl border border-slate-200 bg-white pl-4 pr-9 text-sm font-semibold text-slate-700 outline-none transition focus:border-pnl-yellow focus:ring-4 focus:ring-pnl-yellow/15"
+      >
+        <option value="">{label}</option>
+        {options.map((option) => (
+          <option key={option}>{option}</option>
+        ))}
+      </select>
+      <span className="pointer-events-none absolute right-3 top-3.5 text-slate-400">
+        <Icon name="arrowDown" size="size-4" />
+      </span>
+    </label>
+  );
+}
+
+function BookCover({ book, compact = false, dense = false }: { book: Book; compact?: boolean; dense?: boolean }) {
+  return (
+    <div className={`relative shrink-0 overflow-hidden rounded-xl bg-gradient-to-br ${book.cover} text-white shadow-lg ${compact ? "h-32 w-24" : "aspect-[3/4] w-full"}`}>
+      <div className="absolute inset-y-0 left-0 w-2 bg-white/10" />
+      <div className={`flex h-full flex-col justify-between ${dense ? "p-2.5" : "p-4"}`}>
+        <div className="text-xs font-black uppercase tracking-widest text-accent">PNL Library</div>
+        <Icon name="book" size={compact ? "size-7" : dense ? "size-7" : "size-10"} />
+        <div>
+          <div className={`h-0.5 bg-accent ${dense ? "w-5" : "w-8"}`} />
+          <div className={`${dense ? "mt-1" : "mt-2"} text-xs font-bold uppercase tracking-widest text-white/70`}>{book.code}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Availability({ stock }: { stock: number }) {
+  return stock > 0 ? (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-success-soft px-2.5 py-1 text-xs font-bold text-success">
+      <span className="size-1.5 rounded-full bg-success" /> Tersedia
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-danger-soft px-2.5 py-1 text-xs font-bold text-danger">
+      <span className="size-1.5 rounded-full bg-danger" /> Dipinjam
+    </span>
+  );
+}
+
+function ManageButton({ onClick, className = "" }: { onClick: () => void; className?: string }) {
+  return (
+    <Button variant="secondary" onClick={onClick} className={className}>
+      <Icon name="layers" size="size-4" /> Edit / Kelola
+    </Button>
+  );
+}
+
+function BookCard({ book, layout, onReserve, onManage }: { book: Book; layout: Layout; onReserve: () => void; onManage?: (book: Book) => void }) {
+  if (layout === "list") {
+    return (
+      <article className="group flex flex-col gap-5 rounded-2xl border border-emerald-950/10 bg-white p-4 transition hover:-translate-y-0.5 hover:border-forest/20 hover:shadow-lg hover:shadow-emerald-950/10 sm:flex-row sm:items-center">
+        <BookCover book={book} compact />
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-accent-soft px-2.5 py-1 text-xs font-bold text-forest">{book.shelf}</span>
+            <Availability stock={book.stock} />
+          </div>
+          <h3 className="text-lg font-extrabold leading-snug text-ink">{book.title}</h3>
+          <p className="mt-1 text-sm text-muted">{book.author}</p>
+          <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-muted">
+            <Icon name="books" size="size-4" /> Stok fisik: <strong className="text-ink">{book.stock} eksemplar</strong>
+          </div>
+        </div>
+        {onManage ? <ManageButton onClick={() => onManage(book)} className="w-full sm:w-auto" /> : (
+        <Button onClick={onReserve} disabled={book.stock === 0} className="w-full sm:w-auto">
+          <Icon name="calendar" size="size-4" /> Reservasi <span className="hidden lg:inline">(Hold 3 Hari)</span>
+        </Button>
+        )}
+      </article>
+    );
+  }
+  const dense = layout === "grid5" || layout === "grid6";
+  return (
+    <article className={`group flex h-full flex-col rounded-2xl border border-emerald-950/10 bg-white transition hover:-translate-y-1 hover:border-forest/25 hover:shadow-xl hover:shadow-emerald-950/10 ${dense ? "p-2.5" : "p-4"}`}>
+      <BookCover book={book} dense={dense} />
+      <div className={`flex flex-1 flex-col ${dense ? "pt-3" : "pt-5"}`}>
+        <div className={`flex flex-wrap items-center ${dense ? "mb-2 gap-1" : "mb-3 gap-2"}`}>
+          <span className={`rounded-full bg-accent-soft text-xs font-bold text-forest ${dense ? "px-2 py-0.5" : "px-2.5 py-1"}`}>{book.shelf}</span>
+          <Availability stock={book.stock} />
+        </div>
+        <h3 className={`${dense ? "text-sm" : "text-base"} font-extrabold leading-snug text-ink`}>{book.title}</h3>
+        <p className={`mt-1 text-muted ${dense ? "text-xs" : "text-sm"}`}>{book.author}</p>
+        <div className={`${dense ? "mb-3 mt-3 pt-2" : "mb-4 mt-4 pt-3"} flex items-center gap-2 border-t border-slate-100 text-xs font-semibold text-muted`}>
+          <Icon name="books" size="size-4" /> Stok: <strong className="text-ink">{book.stock} eksemplar</strong>
+        </div>
+        {onManage ? <ManageButton onClick={() => onManage(book)} className={`mt-auto w-full ${dense ? "px-2 py-2 text-xs" : ""}`} /> : (
+        <Button onClick={onReserve} disabled={book.stock === 0} className={`mt-auto w-full ${dense ? "px-2 py-2 text-xs" : ""}`}>
+          <Icon name="calendar" size="size-4" /> {dense ? "Reservasi" : "Reservasi (Hold 3 Hari)"}
+        </Button>
+        )}
+      </div>
+    </article>
+  );
+}
+
+export function BooksView({ onReserve, items = books, onManage }: { onReserve: () => void; items?: Book[]; onManage?: (book: Book) => void }) {
+  const [query, setQuery] = useState("");
+  const [department, setDepartment] = useState("");
+  const [theme, setTheme] = useState("");
+  const [layout, setLayout] = useState<Layout>("grid4");
+  const filtered = items.filter((book) => {
+    const matchesQuery = `${book.title} ${book.author}`.toLowerCase().includes(query.toLowerCase());
+    return matchesQuery && (!department || book.department === department) && (!theme || book.theme === theme);
+  });
+  const gridClass = layout === "grid4"
+  ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+  : layout === "grid5"
+    ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+    : layout === "grid6"
+      ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+      : "grid-cols-1";
+
+  return (
+    <div>
+      <Hero eyebrow="Katalog Perpustakaan" title="Akses Koleksi Buku Fisik Perpustakaan PNL" subtitle="Cari buku, cek lokasi rak fisik, dan reservasi mandiri." icon="books" />
+      <section className="relative z-10 mx-3 -mt-5 rounded-2xl border border-emerald-950/10 bg-white p-4 shadow-xl shadow-emerald-950/10 md:mx-6 md:p-5">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+  {/* Search Bar dibuat flex-1 (paling dominan/lebar) */}
+  <label className="relative min-w-0 flex-1">
+    <span className="sr-only">Cari judul atau penulis</span>
+    <span className="absolute left-4 top-3.5 text-slate-400">
+      <Icon name="search" />
+    </span>
+    <input
+      value={query}
+      onChange={(event) => setQuery(event.target.value)}
+      placeholder="Cari judul buku atau nama penulis..."
+      className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-pnl-yellow focus:ring-4 focus:ring-pnl-yellow/15"
+    />
+  </label>
+
+  {/* Panggil SelectField dengan proporsi fit/pas-pasan */}
+  <SelectField
+    value={department}
+    onChange={setDepartment}
+    label="Semua Jurusan"
+    options={["Teknik Informatika (TIK)", "Teknik Sipil", "Teknik Elektro", "Teknik Mesin", "Teknik Kimia", "Tata Niaga / Bisnis"]}
+  />
+  <SelectField
+    value={theme}
+    onChange={setTheme}
+    label="Semua Tema Buku"
+    options={["Algoritma & RPL", "Cybersecurity", "Konstruksi", "Kelistrikan", "Manufaktur", "Proses Kimia", "Akuntansi & Bisnis"]}
+  />
+  <LayoutSwitcher value={layout} onChange={setLayout} />
+</div>
+      </section>
+      <section className="mt-9">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-forest">Koleksi terbaru</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-ink">{filtered.length} buku ditemukan</h2>
+          </div>
+          <p className="hidden text-sm text-muted md:block">Diperbarui hari ini, 09.30 WIB</p>
+        </div>
+        {filtered.length ? (
+          <div className={`grid ${layout === "grid5" || layout === "grid6" ? "gap-3" : "gap-5"} ${gridClass}`}>{filtered.map((book) => <BookCard key={book.code} book={book} layout={layout} onReserve={onReserve} onManage={onManage} />)}</div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-forest/20 bg-white py-16 text-center">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-canvas text-muted"><Icon name="search" /></div>
+            <h3 className="mt-4 font-bold text-ink">Buku belum ditemukan</h3>
+            <p className="mt-1 text-sm text-muted">Coba ubah kata kunci atau filter pencarian.</p>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function RepoCard({ item, layout, onDownload }: { item: RepoItem; layout: Layout; onDownload: () => void }) {
+  const list = layout === "list";
+  const dense = layout === "grid5" || layout === "grid6";
+  return (
+    <article className={`group flex rounded-2xl border border-emerald-950/10 bg-white transition hover:-translate-y-0.5 hover:border-forest/25 hover:shadow-lg hover:shadow-emerald-950/10 ${dense ? "p-3" : "p-5"} ${list ? "flex-col gap-5 sm:flex-row sm:items-center" : "h-full flex-col"}`}>
+      <div className={`flex shrink-0 items-center justify-center rounded-2xl bg-forest text-accent ${list ? "size-20" : dense ? "mb-3 size-10" : "mb-5 size-14"}`}>
+        <Icon name="file" size={list ? "size-8" : dense ? "size-5" : "size-7"} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${item.accent}`}>{item.type}</span>
+          <span className="rounded-full bg-canvas px-2.5 py-1 text-xs font-bold text-muted">{item.department}</span>
+        </div>
+        <h3 className={`${dense ? "text-sm" : "text-lg"} font-extrabold leading-snug text-ink`}>{item.title}</h3>
+        <div className={`${dense ? "mt-2 text-xs" : "mt-3 text-sm"} flex flex-wrap items-center gap-x-5 gap-y-2 text-muted`}>
+          <span className="flex items-center gap-1.5"><Icon name="user" size="size-4" /> {item.author}</span>
+          <span className="flex items-center gap-1.5 font-semibold"><Icon name="file" size="size-4" /> {item.size}</span>
+        </div>
+      </div>
+      <Button onClick={onDownload} variant="dark" className={`${list ? "w-full sm:w-auto" : dense ? "mt-4 w-full px-2 py-2 text-xs" : "mt-6 w-full"}`}>
+        <Icon name="download" size="size-4" /> {dense ? "Download" : "Download PDF"}
+      </Button>
+    </article>
+  );
+}
+
+export function RepositoryView({ onDownload }: { onDownload: () => void }) {
+  const [query, setQuery] = useState("");
+  const [department, setDepartment] = useState("");
+  const [category, setCategory] = useState<"all" | "nonfiction" | "fiction">("all");
+  const [layout, setLayout] = useState<Layout>("grid4");
+
+  // Filter logika pencarian, jurusan, dan kategori
+  const filtered = repoItems.filter((item) => {
+    const matchesQuery = `${item.title} ${item.author}`.toLowerCase().includes(query.toLowerCase());
+    const matchesDepartment = !department || item.department === department;
+    const matchesCategory = category === "all" || item.category === category;
+    return matchesQuery && matchesDepartment && matchesCategory;
+  });
+
+  // Breakpoint Grid yang lebih responsif di zoom 100%
+  const gridClass =
+    layout === "grid4"
+      ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      : layout === "grid5"
+        ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        : layout === "grid6"
+          ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+          : "grid-cols-1";
+
+  return (
+    <div>
+      <Hero
+        eyebrow="E-Repository PNL"
+        title="Repositori Karya Ilmiah & Kreatif Mahasiswa"
+        subtitle="Unggah dan akses karya digital mahasiswa Politeknik Negeri Lhokseumawe."
+        icon="layers"
+      />
+
+      {/* SEARCH BAR & FILTER CONTROL SECTION */}
+      <section className="relative z-10 mx-3 -mt-5 rounded-2xl border border-emerald-950/10 bg-white p-4 shadow-xl shadow-emerald-950/10 md:mx-6 md:p-5">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          {/* Search Bar Utama (Memanjang / Flex-1) */}
+          <label className="relative min-w-0 flex-1">
+            <span className="sr-only">Cari karya digital</span>
+            <span className="absolute left-4 top-3.5 text-slate-400">
+              <Icon name="search" />
+            </span>
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Cari judul paper, laporan magang, cerpen, atau penulis..."
+              className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/15"
+            />
+          </label>
+
+          {/* Filter Jurusan (Width Pas/Fixed) */}
+          <SelectField
+            value={department}
+            onChange={setDepartment}
+            label="Semua Jurusan"
+            options={[
+              "Teknik Informatika",
+              "Teknik Sipil",
+              "Teknik Elektro",
+              "Teknik Mesin",
+              "Teknik Kimia",
+              "Tata Niaga",
+            ]}
+          />
+
+          {/* Toggle Segmented Button Kategori (Semua / Non-Fiksi / Fiksi) */}
+          <div className="flex shrink-0 rounded-xl bg-slate-100 p-1">
+            <button
+              type="button"
+              onClick={() => setCategory("all")}
+              className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
+                category === "all" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500"
+              }`}
+            >
+              Semua
+            </button>
+            <button
+              type="button"
+              onClick={() => setCategory("nonfiction")}
+              className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
+                category === "nonfiction" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500"
+              }`}
+            >
+              Non-Fiksi
+            </button>
+            <button
+              type="button"
+              onClick={() => setCategory("fiction")}
+              className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
+                category === "fiction" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500"
+              }`}
+            >
+              Fiksi
+            </button>
+          </div>
+
+          {/* Layout Switcher Grid/List */}
+          <LayoutSwitcher value={layout} onChange={setLayout} />
+        </div>
+      </section>
+
+      {/* RENDER HASIL E-REPOSITORY */}
+      <section className="mt-9">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-forest">Arsip digital mahasiswa</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-ink">
+              {filtered.length} berkas ditemukan
+            </h2>
+          </div>
+        </div>
+
+        {filtered.length ? (
+          <div className={`grid ${layout === "grid5" || layout === "grid6" ? "gap-3" : "gap-5"} ${gridClass}`}>
+            {filtered.map((item) => (
+              <RepoCard key={item.title} item={item} layout={layout} onDownload={onDownload} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+              <Icon name="search" />
+            </div>
+            <h3 className="mt-4 font-bold text-slate-950">Berkas tidak ditemukan</h3>
+            <p className="mt-1 text-sm text-slate-500">Coba ubah kata kunci atau filter kategori Anda.</p>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function AboutView({ onOpenContact }: { onOpenContact: () => void }) {
+  const cards = [
+    { icon: "building" as IconName, eyebrow: "Profil", title: "Perpustakaan PNL", content: "Pusat literasi dan pengetahuan yang mendukung pendidikan vokasi, penelitian terapan, dan inovasi seluruh sivitas akademika PNL.", tone: "bg-accent text-ink" },
+    { icon: "clock" as IconName, eyebrow: "Jam Operasional", title: "Senin – Jumat", content: "08.00 – 16.00 WIB", detail: "Tutup pada Sabtu, Minggu, dan hari libur nasional.", tone: "bg-forest text-accent" },
+    { icon: "map" as IconName, eyebrow: "Peta Rak Fisik", title: "Lantai 1 & Lantai 2", content: "Lantai 1: Sirkulasi, TIK, Bisnis. Lantai 2: Teknik Sipil, Elektro, Mesin, dan Kimia.", tone: "bg-accent-soft text-forest" },
+    { icon: "phone" as IconName, eyebrow: "Kontak", title: "Hubungi Pustakawan", content: "perpustakaan@pnl.ac.id", detail: "(0645) 42785 · Kampus PNL, Buketrata", tone: "bg-forest-light text-white" },
+  ];
+
+  return (
+    <div>
+      <Hero eyebrow="Tentang Perpustakaan" title="Ruang belajar, bertumbuh, dan berkarya bersama." subtitle="Perpustakaan Politeknik Negeri Lhokseumawe hadir sebagai pusat sumber belajar terpadu bagi seluruh sivitas akademika." icon="building" />
+      <section className="mt-8 grid gap-5 md:grid-cols-2">
+        {cards.map((card) => (
+          <article key={card.title} className="rounded-2xl border border-emerald-950/10 bg-white p-6 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-950/10 md:p-7">
+            <div className={`flex size-12 items-center justify-center rounded-xl ${card.tone}`}><Icon name={card.icon} size="size-6" /></div>
+            <p className="mt-6 text-xs font-bold uppercase tracking-wider text-forest">{card.eyebrow}</p>
+            <h2 className="mt-1 text-2xl font-black text-ink">{card.title}</h2>
+            <p className="mt-3 leading-relaxed text-muted">{card.content}</p>
+            {card.detail && <p className="mt-3 text-sm font-semibold text-muted">{card.detail}</p>}
+          </article>
+        ))}
+      </section>
+      <section className="mt-5 flex flex-col gap-6 overflow-hidden rounded-2xl bg-accent p-7 md:flex-row md:items-center md:justify-between md:p-9">
+        <div>
+          <p className="text-xs font-black uppercase tracking-wider text-muted">Butuh bantuan pencarian?</p>
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-ink">Pustakawan kami siap membantu.</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">Kunjungi meja layanan sirkulasi di lantai satu untuk bantuan koleksi, akses referensi, dan layanan repository.</p>
+        </div>
+        <Button onClick={onOpenContact} variant="dark" className="shrink-0">
+          <Icon name="mail" size="size-4" /> Hubungi Pustakawan
+        </Button>
+      </section>
+    </div>
+  );
+}
+
+function LoginModal({ source, onClose, onLogin }: { source: ModalSource; onClose: () => void; onLogin: (role: LoginRole) => void }) {
+  const actionTriggered = source !== "navbar";
+  const [role, setRole] = useState<LoginRole>(actionTriggered ? "student" : "student");
+  const [identity, setIdentity] = useState("");
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-forest/60 p-0 backdrop-blur-sm sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="login-title" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <div className="w-full overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:max-w-md sm:rounded-3xl">
+        <div className="flex items-start justify-between border-b border-slate-100 px-6 py-5">
+          <Brand />
+          <button type="button" onClick={onClose} aria-label="Tutup modal" className="flex size-9 items-center justify-center rounded-full bg-canvas text-muted transition hover:bg-slate-200 hover:text-ink"><Icon name="close" size="size-4" /></button>
+        </div>
+        <div className="p-6">
+          <div className="mb-5">
+            <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-accent text-ink"><Icon name="lock" /></div>
+            <h2 id="login-title" className="text-2xl font-black tracking-tight text-ink">Masuk dengan SSO PNL</h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">Gunakan akun institusi Politeknik Negeri Lhokseumawe.</p>
+          </div>
+          {actionTriggered && (
+            <div className="mb-5 flex gap-3 rounded-xl border border-accent/40 bg-accent-soft p-3.5 text-sm font-semibold leading-relaxed text-muted">
+              <span className="mt-0.5 shrink-0 text-forest"><Icon name="info" size="size-5" /></span>
+              {source === "download" ? "Login SSO PNL diperlukan untuk mengunduh berkas PDF mahasiswa." : "Fitur reservasi & download PDF khusus untuk Mahasiswa PNL."}
+            </div>
+          )}
+          {!actionTriggered && (
+            <div className="mb-5 grid grid-cols-2 rounded-xl bg-canvas p-1">
+              <button type="button" onClick={() => setRole("student")} className={`rounded-lg px-3 py-2.5 text-xs font-bold transition sm:text-sm ${role === "student" ? "bg-white text-ink shadow-sm" : "text-muted"}`}>Mahasiswa (NIM)</button>
+              <button type="button" onClick={() => setRole("staff")} className={`rounded-lg px-3 py-2.5 text-xs font-bold transition sm:text-sm ${role === "staff" ? "bg-white text-ink shadow-sm" : "text-muted"}`}>Pustakawan / Staf (NIP)</button>
+            </div>
+          )}
+          <form onSubmit={(event) => { event.preventDefault(); onLogin(role); }}>
+            <label className="text-sm font-bold text-muted" htmlFor="identity">{role === "student" ? "Nomor Induk Mahasiswa (NIM)" : "Nomor Induk Pegawai (NIP)"}</label>
+            <div className="relative mt-2">
+              <span className="absolute left-4 top-3.5 text-slate-400"><Icon name="user" /></span>
+              <input id="identity" value={identity} onChange={(event) => setIdentity(event.target.value)} placeholder={role === "student" ? "Masukkan NIM Anda" : "Masukkan NIP Anda"} className="h-12 w-full rounded-xl border border-emerald-950/10 pl-12 pr-4 text-sm font-medium outline-none placeholder:text-slate-400 focus:border-accent focus:ring-4 focus:ring-accent/15" />
+            </div>
+            <Button type="submit" className="mt-4 w-full"><Icon name="shield" size="size-4" /> Lanjutkan dengan SSO PNL</Button>
+          </form>
+          <div className="my-5 flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-slate-400"><span className="h-px flex-1 bg-slate-200" /> Mode simulasi <span className="h-px flex-1 bg-slate-200" /></div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Button variant="secondary" onClick={() => onLogin("student")}><Icon name="user" size="size-4" /> Simulasi Mahasiswa</Button>
+            <Button variant="secondary" onClick={() => onLogin("staff")}><Icon name="building" size="size-4" /> Simulasi Pustakawan</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContactModal({ onClose }: { onClose: () => void }) {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-forest/60 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contact-title"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      {/* Modal Container: Diperkecil ke max-w-sm tanpa clutter */}
+      <div className="flex w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-w-sm sm:rounded-2xl">
+        {/* Clean Header: Langsung gabung Judul & Subtitle */}
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-5 py-3.5">
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent text-ink">
+              <Icon name="mail" size="size-4" />
+            </div>
+            <div>
+              <h2 id="contact-title" className="text-sm font-bold text-ink">
+                Hubungi Pustakawan
+              </h2>
+              <p className="text-[11px] text-muted">Tanyakan seputar buku & e-repository</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Tutup modal"
+            className="flex size-7 items-center justify-center rounded-full bg-canvas text-muted transition hover:bg-slate-200 hover:text-ink"
+          >
+            <Icon name="close" size="size-4" />
+          </button>
+        </div>
+
+        {/* Form Body langsung tanpa kotak email/telepon */}
+        <div className="p-5">
+          {submitted ? (
+            <div className="py-6 text-center">
+              <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-accent text-ink">
+                <Icon name="check" size="size-6" />
+              </div>
+              <h3 className="text-base font-extrabold text-ink">Pesan Terkirim!</h3>
+              <p className="mt-1 text-xs text-muted">
+                Pustakawan akan membalas via email dalam 1x24 jam kerja.
+              </p>
+              <Button onClick={onClose} className="mt-5 h-9 w-full text-xs">
+                Selesai
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div>
+                <label htmlFor="contact-name" className="text-xs font-bold text-muted">
+                  Nama Lengkap
+                </label>
+                <input
+                  id="contact-name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Nama Anda"
+                  className="mt-1 h-9 w-full rounded-lg border border-emerald-950/10 px-3 text-xs font-medium outline-none placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="contact-email" className="text-xs font-bold text-muted">
+                  Email
+                </label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="contoh@pnl.ac.id"
+                  className="mt-1 h-9 w-full rounded-lg border border-emerald-950/10 px-3 text-xs font-medium outline-none placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="contact-subject" className="text-xs font-bold text-muted">
+                  Topik Pertanyaan
+                </label>
+                <select
+                  id="contact-subject"
+                  required
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="mt-1 h-9 w-full rounded-lg border border-emerald-950/10 bg-white px-3 text-xs font-medium outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                >
+                  <option value="">Pilih topik...</option>
+                  <option value="sirkulasi">Sirkulasi & Peminjaman Buku</option>
+                  <option value="erepo">E-Repository & Karya Ilmiah</option>
+                  <option value="denda">Informasi Denda / Bebas Pustaka</option>
+                  <option value="lainnya">Pertanyaan Lainnya</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="contact-message" className="text-xs font-bold text-muted">
+                  Isi Pesan
+                </label>
+                <textarea
+                  id="contact-message"
+                  required
+                  rows={2.5}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Detail pertanyaan Anda..."
+                  className="mt-1 w-full rounded-lg border border-emerald-950/10 p-2.5 text-xs font-medium outline-none placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+
+              <Button type="submit" className="mt-2 h-9 w-full text-xs">
+                <Icon name="mail" size="size-3.5" /> Kirim Pesan
+              </Button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<Tab>("books");
+  const [modalSource, setModalSource] = useState<ModalSource | null>(null);
+  const [showContactModal, setShowContactModal] = useState(false); // State baru untuk ContactModal
+  const [loggedInAs, setLoggedInAs] = useState<LoginRole | null>(null);
+  const [mobileMenu, setMobileMenu] = useState(false);
+
+  const tabs: { id: Tab; label: string }[] = [
+    { id: "books", label: "Buku Fisik" },
+    { id: "erepo", label: "E-Repository" },
+    { id: "about", label: "Tentang" },
+  ];
+
+  const openAction = (source: ModalSource) => {
+    if (!loggedInAs) setModalSource(source);
+  };
+
+  const handleLogin = (role: LoginRole) => {
+    setLoggedInAs(role);
+    setModalSource(null);
+  };
+
+  if (loggedInAs === "staff") {
+    return <LibrarianPortal onLogout={() => setLoggedInAs(null)} />;
+  }
+
+  if (loggedInAs === "student") {
+    return <StudentPortal onLogout={() => setLoggedInAs(null)} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-canvas text-ink">
+      <header className="sticky top-0 z-40 border-b border-emerald-950/10/80 bg-white/95 backdrop-blur-lg">
+        <div className="mx-auto flex h-20 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Brand />
+          <nav className="hidden items-center gap-1 rounded-xl bg-canvas p-1 md:flex" aria-label="Navigasi utama">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative rounded-lg px-5 py-2.5 text-sm font-bold transition ${
+                  activeTab === tab.id ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink"
+                }`}
+              >
+                {tab.label}
+                {activeTab === tab.id && <span className="absolute inset-x-5 -bottom-1 h-0.5 rounded-full bg-accent" />}
+              </button>
+            ))}
+          </nav>
+          <div className="flex items-center gap-2">
+            {loggedInAs ? (
+              <Button variant="secondary" onClick={() => setLoggedInAs(null)} className="hidden sm:flex">
+                <span className="flex size-6 items-center justify-center rounded-full bg-success-soft text-success">
+                  <Icon name="check" size="size-3.5" />
+                </span>
+                {loggedInAs === "student" ? "Mahasiswa PNL" : "Pustakawan PNL"}
+              </Button>
+            ) : (
+              <Button onClick={() => setModalSource("navbar")} className="hidden sm:flex">
+                <Icon name="lock" size="size-4" /> Masuk SSO PNL
+              </Button>
+            )}
+            <button
+              type="button"
+              onClick={() => setMobileMenu(!mobileMenu)}
+              aria-label="Buka navigasi"
+              className="flex size-10 items-center justify-center rounded-xl border border-emerald-950/10 text-muted md:hidden"
+            >
+              <Icon name={mobileMenu ? "close" : "list"} />
+            </button>
+          </div>
+        </div>
+        {mobileMenu && (
+          <div className="border-t border-slate-100 bg-white p-4 md:hidden">
+            <div className="grid gap-1">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setMobileMenu(false);
+                  }}
+                  className={`rounded-xl px-4 py-3 text-left text-sm font-bold ${
+                    activeTab === tab.id ? "bg-accent-soft text-ink" : "text-muted"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+              {!loggedInAs && (
+                <Button
+                  onClick={() => {
+                    setModalSource("navbar");
+                    setMobileMenu(false);
+                  }}
+                  className="mt-2"
+                >
+                  <Icon name="lock" size="size-4" /> Masuk SSO PNL
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
+
+      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6 md:py-8 lg:px-8">
+        {activeTab === "books" && <BooksView onReserve={() => openAction("reservation")} />}
+        {activeTab === "erepo" && <RepositoryView onDownload={() => openAction("download")} />}
+        {/* Pass prop onOpenContact ke AboutView */}
+        {activeTab === "about" && <AboutView onOpenContact={() => setShowContactModal(true)} />}
+      </main>
+
+      <footer className="mt-16 border-t border-emerald-950/10 bg-white">
+        <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-4 py-7 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+          <Brand />
+          <p className="text-xs font-medium text-slate-400">© 2025 Politeknik Negeri Lhokseumawe · UPT Perpustakaan</p>
+        </div>
+      </footer>
+
+      {/* Login Modal */}
+      {modalSource && <LoginModal source={modalSource} onClose={() => setModalSource(null)} onLogin={handleLogin} />}
+
+      {/* Render ContactModal jika state true */}
+      {showContactModal && <ContactModal onClose={() => setShowContactModal(false)} />}
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/index.css
+================================================
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-forest: #0d372b;
+  --color-forest-light: #155f46;
+  --color-accent: #c9ee72;
+  --color-accent-hover: #b7de5d;
+  --color-accent-strong: #10b981;
+  --color-accent-soft: #effbd5;
+  --color-canvas: #f8f9f6;
+  --color-ink: #17211c;
+  --color-muted: #4a5568;
+  --color-success-soft: #dcfce7;
+  --color-success: #15803d;
+  --color-danger-soft: #fee2e2;
+  --color-danger: #b91c1c;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 20rem;
+  min-height: 100vh;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+
+
+================================================
+FILE: src/LibrarianPortal.tsx
+================================================
+import { useEffect, useState, type ReactNode } from "react";
+import { BooksView, RepositoryView, books as seedBooks, type Book } from "./App";
+
+type View = "dashboard" | "sirkulasi" | "fines" | "erepo_curation" | "catalog";
+type CircTab = "hold" | "loans" | "history";
+type CatalogTab = "books" | "erepo";
+
+/* ---------- Icons (fine-line) ---------- */
+const P = {
+  grid: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+  userCheck: "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 4 1.5M16 18l2 2 4-4",
+  receipt: "M5 3h14v18l-2.5-1.5L14 21l-2-1.5L10 21l-2.5-1.5L5 21zM9 8h6M9 12h6M9 16h3",
+  fileCheck: "M14 3H6v18h12V7zM14 3v4h4M9 14l2 2 4-4",
+  books: "M4 4h4v16H4zM10 4h4v16h-4zM16.5 4.5l3.8 1-3.9 15-3.8-1z",
+  logout: "M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10",
+  bell: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0",
+  search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-5-5",
+  menu: "M4 6h16M4 12h16M4 18h16",
+  x: "M6 6l12 12M18 6L6 18",
+  check: "M5 12l5 5 9-10",
+  chevL: "M15 6l-6 6 6 6",
+  chevR: "M9 6l6 6-6 6",
+  repeat: "M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3",
+  clock: "M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
+  ticket: "M3 8a2 2 0 0 0 0 4v0a2 2 0 0 1 0 4v2h18v-2a2 2 0 0 1 0-4 2 2 0 0 1 0-4V6H3zM14 6v12",
+  eye: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+  alert: "M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z",
+  plus: "M12 5v14M5 12h14",
+  arrowR: "M5 12h14M13 6l6 6-6 6",
+  pen: "M4 20h4L19 9l-4-4L4 16zM13 7l4 4",
+  shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",
+};
+function Icon({ d, className = "size-5" }: { d: keyof typeof P; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <path d={P[d]} />
+    </svg>
+  );
+}
+
+/* ---------- Atoms (mirrors StudentPortal) ---------- */
+const card = "rounded-2xl border border-emerald-950/10 bg-white";
+const input = "w-full rounded-xl border border-emerald-950/10 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-forest/40 focus:ring-4 focus:ring-accent/30";
+function Badge({ tone, children }: { tone: "green" | "amber" | "red" | "slate" | "lime" | "blue"; children: ReactNode }) {
+  const m = {
+    green: "bg-success-soft text-success",
+    amber: "bg-amber-100 text-amber-800",
+    red: "bg-danger-soft text-danger",
+    slate: "bg-slate-100 text-muted",
+    lime: "bg-accent-soft text-forest",
+    blue: "bg-sky-50 text-sky-800",
+  }[tone];
+  return <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${m}`}>{children}</span>;
+}
+function Tabs<T extends string>({ value, onChange, items }: { value: T; onChange: (v: T) => void; items: [T, string][] }) {
+  return (
+    <div className="inline-flex flex-wrap gap-1 rounded-xl border border-emerald-950/10 bg-white p-1">
+      {items.map(([k, l]) => (
+        <button key={k} onClick={() => onChange(k)} className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${value === k ? "bg-forest text-white" : "text-muted hover:bg-canvas hover:text-ink"}`}>{l}</button>
+      ))}
+    </div>
+  );
+}
+function Btn({ kind = "primary", className = "", children, ...rest }: { kind?: "primary" | "outline" | "lime" | "danger" } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  const k = {
+    primary: "bg-forest text-white hover:bg-forest-light",
+    lime: "bg-accent text-forest hover:bg-accent-hover",
+    outline: "border border-emerald-950/15 bg-white text-ink hover:border-forest/30 hover:bg-canvas",
+    danger: "border border-danger/25 bg-white text-danger hover:bg-danger-soft",
+  }[kind];
+  return <button {...rest} className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest disabled:opacity-45 ${k} ${className}`}>{children}</button>;
+}
+function PageHead({ eyebrow, title, sub, right }: { eyebrow: string; title: string; sub: string; right?: ReactNode }) {
+  return (
+    <header className="flex flex-wrap items-end justify-between gap-4 pb-6">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.15em] text-forest-light">{eyebrow}</p>
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight md:text-3xl">{title}</h1>
+        <p className="mt-1 max-w-2xl text-sm text-muted">{sub}</p>
+      </div>
+      {right}
+    </header>
+  );
+}
+function Modal({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ReactNode; wide?: boolean }) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-forest/50 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div role="dialog" aria-modal className={`${card} max-h-[92vh] w-full overflow-y-auto p-6 shadow-2xl ${wide ? "max-w-3xl" : "max-w-md"}`} onClick={(e) => e.stopPropagation()}>
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-muted hover:bg-canvas" aria-label="Tutup"><Icon d="x" /></button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Data ---------- */
+type Hold = { id: string; pin: string; title: string; code: string; shelf: string; expires: string };
+type Loan = { id: string; title: string; code: string; start: string; due: string; daysLeft: number };
+type Txn = { date: string; action: string; title: string };
+type Student = { nim: string; name: string; major: string; holds: Hold[]; loans: Loan[]; history: Txn[]; fine: number; clear: boolean };
+type FineReq = { id: string; nim: string; name: string; major: string; reason: string; amount: number; uploaded: string; ref: string };
+type Submission = { id: string; title: string; author: string; major: string; size: string; category: "Non-Fiksi" | "Fiksi"; type: string; flag?: string };
+
+const fmtDate = (d: Date) => d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+const rupiah = (n: number) => "Rp " + n.toLocaleString("id-ID");
+
+const initialStudents: Student[] = [
+  {
+    nim: "2022573010041", name: "Ammar Fauzan", major: "Teknik Informatika", fine: 6000, clear: false,
+    holds: [
+      { id: "h1", pin: "PNL-HOLD-8921", title: "Keamanan Jaringan Komputer", code: "CYBER / 02", shelf: "Rak A3 - TIK", expires: "06 Okt 2026" },
+      { id: "h2", pin: "PNL-HOLD-8934", title: "Algoritma dan Pemrograman Modern", code: "ALGO / 01", shelf: "Rak A1 - TIK", expires: "07 Okt 2026" },
+    ],
+    loans: [{ id: "l1", title: "Basis Data Relasional", code: "TIK 005.74", start: "24 Sep 2026", due: "08 Okt 2026", daysLeft: 4 }],
+    history: [
+      { date: "24 Sep 2026", action: "Peminjaman", title: "Basis Data Relasional" },
+      { date: "18 Sep 2026", action: "Pengembalian (terlambat 3 hari)", title: "Rekayasa Perangkat Lunak" },
+      { date: "02 Sep 2026", action: "Peminjaman", title: "Rekayasa Perangkat Lunak" },
+    ],
+  },
+  {
+    nim: "2021571020017", name: "Cut Nadia Rahmi", major: "Teknik Sipil", fine: 0, clear: true,
+    holds: [{ id: "h3", pin: "PNL-HOLD-8950", title: "Struktur Beton Bertulang", code: "SIPIL / 03", shelf: "Rak B2 - SIPIL", expires: "05 Okt 2026" }],
+    loans: [],
+    history: [{ date: "11 Sep 2026", action: "Pengembalian", title: "Mekanika Tanah Jilid 1" }],
+  },
+];
+
+const initialFines: FineReq[] = [
+  { id: "f1", nim: "2022573010041", name: "Ammar Fauzan", major: "Teknik Informatika", reason: "Terlambat 3 hari · Rekayasa Perangkat Lunak", amount: 6000, uploaded: "04 Okt, 09.12", ref: "QRIS-PNL-77120" },
+  { id: "f2", nim: "2020574030102", name: "Teuku Rizki Maulana", major: "Teknik Mesin", reason: "Terlambat 7 hari · Mesin Konversi Energi", amount: 14000, uploaded: "04 Okt, 08.40", ref: "QRIS-PNL-77098" },
+  { id: "f3", nim: "2023575010066", name: "Siti Humaira", major: "Akuntansi", reason: "Terlambat 2 hari · Akuntansi Biaya Terapan", amount: 4000, uploaded: "03 Okt, 15.27", ref: "QRIS-PNL-77011" },
+];
+
+const initialSubs: Submission[] = [
+  { id: "s1", title: "Sistem Deteksi Intrusi Berbasis Machine Learning di Jaringan Kampus PNL", author: "Rahmat Fadhil", major: "Teknik Informatika", size: "4,2 MB", category: "Non-Fiksi", type: "Skripsi" },
+  { id: "s2", title: "Senja di Ujung Krueng Pase", author: "Nurul Aini", major: "Tata Niaga", size: "1,1 MB", category: "Fiksi", type: "Novelet" },
+  { id: "s3", title: "tugas akhir final revisi FIX (2)", author: "Anonim_88", major: "Tidak diisi", size: "0,02 MB", category: "Non-Fiksi", type: "Laporan", flag: "Ukuran file janggal · kemungkinan korup" },
+  { id: "s4", title: "Aplikasi Monitoring Banjir Lhokseumawe Berbasis IoT", author: "Fikri Haikal", major: "Teknik Elektro", size: "6,8 MB", category: "Non-Fiksi", type: "Tugas Akhir" },
+  { id: "s5", title: "Antologi Puisi: Laut, Garam, dan Pulang", author: "Dewi Safitri", major: "Teknik Sipil", size: "0,9 MB", category: "Fiksi", type: "Antologi" },
+  { id: "s6", title: "Analisis Kelayakan UMKM Kopi Gayo Pasca Pandemi", author: "Syahrul Ramadhan", major: "Tata Niaga", size: "3,3 MB", category: "Non-Fiksi", type: "Jurnal" },
+  { id: "s7", title: "DOWNLOAD GRATIS FILM TERBARU klik link", author: "promo2026", major: "—", size: "12,4 MB", category: "Fiksi", type: "—", flag: "Terindikasi spam · tautan eksternal" },
+];
+
+/* ---------- Views ---------- */
+function Metric({ label, value, icon, note, onClick }: { label: string; value: number; icon: keyof typeof P; note: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className={`${card} group p-5 text-left transition hover:-translate-y-0.5 hover:border-forest/25`}>
+      <div className="flex items-center justify-between">
+        <span className="grid size-10 place-items-center rounded-xl bg-accent-soft text-forest"><Icon d={icon} /></span>
+        <Icon d="arrowR" className="size-4 text-muted opacity-0 transition group-hover:opacity-100" />
+      </div>
+      <p className="mt-5 text-3xl font-extrabold tabular-nums tracking-tight">{value}</p>
+      <p className="mt-1 text-sm font-semibold">{label}</p>
+      <p className="mt-0.5 text-xs text-muted">{note}</p>
+    </button>
+  );
+}
+
+function Dashboard({ go, txCount, holdCount, fines, subs }: { go: (v: View) => void; txCount: number; holdCount: number; fines: FineReq[]; subs: Submission[] }) {
+  const queue = [
+    ...fines.map((f) => ({ k: f.id, icon: "receipt" as const, title: `Struk QRIS ${rupiah(f.amount)} — ${f.name}`, meta: `${f.nim} · diunggah ${f.uploaded}`, badge: <Badge tone="amber">Menunggu Verifikasi</Badge>, view: "fines" as View })),
+    ...subs.slice(0, 3).map((s) => ({ k: s.id, icon: "fileCheck" as const, title: s.title, meta: `${s.author} · ${s.category} · ${s.size}`, badge: s.flag ? <Badge tone="red">Perlu dicek</Badge> : <Badge tone="blue">Kurasi</Badge>, view: "erepo_curation" as View })),
+  ];
+  return (
+    <>
+      <PageHead eyebrow="Sabtu, 04 Oktober 2026" title="Dashboard Operasional" sub="Ringkasan meja layanan sirkulasi hari ini. Klik kartu untuk langsung menuju antrean terkait." />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Metric label="Transaksi Hari Ini" value={txCount} icon="repeat" note="Pinjam + kembali sejak 08.00" onClick={() => go("sirkulasi")} />
+        <Metric label="Antrean Hold Active" value={holdCount} icon="ticket" note="Siap diambil di loket" onClick={() => go("sirkulasi")} />
+        <Metric label="Verifikasi QRIS Pending" value={fines.length} icon="receipt" note="Struk pembayaran denda" onClick={() => go("fines")} />
+        <Metric label="Antrean Kurasi E-Repo" value={subs.length} icon="fileCheck" note="Karya menunggu publikasi" onClick={() => go("erepo_curation")} />
+      </div>
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+        <section className={card}>
+          <div className="flex items-center justify-between border-b border-emerald-950/10 px-5 py-4">
+            <h2 className="font-bold">Antrean Tindakan Cepat</h2>
+            <Badge tone="lime">{queue.length} item</Badge>
+          </div>
+          {queue.length === 0 ? <p className="p-8 text-center text-sm text-muted">Semua antrean bersih. Kerja bagus.</p> : (
+            <ul className="divide-y divide-emerald-950/10">
+              {queue.map((q) => (
+                <li key={q.k} className="flex items-center gap-4 px-5 py-3.5">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-emerald-950/10 text-forest"><Icon d={q.icon} className="size-4" /></span>
+                  <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{q.title}</p><p className="text-xs text-muted">{q.meta}</p></div>
+                  <span className="hidden sm:block">{q.badge}</span>
+                  <button onClick={() => go(q.view)} className="rounded-lg px-3 py-1.5 text-xs font-semibold text-forest hover:bg-canvas">Proses</button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+        <section className={`${card} p-5`}>
+          <h2 className="font-bold">Jadwal Loket</h2>
+          <ul className="mt-4 space-y-4 text-sm">
+            {[["08.00", "Buka loket sirkulasi Lantai 1"], ["10.30", "Pengecekan rak TIK & Elektro"], ["13.00", "Batch verifikasi QRIS siang"], ["16.00", "Tutup antrean hold kedaluwarsa"]].map(([t, l]) => (
+              <li key={t} className="flex gap-4"><span className="w-12 font-mono text-xs font-semibold text-forest-light">{t}</span><span className="flex-1 border-l border-emerald-950/10 pl-4 text-muted">{l}</span></li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </>
+  );
+}
+
+function Sirkulasi({ students, query, setQuery, onHandover }: { students: Student[]; query: string; setQuery: (q: string) => void; onHandover: (nim: string, holdId: string) => void }) {
+  const [draft, setDraft] = useState(query);
+  const [tab, setTab] = useState<CircTab>("hold");
+  useEffect(() => setDraft(query), [query]);
+  const q = query.trim().toUpperCase();
+  const s = q ? students.find((x) => x.nim === q || x.holds.some((h) => h.pin === q)) : undefined;
+  return (
+    <>
+      <PageHead eyebrow="Loket Sirkulasi" title="Loket & Lookup NIM" sub="Masukkan NIM mahasiswa atau PIN Hold untuk melihat pinjaman aktif, tiket hold, dan status denda." />
+      <form onSubmit={(e) => { e.preventDefault(); setQuery(draft); }} className={`${card} flex flex-col gap-3 p-4 sm:flex-row`}>
+        <div className="relative flex-1">
+          <Icon d="search" className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted" />
+          <input value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="2022573010041 atau PNL-HOLD-8921" className={`${input} pl-10 font-mono`} />
+        </div>
+        <Btn type="submit">Cari Mahasiswa</Btn>
+      </form>
+      <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted">
+        Coba:
+        {["2022573010041", "PNL-HOLD-8921", "2021571020017"].map((x) => <button key={x} onClick={() => setQuery(x)} className="font-mono text-forest underline-offset-2 hover:underline">{x}</button>)}
+      </div>
+
+      {q && !s && <div className={`${card} mt-6 p-8 text-center text-sm text-muted`}>Tidak ditemukan data untuk <span className="font-mono font-semibold text-ink">{q}</span>.</div>}
+      {s && (
+        <>
+          <section className={`${card} mt-6 grid gap-5 p-5 lg:grid-cols-[1.3fr_repeat(3,1fr)] lg:items-center`}>
+            <div className="flex items-center gap-4">
+              <div className="grid size-12 place-items-center rounded-full bg-forest text-sm font-bold text-accent">{s.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}</div>
+              <div><p className="font-bold">{s.name}</p><p className="font-mono text-xs text-muted">{s.nim}</p><p className="text-xs text-muted">{s.major}</p></div>
+            </div>
+            {[["Pinjaman Aktif", `${s.loans.length} buku`], ["Tiket Hold", `${s.holds.length} siap ambil`]].map(([l, v]) => (
+              <div key={l} className="border-emerald-950/10 lg:border-l lg:pl-5"><p className="text-xs text-muted">{l}</p><p className="mt-1 text-lg font-extrabold">{v}</p></div>
+            ))}
+            <div className="border-emerald-950/10 lg:border-l lg:pl-5">
+              <p className="text-xs text-muted">Denda & Bebas Pustaka</p>
+              <div className="mt-1.5">{s.clear ? <Badge tone="green"><Icon d="check" className="size-3.5" />Bebas Pustaka</Badge> : <Badge tone="red"><Icon d="alert" className="size-3.5" />{rupiah(s.fine)} tertunggak</Badge>}</div>
+            </div>
+          </section>
+          <div className="mt-6"><Tabs value={tab} onChange={setTab} items={[["hold", `Antrean Hold (Siap Ambil) · ${s.holds.length}`], ["loans", `Buku Sedang Dipinjam · ${s.loans.length}`], ["history", "Riwayat Transaksi"]]} /></div>
+          <div className="mt-4 space-y-3">
+            {tab === "hold" && (s.holds.length === 0 ? <p className={`${card} p-6 text-center text-sm text-muted`}>Tidak ada tiket hold aktif.</p> : s.holds.map((h) => (
+              <div key={h.id} className={`${card} flex flex-col gap-4 p-4 sm:flex-row sm:items-center`}>
+                <span className="grid size-10 place-items-center rounded-xl bg-accent-soft text-forest"><Icon d="ticket" /></span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold">{h.title}</p>
+                  <p className="mt-0.5 text-xs text-muted"><span className="font-mono">{h.pin}</span> · {h.shelf} · kode {h.code}</p>
+                </div>
+                <Badge tone="amber"><Icon d="clock" className="size-3.5" />Hold s.d. {h.expires}</Badge>
+                <Btn kind="lime" onClick={() => onHandover(s.nim, h.id)}><Icon d="check" className="size-4" />Serahkan Buku</Btn>
+              </div>
+            )))}
+            {tab === "loans" && (s.loans.length === 0 ? <p className={`${card} p-6 text-center text-sm text-muted`}>Tidak ada pinjaman aktif.</p> : s.loans.map((l) => (
+              <div key={l.id} className={`${card} flex flex-col gap-3 p-4 sm:flex-row sm:items-center`}>
+                <div className="min-w-0 flex-1"><p className="font-semibold">{l.title}</p><p className="mt-0.5 text-xs text-muted">Dipinjam {l.start} · jatuh tempo {l.due}</p></div>
+                <Badge tone={l.daysLeft <= 3 ? "amber" : "green"}>{l.daysLeft} hari lagi</Badge>
+              </div>
+            )))}
+            {tab === "history" && (
+              <div className={card}>
+                {s.history.map((t, i) => (
+                  <div key={i} className="flex items-center gap-4 border-b border-emerald-950/10 px-5 py-3 text-sm last:border-0">
+                    <span className="w-24 shrink-0 text-xs text-muted">{t.date}</span><span className="flex-1 font-semibold">{t.title}</span><span className="text-xs text-muted">{t.action}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </>
+  );
+}
+
+function Fines({ fines, onApprove, onReject }: { fines: FineReq[]; onApprove: (f: FineReq) => void; onReject: (f: FineReq, note: string) => void }) {
+  const [open, setOpen] = useState<FineReq | null>(null);
+  const [rejecting, setRejecting] = useState(false);
+  const [note, setNote] = useState("");
+  const close = () => { setOpen(null); setRejecting(false); setNote(""); };
+  return (
+    <>
+      <PageHead eyebrow="Keuangan Perpustakaan" title="Verifikasi Denda QRIS" sub="Cocokkan nominal dan nomor referensi pada struk dengan data denda sebelum menyetel lunas." />
+      <div className={`${card} overflow-hidden`}>
+        <div className="hidden grid-cols-[1.4fr_1.6fr_0.8fr_1fr_auto] gap-4 border-b border-emerald-950/10 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-muted md:grid">
+          <span>Mahasiswa</span><span>Alasan Denda</span><span>Nominal</span><span>Status</span><span className="w-28" />
+        </div>
+        {fines.length === 0 && <p className="p-10 text-center text-sm text-muted">Tidak ada struk yang menunggu verifikasi.</p>}
+        {fines.map((f) => (
+          <div key={f.id} className="grid gap-3 border-b border-emerald-950/10 px-5 py-4 last:border-0 md:grid-cols-[1.4fr_1.6fr_0.8fr_1fr_auto] md:items-center md:gap-4">
+            <div><p className="font-semibold">{f.name}</p><p className="font-mono text-xs text-muted">{f.nim}</p></div>
+            <p className="text-sm text-muted">{f.reason}</p>
+            <p className="font-bold tabular-nums">{rupiah(f.amount)}</p>
+            <div><Badge tone="amber">Menunggu Verifikasi</Badge></div>
+            <Btn kind="outline" className="w-28" onClick={() => setOpen(f)}><Icon d="eye" className="size-4" />Lihat Struk</Btn>
+          </div>
+        ))}
+      </div>
+      {open && (
+        <Modal title="Bukti Pembayaran QRIS" onClose={close} wide>
+          <div className="grid gap-6 md:grid-cols-[1fr_1.1fr]">
+            <div className="rounded-xl border border-emerald-950/10 bg-canvas p-5">
+              <div className="mx-auto max-w-[240px] rounded-lg border border-dashed border-emerald-950/20 bg-white p-5 font-mono text-xs leading-relaxed">
+                <p className="text-center font-bold">BANK ACEH SYARIAH</p>
+                <p className="text-center text-muted">Pembayaran QRIS Berhasil</p>
+                <div className="my-3 border-t border-dashed border-emerald-950/20" />
+                <p>Merchant: PERPUS PNL</p><p>Ref: {open.ref}</p><p>Waktu: {open.uploaded}</p><p>Pengirim: {open.name.toUpperCase()}</p>
+                <div className="my-3 border-t border-dashed border-emerald-950/20" />
+                <p className="flex justify-between font-bold"><span>TOTAL</span><span>{rupiah(open.amount)}</span></p>
+                <p className="mt-3 text-center text-success">✓ SUKSES</p>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <dl className="space-y-3 text-sm">
+                {[["Mahasiswa", `${open.name} · ${open.nim}`], ["Program Studi", open.major], ["Alasan", open.reason], ["Tagihan sistem", rupiah(open.amount)]].map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-4 border-b border-emerald-950/10 pb-2"><dt className="text-muted">{k}</dt><dd className="text-right font-semibold">{v}</dd></div>
+                ))}
+              </dl>
+              <p className="mt-4 flex items-center gap-2 text-xs text-success"><Icon d="check" className="size-4" />Nominal struk cocok dengan tagihan sistem.</p>
+              {rejecting && <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="Catatan opsional, mis. nomor referensi tidak terbaca" className={`${input} mt-4 resize-none`} />}
+              <div className="mt-auto flex flex-wrap gap-3 pt-6">
+                {rejecting ? (
+                  <>
+                    <Btn kind="outline" onClick={() => setRejecting(false)}>Batal</Btn>
+                    <Btn kind="danger" className="flex-1" onClick={() => { onReject(open, note); close(); }}>Kirim Penolakan</Btn>
+                  </>
+                ) : (
+                  <>
+                    <Btn kind="danger" onClick={() => setRejecting(true)}><Icon d="x" className="size-4" />Tolak Bukti</Btn>
+                    <Btn className="flex-1" onClick={() => { onApprove(open); close(); }}><Icon d="check" className="size-4" />Approve (Setel Lunas)</Btn>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+function Curation({ subs, onPublish, onRevise }: { subs: Submission[]; onPublish: (s: Submission) => void; onRevise: (s: Submission, note: string) => void }) {
+  const [filter, setFilter] = useState<"all" | "Non-Fiksi" | "Fiksi">("all");
+  const [revise, setRevise] = useState<Submission | null>(null);
+  const [note, setNote] = useState("");
+  const list = subs.filter((s) => filter === "all" || s.category === filter);
+  return (
+    <>
+      <PageHead eyebrow="Quality Control" title="Kurasi E-Repository" sub="Saring file korup, spam, atau tidak layak sebelum karya ilmiah dan karya fiksi dipublikasikan ke katalog digital."
+        right={<Tabs value={filter} onChange={setFilter} items={[["all", `Semua · ${subs.length}`], ["Non-Fiksi", "Non-Fiksi"], ["Fiksi", "Fiksi"]]} />} />
+      {list.length === 0 && <p className={`${card} p-10 text-center text-sm text-muted`}>Antrean kurasi kosong.</p>}
+      <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+        {list.map((s) => (
+          <article key={s.id} className={`${card} flex flex-col p-5 ${s.flag ? "border-danger/25" : ""}`}>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone={s.category === "Fiksi" ? "lime" : "slate"}>{s.category}</Badge>
+              <span className="text-xs text-muted">{s.type} · {s.size}</span>
+            </div>
+            <h3 className="mt-3 font-bold leading-snug">{s.title}</h3>
+            <p className="mt-1 text-sm text-muted">{s.author} · {s.major}</p>
+            {s.flag && <p className="mt-3 flex items-center gap-2 rounded-lg bg-danger-soft px-3 py-2 text-xs font-semibold text-danger"><Icon d="shield" className="size-4" />{s.flag}</p>}
+            <a href="#" onClick={(e) => e.preventDefault()} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-forest hover:underline"><Icon d="eye" className="size-4" />Pratinjau PDF</a>
+            <div className="mt-auto flex gap-2 pt-5">
+              <Btn kind="outline" className="flex-1" onClick={() => setRevise(s)}><Icon d="pen" className="size-4" />Minta Revisi</Btn>
+              <Btn className="flex-1" onClick={() => onPublish(s)}><Icon d="check" className="size-4" />Setujui & Publish</Btn>
+            </div>
+          </article>
+        ))}
+      </div>
+      {revise && (
+        <Modal title="Minta Revisi" onClose={() => setRevise(null)}>
+          <p className="text-sm text-muted">Umpan balik kurator untuk <span className="font-semibold text-ink">{revise.title}</span></p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {["File PDF korup / tidak bisa dibuka", "Abstrak belum dilampirkan", "Metadata penulis tidak lengkap", "Konten tidak relevan / spam"].map((t) => (
+              <button key={t} onClick={() => setNote(t)} className="rounded-full border border-emerald-950/10 px-3 py-1 text-xs text-muted hover:border-forest/30 hover:text-ink">{t}</button>
+            ))}
+          </div>
+          <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={4} placeholder="Tulis catatan revisi..." className={`${input} mt-3 resize-none`} />
+          <div className="mt-5 flex justify-end gap-3">
+            <Btn kind="outline" onClick={() => setRevise(null)}>Batal</Btn>
+            <Btn disabled={!note.trim()} onClick={() => { onRevise(revise, note); setRevise(null); setNote(""); }}>Kirim Umpan Balik</Btn>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+function BookForm({ initial, onSave, onClose }: { initial?: Book; onSave: (b: Book) => void; onClose: () => void }) {
+  const [f, setF] = useState<Book>(initial ?? { title: "", author: "", shelf: "", stock: 1, department: "Teknik Informatika (TIK)", theme: "Algoritma & RPL", cover: "from-forest to-emerald-800", code: `BARU / ${Date.now().toString().slice(-4)}` });
+  const set = <K extends keyof Book>(k: K, v: Book[K]) => setF((p) => ({ ...p, [k]: v }));
+  const field = (label: string, el: ReactNode) => <label className="block"><span className="mb-1.5 block text-xs font-semibold text-muted">{label}</span>{el}</label>;
+  return (
+    <Modal title={initial ? "Kelola Buku" : "Tambah Buku Baru"} onClose={onClose}>
+      <div className="space-y-4">
+        {initial ? <div className="rounded-xl bg-canvas p-3"><p className="font-semibold">{f.title}</p><p className="text-xs text-muted">{f.author} · {f.code}</p></div> : (
+          <>
+            {field("Judul Buku", <input className={input} value={f.title} onChange={(e) => set("title", e.target.value)} />)}
+            {field("Penulis", <input className={input} value={f.author} onChange={(e) => set("author", e.target.value)} />)}
+          </>
+        )}
+        {field("Jumlah Stok", (
+          <div className="flex items-center gap-2">
+            <button onClick={() => set("stock", Math.max(0, f.stock - 1))} className="size-10 rounded-xl border border-emerald-950/10 text-lg hover:bg-canvas">−</button>
+            <input type="number" min={0} className={`${input} text-center tabular-nums`} value={f.stock} onChange={(e) => set("stock", Math.max(0, Number(e.target.value)))} />
+            <button onClick={() => set("stock", f.stock + 1)} className="size-10 rounded-xl border border-emerald-950/10 text-lg hover:bg-canvas">+</button>
+          </div>
+        ))}
+        {field("Lokasi Rak", <input className={`${input} font-mono`} placeholder="B-04 / TIK" value={f.shelf} onChange={(e) => set("shelf", e.target.value)} />)}
+      </div>
+      <div className="mt-6 flex justify-end gap-3">
+        <Btn kind="outline" onClick={onClose}>Batal</Btn>
+        <Btn disabled={!f.title.trim() || !f.shelf.trim()} onClick={() => onSave(f)}>Simpan Perubahan</Btn>
+      </div>
+    </Modal>
+  );
+}
+
+function Catalog({ items, setItems, toast }: { items: Book[]; setItems: (fn: (b: Book[]) => Book[]) => void; toast: (m: string) => void }) {
+  const [tab, setTab] = useState<CatalogTab>("books");
+  const [editing, setEditing] = useState<Book | null>(null);
+  const [adding, setAdding] = useState(false);
+  return (
+    <>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <Tabs value={tab} onChange={setTab} items={[["books", "Buku Fisik"], ["erepo", "E-Repository"]]} />
+        {tab === "books" && <Btn kind="lime" onClick={() => setAdding(true)}><Icon d="plus" className="size-4" />Tambah Buku Baru</Btn>}
+      </div>
+      {tab === "books" ? <BooksView items={items} onReserve={() => {}} onManage={setEditing} /> : <RepositoryView onDownload={() => toast("Salinan arsip PDF diunduh untuk pemeriksaan.")} />}
+      {editing && <BookForm initial={editing} onClose={() => setEditing(null)} onSave={(b) => { setItems((xs) => xs.map((x) => (x.code === b.code ? b : x))); setEditing(null); toast(`Stok "${b.title}" diperbarui: ${b.stock} eksemplar · ${b.shelf}`); }} />}
+      {adding && <BookForm onClose={() => setAdding(false)} onSave={(b) => { setItems((xs) => [b, ...xs]); setAdding(false); toast(`"${b.title}" ditambahkan ke katalog.`); }} />}
+    </>
+  );
+}
+
+/* ---------- Shell ---------- */
+type NavItem = { key: View; label: string; icon: keyof typeof P; count?: number };
+const TIP = "pointer-events-none invisible absolute left-full z-50 ml-3 hidden whitespace-nowrap rounded-md bg-slate-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100 lg:block";
+const ROW = "group relative flex min-h-[42px] w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium tracking-[-0.01em] transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+
+function SideLink({ item, active, collapsed, onClick }: { item: NavItem; active: boolean; collapsed: boolean; onClick: () => void }) {
+  return (
+    <button onClick={onClick} aria-label={item.label} aria-current={active ? "page" : undefined}
+      className={`${ROW} ${collapsed ? "lg:justify-center lg:px-0" : ""} ${active ? "bg-accent font-semibold text-forest" : "text-white/70 hover:bg-white/10 hover:text-white"}`}>
+      <Icon d={item.icon} className="size-5 shrink-0" />
+      <span className={`flex-1 truncate text-left ${collapsed ? "lg:hidden" : ""}`}>{item.label}</span>
+      {!!item.count && <span className={`rounded-full px-2 text-[11px] font-bold tabular-nums ${active ? "bg-forest/10" : "bg-white/10"} ${collapsed ? "lg:absolute lg:right-1 lg:top-1 lg:px-1.5" : ""}`}>{item.count}</span>}
+      {collapsed && <span role="tooltip" className={TIP}>{item.label}</span>}
+    </button>
+  );
+}
+
+export default function LibrarianPortal({ onLogout }: { onLogout?: () => void }) {
+  const [activeView, setActiveView] = useState<View>("dashboard");
+  const [open, setOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [students, setStudents] = useState(initialStudents);
+  const [fines, setFines] = useState(initialFines);
+  const [subs, setSubs] = useState(initialSubs);
+  const [items, setItems] = useState<Book[]>(seedBooks);
+  const [txCount, setTxCount] = useState(18);
+  const [lookup, setLookup] = useState("");
+  const [headerQ, setHeaderQ] = useState("");
+  const go = (v: View) => { setActiveView(v); setOpen(false); };
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  // Seed counts to match the brief while reflecting live changes.
+  const holdCount = 5 - (initialStudents.reduce((n, s) => n + s.holds.length, 0) - students.reduce((n, s) => n + s.holds.length, 0));
+
+  const handover = (nim: string, holdId: string) => {
+    const start = new Date(2026, 9, 4);
+    const due = new Date(start); due.setDate(due.getDate() + 14);
+    setStudents((xs) => xs.map((s) => {
+      if (s.nim !== nim) return s;
+      const h = s.holds.find((x) => x.id === holdId)!;
+      setToast(`"${h.title}" diserahkan. Masa pinjam 14 hari hingga ${fmtDate(due)}.`);
+      return {
+        ...s,
+        holds: s.holds.filter((x) => x.id !== holdId),
+        loans: [{ id: `l-${holdId}`, title: h.title, code: h.code, start: fmtDate(start), due: fmtDate(due), daysLeft: 14 }, ...s.loans],
+        history: [{ date: fmtDate(start), action: `Peminjaman (dari ${h.pin})`, title: h.title }, ...s.history],
+      };
+    }));
+    setTxCount((c) => c + 1);
+  };
+  const approve = (f: FineReq) => {
+    setFines((xs) => xs.filter((x) => x.id !== f.id));
+    setStudents((xs) => xs.map((s) => (s.nim === f.nim ? { ...s, fine: 0, clear: true } : s)));
+    setToast(`Denda ${f.name} lunas. Status Bebas Pustaka kini hijau.`);
+  };
+  const reject = (f: FineReq, note: string) => {
+    setFines((xs) => xs.filter((x) => x.id !== f.id));
+    setToast(`Bukti ${f.name} ditolak${note ? ` — "${note}"` : ""}. Notifikasi dikirim.`);
+  };
+
+  const nav: NavItem[] = [
+    { key: "dashboard", label: "Dashboard Operasional", icon: "grid" },
+    { key: "sirkulasi", label: "Loket & Lookup NIM", icon: "userCheck", count: holdCount },
+    { key: "fines", label: "Verifikasi Denda QRIS", icon: "receipt", count: fines.length },
+    { key: "erepo_curation", label: "Kurasi E-Repository", icon: "fileCheck", count: subs.length },
+    { key: "catalog", label: "Kelola Katalog & Stok", icon: "books" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-canvas text-ink">
+      {open && <div className="fixed inset-0 z-30 bg-forest/50 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-forest p-4 text-white transition-[transform,width] duration-200 lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"} ${open ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className={`flex items-center justify-between px-1 ${isCollapsed ? "lg:justify-center lg:px-0" : ""}`}>
+          <div className="flex items-center gap-3">
+            <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent font-black text-forest">SA</div>
+            <div className={isCollapsed ? "lg:hidden" : ""}><p className="font-extrabold tracking-tight">SIPERPUS Admin</p><p className="text-[11px] text-white/50">Politeknik Negeri Lhokseumawe</p></div>
+          </div>
+          <button onClick={() => setOpen(false)} className="lg:hidden" aria-label="Tutup menu"><Icon d="x" /></button>
+        </div>
+        <span className={`mx-1 mt-5 self-start rounded-full border border-accent/40 px-3 py-1 text-xs font-semibold text-accent ${isCollapsed ? "lg:hidden" : ""}`}>Pustakawan PNL</span>
+        <nav aria-label="Navigasi admin" className="mt-6 space-y-1">
+          {nav.map((item) => <SideLink key={item.key} item={item} active={activeView === item.key} collapsed={isCollapsed} onClick={() => go(item.key)} />)}
+        </nav>
+        <div className={`mt-auto rounded-xl bg-white/5 p-4 text-xs text-white/60 ${isCollapsed ? "lg:hidden" : ""}`}>Shift aktif: 08.00–16.30 WIB · Loket 1</div>
+        <button onClick={onLogout} aria-label="Keluar Admin" className={`${ROW} mt-3 text-white/80 hover:bg-danger/20 hover:text-white ${isCollapsed ? "lg:justify-center lg:px-0" : ""}`}>
+          <Icon d="logout" className="size-5 shrink-0" />
+          <span className={`truncate ${isCollapsed ? "lg:hidden" : ""}`}>Keluar Admin</span>
+          {isCollapsed && <span role="tooltip" className={TIP}>Keluar Admin</span>}
+        </button>
+        <button onClick={() => setIsCollapsed((c) => !c)} aria-label={isCollapsed ? "Perluas sidebar" : "Ciutkan sidebar"} aria-expanded={!isCollapsed}
+          className="absolute -right-3 top-[34px] hidden size-6 place-items-center rounded-full border border-white/15 bg-forest-light text-white shadow-md transition-[background-color] duration-150 hover:bg-forest-light/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:grid">
+          <Icon d={isCollapsed ? "chevR" : "chevL"} className="size-4" />
+        </button>
+      </aside>
+
+      <div className={`transition-[padding] duration-200 ${isCollapsed ? "lg:pl-20" : "lg:pl-72"}`}>
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-emerald-950/10 bg-canvas/85 px-4 py-3 backdrop-blur md:px-8">
+          <button onClick={() => setOpen(true)} className="rounded-lg p-2 hover:bg-white lg:hidden" aria-label="Buka menu"><Icon d="menu" /></button>
+          <form className="relative max-w-xl flex-1" onSubmit={(e) => { e.preventDefault(); if (!headerQ.trim()) return; setLookup(headerQ); go("sirkulasi"); setHeaderQ(""); }}>
+            <Icon d="search" className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted" />
+            <input value={headerQ} onChange={(e) => setHeaderQ(e.target.value)} placeholder="Input NIM atau PIN Hold, e.g. PNL-HOLD-8921..." className="w-full rounded-xl border border-emerald-950/10 bg-white py-2.5 pl-10 pr-14 text-sm outline-none transition focus:border-forest/40 focus:ring-4 focus:ring-accent/30" />
+            <kbd className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md border border-emerald-950/10 px-1.5 py-0.5 font-mono text-[10px] text-muted sm:block">Enter</kbd>
+          </form>
+          <button className="relative ml-auto rounded-xl border border-emerald-950/10 bg-white p-2.5" aria-label="Notifikasi">
+            <Icon d="bell" className="size-5" />{fines.length > 0 && <span className="absolute right-2 top-2 size-2 rounded-full bg-danger ring-2 ring-white" />}
+          </button>
+          <div className="hidden items-center gap-3 md:flex">
+            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">RH</div>
+            <div className="leading-tight"><p className="text-sm font-bold">Rina Hayati</p><p className="text-xs text-muted">Staf Sirkulasi · Lantai 1</p></div>
+          </div>
+        </header>
+        <main className="mx-auto max-w-screen-2xl p-4 md:p-8">
+          {activeView === "dashboard" && <Dashboard go={go} txCount={txCount} holdCount={holdCount} fines={fines} subs={subs} />}
+          {activeView === "sirkulasi" && <Sirkulasi students={students} query={lookup} setQuery={setLookup} onHandover={handover} />}
+          {activeView === "fines" && <Fines fines={fines} onApprove={approve} onReject={reject} />}
+          {activeView === "erepo_curation" && <Curation subs={subs}
+            onPublish={(s) => { setSubs((xs) => xs.filter((x) => x.id !== s.id)); setToast(`"${s.title}" dipublikasikan ke E-Repository.`); }}
+            onRevise={(s) => { setSubs((xs) => xs.filter((x) => x.id !== s.id)); setToast(`Permintaan revisi dikirim ke ${s.author}.`); }} />}
+          {activeView === "catalog" && <Catalog items={items} setItems={setItems} toast={setToast} />}
+        </main>
+      </div>
+
+      {toast && (
+        <div role="status" className="fixed bottom-6 left-1/2 z-50 flex max-w-[90vw] -translate-x-1/2 items-center gap-3 rounded-xl bg-forest px-5 py-3 text-sm font-semibold text-white shadow-2xl">
+          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-forest"><Icon d="check" className="size-4" /></span>
+          {toast}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/main.tsx
+================================================
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+
+
+
+================================================
+FILE: src/StudentPortal.tsx
+================================================
+import { useEffect, useState, type ReactNode } from "react";
+import { BooksView, RepositoryView } from "./App";
+
+type View = "dashboard" | "catalog_books" | "catalog_erepo" | "circulation" | "erepo_student";
+type CircTab = "active" | "hold" | "history" | "fines";
+type ErepoTab = "upload" | "my_works" | "downloads";
+
+/* ---------- Icons ---------- */
+const P = {
+  grid: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+  books: "M4 4h4v16H4zM10 4h4v16h-4zM16.5 4.5l3.8 1-3.9 15-3.8-1z",
+  clock: "M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
+  file: "M14 3H6v18h12V7zM14 3v4h4M12 17v-6M9 14l3-3 3 3",
+  logout: "M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10",
+  bell: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0",
+  search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-5-5",
+  menu: "M4 6h16M4 12h16M4 18h16",
+  x: "M6 6l12 12M18 6L6 18",
+  check: "M5 12l5 5 9-10",
+  alert: "M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z",
+  list: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
+  download: "M12 4v12M7 11l5 5 5-5M4 20h16",
+  upload: "M12 20V8M7 13l5-5 5 5M4 4h16",
+  layers: "M12 3l9 5-9 5-9-5zM3 12.5l9 5 9-5M3 17l9 5 9-5",
+  panel: "M3 4h18v16H3zM9 4v16",
+  chevL: "M15 6l-6 6 6 6",
+  chevR: "M9 6l6 6-6 6",
+  pin: "M12 21s-7-6.2-7-12a7 7 0 1 1 14 0c0 5.8-7 12-7 12zM12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+};
+function Icon({ d, className = "size-5" }: { d: keyof typeof P; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <path d={P[d]} />
+    </svg>
+  );
+}
+
+/* ---------- Data ---------- */
+const books = [
+  { t: "Keamanan Jaringan Komputer", a: "Onno W. Purbo", y: 2021, k: "TIK 005.8", s: 3, c: "#0d372b" },
+  { t: "Algoritma & Struktur Data", a: "Rinaldi Munir", y: 2020, k: "TIK 005.1", s: 0, c: "#155f46" },
+  { t: "Basis Data Relasional", a: "Fathansyah", y: 2019, k: "TIK 005.74", s: 5, c: "#3b4a2a" },
+  { t: "Mesin Konversi Energi", a: "Zuhal", y: 2018, k: "TM 621.3", s: 2, c: "#5c3d1e" },
+  { t: "Akuntansi Biaya Terapan", a: "Mulyadi", y: 2022, k: "AK 657.4", s: 4, c: "#1f3b4d" },
+  { t: "Teknik Kimia Dasar", a: "Himmelblau", y: 2017, k: "TK 660", s: 1, c: "#4d1f2f" },
+  { t: "Pemrograman Web Modern", a: "Abdul Kadir", y: 2023, k: "TIK 006.7", s: 6, c: "#2c2c54" },
+  { t: "Rekayasa Perangkat Lunak", a: "Roger Pressman", y: 2020, k: "TIK 005.12", s: 2, c: "#0d372b" },
+];
+const papers = [
+  { t: "Sistem Deteksi Intrusi Berbasis Machine Learning di Jaringan Kampus PNL", a: "Rahmat Fadhil", y: 2025, j: "Teknik Informatika", dl: 214 },
+  { t: "Rancang Bangun Turbin Mikrohidro Sungai Krueng Pase", a: "Nurul Aini", y: 2024, j: "Teknik Mesin", dl: 132 },
+  { t: "Analisis Kelayakan UMKM Kopi Gayo Pasca Pandemi", a: "Syahrul Ramadhan", y: 2025, j: "Tata Niaga", dl: 98 },
+  { t: "Optimasi Produksi Pupuk Urea dengan Simulasi Aspen", a: "Cut Meutia", y: 2023, j: "Teknik Kimia", dl: 77 },
+  { t: "Aplikasi Monitoring Banjir Lhokseumawe Berbasis IoT", a: "Fikri Haikal", y: 2025, j: "Teknik Elektro", dl: 186 },
+  { t: "Perancangan Jembatan Rangka Baja Bentang 40m", a: "Dewi Safitri", y: 2024, j: "Teknik Sipil", dl: 64 },
+];
+
+/* ---------- UI atoms ---------- */
+const card = "rounded-2xl border border-emerald-950/10 bg-white";
+function Badge({ tone, children }: { tone: "green" | "amber" | "red" | "slate" | "lime"; children: ReactNode }) {
+  const m = {
+    green: "bg-success-soft text-success",
+    amber: "bg-amber-100 text-amber-800",
+    red: "bg-danger-soft text-danger",
+    slate: "bg-slate-100 text-muted",
+    lime: "bg-accent-soft text-forest",
+  }[tone];
+  return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${m}`}>{children}</span>;
+}
+function Tabs<T extends string>({ value, onChange, items }: { value: T; onChange: (v: T) => void; items: [T, string][] }) {
+  return (
+    <div className="inline-flex flex-wrap gap-1 rounded-xl border border-emerald-950/10 bg-white p-1">
+      {items.map(([k, l]) => (
+        <button key={k} onClick={() => onChange(k)} className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${value === k ? "bg-forest text-white" : "text-muted hover:bg-canvas hover:text-ink"}`}>
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
+function Cover({ t, c, small }: { t: string; c: string; small?: boolean }) {
+  return (
+    <div className="relative aspect-[3/4] overflow-hidden rounded-lg p-3 text-white" style={{ background: c }}>
+      <div className="absolute inset-y-0 left-2 w-px bg-white/20" />
+      <p className={`font-semibold leading-tight ${small ? "text-[11px]" : "text-sm"}`}>{t}</p>
+      <div className="absolute bottom-3 left-3 h-1 w-8 rounded bg-accent" />
+    </div>
+  );
+}
+function Title({ eyebrow, title, sub }: { eyebrow: string; title: string; sub?: string }) {
+  return (
+    <div className="mb-6">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-forest-light">{eyebrow}</p>
+      <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink md:text-3xl">{title}</h1>
+      {sub && <p className="mt-1 text-sm text-muted">{sub}</p>}
+    </div>
+  );
+}
+
+function useCountdown(hours: number) {
+  const [end] = useState(() => Date.now() + hours * 3600_000);
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const i = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(i);
+  }, []);
+  const s = Math.max(0, Math.floor((end - now) / 1000));
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${Math.floor(s / 86400)}h ${pad(Math.floor((s % 86400) / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+}
+
+/* ---------- Views ---------- */
+const soft = "rounded-2xl border border-slate-200/60 bg-white";
+function Stat({ icon, label, value, unit, note, tone = "slate" }: { icon: keyof typeof P; label: string; value: string; unit?: string; note: string; tone?: "slate" | "green" | "amber" }) {
+  const dot = { slate: "bg-slate-300", green: "bg-emerald-500", amber: "bg-amber-400" }[tone];
+  return (
+    <div className={`${soft} p-6 transition hover:border-slate-300/70`}>
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">{label}</p>
+        <span className="text-[#0d372b]/50"><Icon d={icon} className="size-4" /></span>
+      </div>
+      <p className="mt-5 text-3xl font-light tracking-tight text-[#0d372b] tabular-nums">
+        {value}{unit && <span className="ml-1 text-base font-normal text-slate-400">{unit}</span>}
+      </p>
+      <p className="mt-2 flex items-center gap-2 text-xs text-slate-500"><span className={`size-1.5 rounded-full ${dot}`} />{note}</p>
+    </div>
+  );
+}
+
+function Dashboard({ go }: { go: (v: View) => void }) {
+  const hold = useCountdown(52);
+  const [h, rest] = [hold.split(" ")[0], hold.split(" ")[1]];
+  const genres = [["Jaringan", 42], ["Pemrograman", 31], ["Basis Data", 17], ["Lainnya", 10]] as const;
+  return (
+    <div className="space-y-6">
+      {/* Top: greeting */}
+      <header className="flex flex-wrap items-end justify-between gap-4 pb-2">
+        <div>
+          <h1 className="mt-2 text-3xl font-light tracking-tight text-slate-900 md:text-[34px]">Selamat datang kembali, <span className="font-semibold text-[#0d372b]">Ammar.</span></h1>
+          <p className="mt-1 text-sm text-slate-500">NIM 2022573010041 · Teknik Informatika</p>
+        </div>
+      </header>
+
+      {/* Stats grid */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Stat icon="books" label="Pinjaman Aktif" value="2" unit="/ 10" note="8 mendekati jatuh tempo" tone="green" />
+        <Stat icon="clock" label="Hold Tertunda" value="1" note="Siap diambil di rak B-04" tone="green" />
+        <Stat icon="layers" label="Buku Dibaca" value="14" unit="semester ini" note="+4 dibanding semester lalu" />
+        <Stat icon="check" label="Ketepatan Waktu" value="96" unit="%" note="23 dari 24 tepat waktu" tone="green" />
+      </div>
+
+      {/* Middle row */}
+      <div className="grid gap-6 lg:grid-cols-5">
+        <section className={`${soft} p-7 lg:col-span-3`}>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">Status Bebas Pustaka</p>
+              <h2 className="mt-2 text-lg font-semibold text-[#0d372b]">Tidak ada tanggungan perpustakaan</h2>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+              <span className="size-1.5 rounded-full bg-emerald-500" />Bebas Tanggungan
+            </span>
+          </div>
+          <dl className="mt-7 grid grid-cols-3 divide-x divide-slate-100 border-y border-slate-100 py-5">
+            {[["Rp 0", "Denda aktif"], ["0", "Tunggakan"], ["2", "Pinjaman aktif"]].map(([v, l]) => (
+              <div key={l} className="px-4 first:pl-0">
+                <dd className="text-2xl font-light text-slate-900 tabular-nums">{v}</dd>
+                <dt className="mt-1 text-xs text-slate-500">{l}</dt>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p className="max-w-sm text-sm leading-relaxed text-slate-500">Surat keterangan bebas pustaka berlaku sebagai syarat pendaftaran yudisium. Pinjaman aktif harus dikembalikan sebelum surat diterbitkan.</p>
+            <button className="inline-flex items-center gap-2 rounded-lg border border-[#0d372b]/15 bg-white px-4 py-2 text-sm font-medium text-[#0d372b] transition hover:bg-emerald-50/60">
+              <Icon d="download" className="size-4" />Unduh Surat Yudisium
+            </button>
+          </div>
+        </section>
+
+        <section className={`${soft} flex flex-col p-7 lg:col-span-2`}>
+          <div className="flex items-center gap-2.5">
+            <span className="grid size-8 place-items-center rounded-full border border-amber-200 bg-amber-50/70 text-amber-600"><Icon d="alert" className="size-4" /></span>
+            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">Peringatan Jatuh Tempo</p>
+          </div>
+          <p className="mt-5 text-base font-medium leading-snug text-slate-900">Keamanan Jaringan Komputer</p>
+          <p className="mt-1 text-sm text-slate-500">Kembalikan dalam <span className="font-medium text-amber-700">2 hari</span> · 06 Okt 2026</p>
+          <div className="mt-6">
+            <div className="mb-2 flex justify-between text-[11px] text-slate-400"><span>Masa pinjam</span><span className="tabular-nums">12 / 14 hari</span></div>
+            <div className="h-1 overflow-hidden rounded-full bg-slate-100"><div className="h-full w-[86%] rounded-full bg-amber-400" /></div>
+          </div>
+          <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+            <p className="text-xs text-slate-400">Denda Rp 1.000/hari</p>
+            <button onClick={() => go("circulation")} className="rounded-lg bg-[#0d372b] px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-[#155f46]">Perpanjang</button>
+          </div>
+        </section>
+      </div>
+
+      {/* Bottom: hold ticket */}
+      <section className={`${soft} grid overflow-hidden md:grid-cols-[1fr_auto_260px]`}>
+        <div className="p-7">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0d372b]/10 bg-emerald-50/50 px-3 py-1 text-xs font-medium text-[#0d372b]">Reservasi Aktif · Hold 3 Hari</span>
+            <span className="font-mono text-xs text-slate-400">PNL-HOLD-8921</span>
+          </div>
+          <h3 className="mt-4 text-xl font-semibold text-slate-900">Rekayasa Perangkat Lunak</h3>
+          <p className="text-sm text-slate-500">Roger Pressman · 2020 · TIK 005.12</p>
+          <dl className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-3">
+            <div><dt className="text-[11px] uppercase tracking-[0.14em] text-slate-400">Lokasi Rak</dt><dd className="mt-1 flex items-center gap-1.5 text-lg font-medium text-[#0d372b]"><Icon d="pin" className="size-4 opacity-60" />B-04 / TIK</dd></div>
+            <div><dt className="text-[11px] uppercase tracking-[0.14em] text-slate-400">Pengambilan</dt><dd className="mt-1 text-sm text-slate-700">Meja Sirkulasi, Lt. 2</dd></div>
+            <div><dt className="text-[11px] uppercase tracking-[0.14em] text-slate-400">Bawa</dt><dd className="mt-1 text-sm text-slate-700">KTM aktif</dd></div>
+          </dl>
+        </div>
+        <div className="relative hidden md:block">
+          <div className="absolute inset-y-6 border-l border-dashed border-slate-200" />
+          <span className="absolute -top-3 -left-3 size-6 rounded-full border border-slate-200/60 bg-slate-50" />
+          <span className="absolute -bottom-3 -left-3 size-6 rounded-full border border-slate-200/60 bg-slate-50" />
+        </div>
+        <div className="flex flex-col justify-center border-t border-slate-100 p-7 md:border-t-0">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">Sisa Waktu Hold</p>
+          <p className="mt-2 font-mono text-3xl font-light tracking-tight text-[#0d372b] tabular-nums">{rest}</p>
+          <p className="text-xs text-slate-500">+ {h.replace("h", "")} hari</p>
+          <p className="mt-4 text-xs leading-relaxed text-slate-400">Hold otomatis batal jika tidak diambil sebelum waktu habis.</p>
+        </div>
+      </section>
+
+      {/* Reading analytics */}
+      <section className={`${soft} p-7`}>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">Analitik Peminjaman</p>
+          <span className="inline-flex items-center rounded-full border border-slate-200 px-2.5 py-0.5 text-xs text-slate-600">Genre favorit: <b className="ml-1 font-medium text-[#0d372b]">Jaringan</b></span>
+        </div>
+        <div className="mt-5 flex h-1.5 overflow-hidden rounded-full bg-slate-100">
+          {genres.map(([g, v], i) => <div key={g} style={{ width: `${v}%`, opacity: 1 - i * 0.25 }} className="h-full border-r-2 border-white bg-[#0d372b] last:border-0" />)}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+          {genres.map(([g, v], i) => (
+            <span key={g} className="flex items-center gap-2 text-xs text-slate-500"><span className="size-2 rounded-sm bg-[#0d372b]" style={{ opacity: 1 - i * 0.25 }} />{g}<span className="tabular-nums text-slate-400">{v}%</span></span>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ---------- Fines ---------- */
+type FineState = "unpaid" | "pending_verification" | "rejected";
+type Fine = { id: string; b: (typeof books)[number]; from: string; due: string; returned: string; late: number; state: FineState; file?: string };
+const rupiah = (n: number) => `Rp ${n.toLocaleString("id-ID")}`;
+const FINE_RATE = 1000;
+
+function Modal({ onClose, children }: { onClose: () => void; children: ReactNode }) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, [onClose]);
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 p-4 backdrop-blur-[2px]" onClick={onClose}>
+      <div role="dialog" aria-modal className="relative w-full max-w-md rounded-2xl border border-slate-200/60 bg-white p-7 shadow-2xl shadow-slate-900/10" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} aria-label="Tutup" className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"><Icon d="x" className="size-4" /></button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function QrisMock() {
+  const n = 25;
+  const cells = Array.from({ length: n * n }, (_, i) => ((i * 7919) ^ ((i >> 2) * 131)) % 3 === 0);
+  const finder = (r: number, c: number) => {
+    const inF = (rr: number, cc: number) => rr >= 0 && rr < 7 && cc >= 0 && cc < 7;
+    for (const [or, oc] of [[0, 0], [0, n - 7], [n - 7, 0]]) {
+      const lr = r - or, lc = c - oc;
+      if (inF(lr, lc)) return lr === 0 || lr === 6 || lc === 0 || lc === 6 || (lr >= 2 && lr <= 4 && lc >= 2 && lc <= 4) ? 1 : 0;
+    }
+    return -1;
+  };
+  return (
+    <div className="relative grid size-48 grid-cols-[repeat(25,1fr)] p-1">
+      {cells.map((on, i) => {
+        const f = finder(Math.floor(i / n), i % n);
+        return <div key={i} className={(f === -1 ? on : f === 1) ? "bg-slate-900" : ""} />;
+      })}
+      <div className="absolute left-1/2 top-1/2 grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-md border-2 border-white bg-[#0d372b] text-[9px] font-bold tracking-tight text-white">PNL</div>
+    </div>
+  );
+}
+
+function QrisModal({ fine, onClose, onUpload }: { fine: Fine; onClose: () => void; onUpload: () => void }) {
+  return (
+    <Modal onClose={onClose}>
+      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">Pembayaran Denda</p>
+      <h3 className="mt-1 text-lg font-semibold text-[#0d372b]">Bayar dengan QRIS</h3>
+      <div className="mt-5 rounded-xl border border-slate-200/70">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
+          <span className="text-sm font-black italic tracking-tight text-slate-900">QRIS</span>
+          <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Bank Aceh Syariah</span>
+        </div>
+        <div className="flex flex-col items-center px-4 py-5">
+          <p className="text-sm font-semibold text-slate-900">UPT Perpustakaan PNL</p>
+          <p className="font-mono text-[10px] text-slate-400">NMID: ID1026318842107</p>
+          <div className="mt-3"><QrisMock /></div>
+          <p className="mt-3 text-[11px] uppercase tracking-[0.14em] text-slate-400">Total Bayar</p>
+          <p className="text-2xl font-semibold text-[#0d372b] tabular-nums">{rupiah(fine.late * FINE_RATE)}</p>
+        </div>
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-slate-500">Scan menggunakan M-Banking / GoPay / OVO / Dana, lalu simpan bukti struk dan unggah pada tombol <b className="font-medium text-slate-700">Unggah Bukti</b>.</p>
+      <p className="mt-2 truncate text-xs text-slate-400">Denda: {fine.b.t} · {fine.late} hari</p>
+      <div className="mt-6 flex justify-end gap-2">
+        <button onClick={onClose} className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">Tutup</button>
+        <button onClick={onUpload} className="inline-flex items-center gap-2 rounded-lg bg-[#0d372b] px-4 py-2 text-sm font-medium text-white hover:bg-[#155f46]"><Icon d="upload" className="size-4" />Lanjut Unggah Bukti</button>
+      </div>
+    </Modal>
+  );
+}
+
+function UploadModal({ fine, onClose, onSubmit }: { fine: Fine; onClose: () => void; onSubmit: (file: string) => void }) {
+  const [file, setFile] = useState<File | null>(null);
+  const [drag, setDrag] = useState(false);
+  const [err, setErr] = useState("");
+  const pick = (f?: File) => {
+    if (!f) return;
+    if (!/^image\/|application\/pdf/.test(f.type)) return setErr("Format harus JPG, PNG, atau PDF.");
+    if (f.size > 5 * 1024 * 1024) return setErr("Ukuran file melebihi 5 MB.");
+    setErr(""); setFile(f);
+  };
+  return (
+    <Modal onClose={onClose}>
+      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">{fine.state === "rejected" ? "Unggah Ulang" : "Konfirmasi Pembayaran"}</p>
+      <h3 className="mt-1 text-lg font-semibold text-[#0d372b]">Unggah bukti transfer</h3>
+      <p className="mt-1 truncate text-sm text-slate-500">{fine.b.t} · {rupiah(fine.late * FINE_RATE)}</p>
+      <form onSubmit={(e) => { e.preventDefault(); if (file) onSubmit(file.name); }}>
+        <label
+          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => { e.preventDefault(); setDrag(false); pick(e.dataTransfer.files[0]); }}
+          className={`mt-5 flex cursor-pointer flex-col items-center rounded-xl border border-dashed px-6 py-9 text-center transition ${drag ? "border-[#0d372b]/40 bg-emerald-50/50" : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"}`}
+        >
+          <input type="file" accept="image/*,application/pdf" className="sr-only" onChange={(e) => pick(e.target.files?.[0])} />
+          <span className="grid size-10 place-items-center rounded-full border border-slate-200 text-[#0d372b]/70"><Icon d="upload" className="size-4" /></span>
+          {file ? (
+            <><p className="mt-3 max-w-full truncate text-sm font-medium text-slate-900">{file.name}</p><p className="text-xs text-slate-400">{(file.size / 1024).toFixed(0)} KB · klik untuk ganti</p></>
+          ) : (
+            <><p className="mt-3 text-sm font-medium text-slate-700">Tarik struk ke sini atau <span className="text-[#0d372b] underline underline-offset-2">pilih file</span></p><p className="mt-1 text-xs text-slate-400">JPG, PNG, atau PDF · maks. 5 MB</p></>
+          )}
+        </label>
+        {err && <p className="mt-2 text-xs text-red-600">{err}</p>}
+        <div className="mt-6 flex justify-end gap-2">
+          <button type="button" onClick={onClose} className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">Batal</button>
+          <button type="submit" disabled={!file} className="rounded-lg bg-[#0d372b] px-4 py-2 text-sm font-medium text-white hover:bg-[#155f46] disabled:bg-slate-100 disabled:text-slate-400">Kirim untuk Verifikasi</button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+function Fines() {
+  const [fines, setFines] = useState<Fine[]>([
+    { id: "F-0241", b: books[1], from: "10 Agu 2026", due: "24 Agu 2026", returned: "07 Sep 2026", late: 14, state: "unpaid" },
+    { id: "F-0236", b: books[3], from: "28 Jul 2026", due: "11 Agu 2026", returned: "16 Agu 2026", late: 5, state: "rejected", file: "struk-dana-1608.jpg" },
+    { id: "F-0219", b: books[5], from: "01 Jul 2026", due: "15 Jul 2026", returned: "18 Jul 2026", late: 3, state: "pending_verification", file: "bukti-qris-1807.png" },
+  ]);
+  const [showQrisModal, setShowQrisModal] = useState<string | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState<string | null>(null);
+  const [viewing, setViewing] = useState<string | null>(null);
+  const find = (id: string | null) => fines.find((f) => f.id === id);
+  const outstanding = fines.filter((f) => f.state !== "pending_verification").reduce((s, f) => s + f.late * FINE_RATE, 0);
+  const pending = fines.filter((f) => f.state === "pending_verification").reduce((s, f) => s + f.late * FINE_RATE, 0);
+  const btnGhost = "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-[#0d372b]";
+  const btnPrimary = "inline-flex items-center gap-2 rounded-lg bg-[#0d372b] px-3.5 py-2 text-sm font-medium text-white transition hover:bg-[#155f46]";
+
+  return (
+    <div className="space-y-4">
+      <div className={`${card} grid grid-cols-3 divide-x divide-emerald-950/5 p-5`}>
+        {[[rupiah(outstanding), "Belum dibayar", "text-danger"], [rupiah(pending), "Menunggu verifikasi", "text-amber-700"], [`${rupiah(FINE_RATE)}/hari`, "Tarif denda", "text-ink"]].map(([v, l, c]) => (
+          <div key={l} className="px-4 first:pl-0"><p className={`text-xl font-semibold tabular-nums md:text-2xl ${c}`}>{v}</p><p className="mt-0.5 text-xs text-muted">{l}</p></div>
+        ))}
+      </div>
+
+      {fines.map((f) => (
+        <div key={f.id} className={`${card} grid items-center gap-5 p-4 md:grid-cols-[80px_1fr_auto]`}>
+          <div className="w-20"><Cover t="" c={f.b.c} small /></div>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              {f.state === "unpaid" && <Badge tone="red">Belum Dibayar</Badge>}
+              {f.state === "pending_verification" && <Badge tone="amber">Menunggu Verifikasi Pustakawan</Badge>}
+              {f.state === "rejected" && <Badge tone="red"><Icon d="alert" className="size-3.5" />Bukti Ditolak Pustakawan</Badge>}
+              <span className="font-mono text-xs text-muted">{f.id}</span>
+            </div>
+            <p className="mt-2 text-lg font-semibold text-ink">{f.b.t}</p>
+            <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              <span className="text-muted">Dipinjam <b className="text-ink">{f.from}</b></span>
+              <span className="text-muted">Jatuh tempo <b className="text-ink">{f.due}</b></span>
+              <span className="text-muted">Terlambat <b className="text-danger">{f.late} hari</b></span>
+            </div>
+            {f.state === "rejected" && <p className="mt-2 text-xs text-danger">Gagal verifikasi: Struk tidak terbaca</p>}
+          </div>
+          <div className="flex flex-col items-start gap-3 md:items-end">
+            <div className="md:text-right">
+              <p className="text-xl font-semibold text-ink tabular-nums">{rupiah(f.late * FINE_RATE)}</p>
+              <p className="text-xs text-muted">{rupiah(FINE_RATE)} × {f.late} hari</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {f.state === "unpaid" && (<>
+                <button onClick={() => setShowQrisModal(f.id)} className={btnPrimary}>Bayar QRIS</button>
+                <button onClick={() => setShowUploadModal(f.id)} className={btnGhost}><Icon d="upload" className="size-4" />Upload Bukti</button>
+              </>)}
+              {f.state === "pending_verification" && <button onClick={() => setViewing(f.id)} className={btnGhost}><Icon d="file" className="size-4" />Lihat Bukti Struk</button>}
+              {f.state === "rejected" && (<>
+                <button onClick={() => setShowQrisModal(f.id)} className={btnGhost}>Bayar QRIS</button>
+                <button onClick={() => setShowUploadModal(f.id)} className={btnPrimary}><Icon d="upload" className="size-4" />Upload Ulang</button>
+              </>)}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {find(showQrisModal) && (
+        <QrisModal fine={find(showQrisModal)!} onClose={() => setShowQrisModal(null)} onUpload={() => { setShowUploadModal(showQrisModal); setShowQrisModal(null); }} />
+      )}
+      {find(showUploadModal) && (
+        <UploadModal
+          fine={find(showUploadModal)!}
+          onClose={() => setShowUploadModal(null)}
+          onSubmit={(file) => { setFines((fs) => fs.map((x) => (x.id === showUploadModal ? { ...x, state: "pending_verification", file } : x))); setShowUploadModal(null); }}
+        />
+      )}
+      {find(viewing) && (
+        <Modal onClose={() => setViewing(null)}>
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">Bukti Struk · {viewing}</p>
+          <h3 className="mt-1 text-lg font-semibold text-[#0d372b]">{find(viewing)!.file}</h3>
+          <div className="mt-5 rounded-xl border border-slate-200/70 bg-slate-50/60 p-5 font-mono text-xs text-slate-600">
+            {[["Merchant", "UPT Perpustakaan PNL"], ["Nominal", rupiah(find(viewing)!.late * FINE_RATE)], ["Metode", "QRIS"], ["Status", "Menunggu verifikasi"]].map(([k, v]) => (
+              <div key={k} className="flex justify-between border-b border-dashed border-slate-200 py-2 last:border-0"><span className="text-slate-400">{k}</span><span>{v}</span></div>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-slate-500">Pustakawan biasanya memverifikasi dalam 1×24 jam kerja. Unggahan dikunci selama proses verifikasi.</p>
+          <div className="mt-6 flex justify-end"><button onClick={() => setViewing(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">Tutup</button></div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function Circulation() {
+  const [tab, setTab] = useState<CircTab>("active");
+  const [extended, setExtended] = useState<string[]>([]);
+  const h1 = useCountdown(52), h2 = useCountdown(70);
+  const active = [
+    { b: books[0], from: "22 Sep 2026", due: "06 Okt 2026", days: 2 },
+    { b: books[2], from: "29 Sep 2026", due: "13 Okt 2026", days: 9 },
+  ];
+  const hist = [
+    ["Pemrograman Web Modern", "02 Agu 2026", "15 Agu 2026", "Tepat waktu"],
+    ["Algoritma & Struktur Data", "10 Jun 2026", "26 Jun 2026", "Terlambat 2 hari · Lunas"],
+    ["Basis Data Relasional", "03 Mei 2026", "16 Mei 2026", "Tepat waktu"],
+    ["Mesin Konversi Energi", "12 Mar 2026", "24 Mar 2026", "Tepat waktu"],
+  ];
+  return (
+    <>
+      <Title eyebrow="Sirkulasi Buku" title="Peminjaman & reservasi" sub="Maks. 3 buku · durasi pinjam 14 hari · 1x perpanjangan" />
+      <div className="mb-5"><Tabs value={tab} onChange={setTab} items={[["active", "Sedang Dipinjam"], ["hold", "Status Hold (3 Hari)"], ["history", "Riwayat Selesai"], ["fines", "Denda & Pembayaran"]]} /></div>
+
+      {tab === "active" && (
+        <div className="space-y-4">
+          {active.map(({ b, from, due, days }) => {
+            const ext = extended.includes(b.t);
+            return (
+              <div key={b.t} className={`${card} grid items-center gap-5 p-4 md:grid-cols-[80px_1fr_auto]`}>
+                <div className="w-20"><Cover t="" c={b.c} small /></div>
+                <div>
+                  <p className="text-lg font-semibold text-ink">{b.t}</p>
+                  <p className="text-sm text-muted">{b.a} · {b.k}</p>
+                  <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                    <span className="text-muted">Dipinjam <b className="text-ink">{from}</b></span>
+                    <span className="text-muted">Jatuh tempo <b className="text-ink">{ext ? "20 Okt 2026" : due}</b></span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-start gap-3 md:items-end">
+                  <Badge tone={ext ? "green" : days <= 3 ? "red" : "slate"}>{ext ? "Diperpanjang +14 hari" : `${days} hari lagi`}</Badge>
+                  <button disabled={ext} onClick={() => setExtended([...extended, b.t])} className="rounded-lg bg-accent px-4 py-2 text-sm font-bold text-forest hover:bg-accent-hover disabled:bg-slate-100 disabled:text-slate-400">
+                    {ext ? "Perpanjangan Diajukan" : "Ajukan Perpanjangan"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {tab === "hold" && (
+        <div className="grid gap-4 md:grid-cols-2">
+          {[{ b: books[7], t: h1, q: 1, rak: "B-04 / TIK" }, { b: books[6], t: h2, q: 2, rak: "B-07 / TIK" }].map(({ b, t, q, rak }) => (
+            <div key={b.t} className={`${card} p-5`}>
+              <div className="flex items-start justify-between gap-3">
+                <div><Badge tone={q === 1 ? "lime" : "amber"}>{q === 1 ? "Siap diambil" : `Antrean #${q}`}</Badge><p className="mt-3 text-lg font-semibold text-ink">{b.t}</p><p className="text-sm text-muted">{b.a}</p></div>
+              </div>
+              <div className="mt-5 rounded-xl bg-forest p-4 text-white">
+                <p className="text-xs uppercase tracking-wider text-white/60">Kedaluwarsa dalam</p>
+                <p className="font-mono text-3xl font-bold text-accent">{t}</p>
+              </div>
+              <p className="mt-4 flex items-center gap-2 text-sm text-muted"><Icon d="pin" className="size-4 text-forest" />Rak ambil: <b className="text-ink">{rak}</b> · Lantai 2, Meja Sirkulasi</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === "history" && (
+        <div className={`${card} overflow-x-auto`}>
+          <table className="w-full min-w-[560px] text-left text-sm">
+            <thead className="border-b border-emerald-950/10 text-xs uppercase tracking-wider text-muted">
+              <tr>{["Judul", "Dipinjam", "Dikembalikan", "Keterangan"].map((h) => <th key={h} className="px-5 py-3 font-semibold">{h}</th>)}</tr>
+            </thead>
+            <tbody>
+              {hist.map((r) => (
+                <tr key={r[0]} className="border-b border-emerald-950/5 last:border-0 hover:bg-canvas">
+                  <td className="px-5 py-3.5 font-semibold text-ink">{r[0]}</td><td className="px-5 text-muted">{r[1]}</td><td className="px-5 text-muted">{r[2]}</td>
+                  <td className="px-5"><Badge tone={r[3].startsWith("Tepat") ? "green" : "amber"}>{r[3]}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {tab === "fines" && <Fines />}
+    </>
+  );
+}
+
+function ERepo() {
+  const [tab, setTab] = useState<ErepoTab>("upload");
+  const [file, setFile] = useState<string | null>(null);
+  const [drag, setDrag] = useState(false);
+  const [cat, setCat] = useState("Non-Fiksi");
+  const [sent, setSent] = useState(false);
+  const input = "w-full rounded-lg border border-emerald-950/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest focus:ring-2 focus:ring-accent";
+  const works = [
+    { t: "Sistem Rekomendasi Buku Perpustakaan PNL Berbasis Collaborative Filtering", d: "Dr. Muhammad Arhami, M.Kom", date: "28 Sep 2026", s: "pending" },
+    { t: "Implementasi Firewall Mikrotik pada Laboratorium Jaringan", d: "Hendrawaty, S.T., M.T.", date: "14 Jul 2026", s: "ok" },
+    { t: "Analisis Usability Aplikasi SIAKAD Mahasiswa", d: "Azhar, S.T., M.Sc.", date: "02 Sep 2026", s: "rev" },
+  ];
+  const tone = { pending: ["amber", "Pending Kurasi"], ok: ["green", "Disetujui / Published"], rev: ["red", "Perlu Revisi"] } as const;
+
+  return (
+    <>
+      <Title eyebrow="E-Repository & Karya" title="Arsipkan karya ilmiahmu" sub="Karya yang disetujui terbit di repositori terbuka PNL." />
+      <div className="mb-5"><Tabs value={tab} onChange={setTab} items={[["upload", "Unggah Karya Baru"], ["my_works", "Karya Saya & Status Kurasi"], ["downloads", "Riwayat Unduhan"]]} /></div>
+
+      {tab === "upload" && (
+        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className={`${card} grid gap-6 p-6 lg:grid-cols-2`}>
+          <div className="space-y-4">
+            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Judul Karya</span><input required className={input} placeholder="Contoh: Rancang Bangun Sistem..." /></label>
+            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Dosen Pembimbing</span><input required className={input} placeholder="Nama lengkap & gelar" /></label>
+            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Jurusan</span>
+              <select className={input}><option>Teknologi Informasi dan Komputer</option><option>Teknik Mesin</option><option>Teknik Elektro</option><option>Teknik Sipil</option><option>Teknik Kimia</option><option>Tata Niaga</option></select>
+            </label>
+            <div><span className="mb-1.5 block text-sm font-semibold">Kategori</span>
+              <div className="flex gap-2">{["Non-Fiksi", "Fiksi"].map((c) => (
+                <button type="button" key={c} onClick={() => setCat(c)} className={`flex-1 rounded-lg border px-3 py-2.5 text-sm font-semibold ${cat === c ? "border-forest bg-forest text-white" : "border-emerald-950/15 text-muted"}`}>{c}</button>
+              ))}</div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="mb-1.5 block text-sm font-semibold">Berkas PDF</span>
+            <label
+              onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+              onDragLeave={() => setDrag(false)}
+              onDrop={(e) => { e.preventDefault(); setDrag(false); setFile(e.dataTransfer.files[0]?.name ?? null); }}
+              className={`flex flex-1 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition ${drag ? "border-forest bg-accent-soft" : "border-emerald-950/20 bg-canvas hover:border-forest-light"}`}
+            >
+              <input type="file" accept="application/pdf" className="hidden" onChange={(e) => setFile(e.target.files?.[0]?.name ?? null)} />
+              <div className="grid size-14 place-items-center rounded-full bg-accent text-forest"><Icon d="upload" className="size-6" /></div>
+              {file ? <p className="mt-4 font-semibold text-forest">{file}</p> : <><p className="mt-4 font-semibold text-ink">Seret & lepas PDF di sini</p><p className="text-sm text-muted">atau klik untuk memilih · maks. 25 MB</p></>}
+            </label>
+            <button className="mt-4 rounded-lg bg-accent py-3 text-sm font-bold text-forest hover:bg-accent-hover">{sent ? "✓ Terkirim untuk Kurasi" : "Kirim untuk Kurasi"}</button>
+          </div>
+        </form>
+      )}
+
+      {tab === "my_works" && (
+        <div className="grid gap-4 md:grid-cols-3">
+          {works.map((w) => (
+            <div key={w.t} className={`${card} flex flex-col p-5`}>
+              <Badge tone={tone[w.s as keyof typeof tone][0]}>{tone[w.s as keyof typeof tone][1]}</Badge>
+              <p className="mt-4 font-semibold leading-snug text-ink">{w.t}</p>
+              <p className="mt-2 text-sm text-muted">Pembimbing: {w.d}</p>
+              <p className="mt-auto pt-4 text-xs text-muted">Diunggah {w.date}</p>
+              {w.s === "rev" && <p className="mt-3 rounded-lg bg-danger-soft p-3 text-xs text-danger">Catatan kurator: lengkapi lembar pengesahan & abstrak bahasa Inggris.</p>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === "downloads" && (
+        <div className={`${card} divide-y divide-emerald-950/5`}>
+          {papers.slice(0, 5).map((p, i) => (
+            <div key={p.t} className="flex items-center gap-4 p-4">
+              <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-soft text-forest"><Icon d="file" className="size-5" /></div>
+              <div className="min-w-0 flex-1"><p className="truncate font-semibold text-ink">{p.t}</p><p className="text-xs text-muted">{p.a} · {p.j}</p></div>
+              <span className="hidden text-xs text-muted sm:block">{["03 Okt", "01 Okt", "27 Sep", "20 Sep", "11 Sep"][i]} 2026</span>
+              <button className="rounded-lg p-2 text-forest hover:bg-canvas" aria-label="Unduh ulang"><Icon d="download" className="size-4" /></button>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ---------- Shell ---------- */
+type NavItem = { key: View; label: string; icon: keyof typeof P };
+
+const TIP = "pointer-events-none invisible absolute left-full z-50 ml-3 hidden whitespace-nowrap rounded-md bg-slate-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100 lg:block";
+const ROW = "group relative flex min-h-[42px] w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium tracking-[-0.01em] transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+
+function SideLink({ item, active, collapsed, onClick }: { item: NavItem; active: boolean; collapsed: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={item.label}
+      aria-current={active ? "page" : undefined}
+      className={`${ROW} ${collapsed ? "lg:justify-center lg:px-0" : ""} ${active ? "bg-accent font-semibold text-forest" : "text-white/70 hover:bg-white/10 hover:text-white"}`}
+    >
+      <Icon d={item.icon} className="size-5 shrink-0" />
+      <span className={`truncate text-left ${collapsed ? "lg:hidden" : ""}`}>{item.label}</span>
+      {collapsed && <span role="tooltip" className={TIP}>{item.label}</span>}
+    </button>
+  );
+}
+
+export default function StudentPortal({ onLogout }: { onLogout?: () => void }) {
+  const [activeView, setActiveView] = useState<View>("dashboard");
+  const [open, setOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const go = (v: View) => { setActiveView(v); setOpen(false); };
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const handleStudentReserve = () => setToast("Reservasi berhasil. Tiket hold 3 hari tersedia di Dashboard Utama.");
+  const handleStudentDownload = () => setToast("Unduhan PDF dimulai. Tercatat di Riwayat Unduhan Anda.");
+
+  const dashboard: NavItem = { key: "dashboard", label: "Dashboard", icon: "grid" };
+  const catalog: NavItem[] = [
+    { key: "catalog_books", label: "Buku Fisik", icon: "books" },
+    { key: "catalog_erepo", label: "E-Repository", icon: "layers" },
+  ];
+  const others: NavItem[] = [
+    { key: "circulation", label: "Sirkulasi", icon: "clock" },
+    { key: "erepo_student", label: "Unggah Karya", icon: "file" },
+  ];
+  const link = (item: NavItem) => (
+    <SideLink key={item.key} item={item} active={activeView === item.key} collapsed={isCollapsed} onClick={() => go(item.key)} />
+  );
+
+  return (
+    <div className="min-h-screen bg-canvas text-ink">
+      {open && <div className="fixed inset-0 z-30 bg-forest/50 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-forest p-4 text-white transition-[transform,width] duration-200 lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"} ${open ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className={`flex items-center justify-between px-1 ${isCollapsed ? "lg:justify-center lg:px-0" : ""}`}>
+          <div className="flex items-center gap-3">
+            <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent font-black text-forest">SR</div>
+            <div className={isCollapsed ? "lg:hidden" : ""}><p className="font-extrabold tracking-tight">SIPERPUS-REPO</p><p className="text-[11px] text-white/50">Politeknik Negeri Lhokseumawe</p></div>
+          </div>
+          <button onClick={() => setOpen(false)} className="lg:hidden" aria-label="Tutup menu"><Icon d="x" /></button>
+        </div>
+        <span className={`mx-1 mt-5 self-start rounded-full border border-accent/40 px-3 py-1 text-xs font-semibold text-accent ${isCollapsed ? "lg:hidden" : ""}`}>Mahasiswa PNL</span>
+        <nav aria-label="Navigasi utama" className="mt-6 space-y-1">
+          {link(dashboard)}
+          <p className={`my-3 px-3 pt-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 ${isCollapsed ? "lg:hidden" : ""}`}>Jelajahi Katalog</p>
+          {isCollapsed && <div className="mx-3 my-3 hidden border-t border-white/15 lg:block" />}
+          <div className={`space-y-1 ${isCollapsed ? "" : "lg:ml-5 lg:border-l lg:border-white/10 lg:pl-2"}`}>{catalog.map(link)}</div>
+          {isCollapsed && <div className="mx-3 my-3 hidden border-t border-white/15 lg:block" />}
+          <div className="space-y-1 pt-1">{others.map(link)}</div>
+        </nav>
+        <div className={`mt-auto rounded-xl bg-white/5 p-4 text-xs text-white/60 ${isCollapsed ? "lg:hidden" : ""}`}>Jam layanan: Senin–Jumat, 08.00–16.30 WIB</div>
+        <button onClick={onLogout} aria-label="Keluar SSO" className={`${ROW} mt-3 text-white/80 hover:bg-danger/20 hover:text-white ${isCollapsed ? "lg:justify-center lg:px-0" : ""}`}>
+          <Icon d="logout" className="size-5 shrink-0" />
+          <span className={`truncate ${isCollapsed ? "lg:hidden" : ""}`}>Keluar SSO</span>
+          {isCollapsed && <span role="tooltip" className={TIP}>Keluar SSO</span>}
+        </button>
+        <button
+          onClick={() => setIsCollapsed((c) => !c)}
+          aria-label={isCollapsed ? "Perluas sidebar" : "Ciutkan sidebar"}
+          aria-expanded={!isCollapsed}
+          className="absolute -right-3 top-[34px] hidden size-6 place-items-center rounded-full border border-white/15 bg-forest-light text-white shadow-md transition-[background-color] duration-150 hover:bg-forest-light/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:grid"
+        >
+          <Icon d={isCollapsed ? "chevR" : "chevL"} className="size-4" />
+        </button>
+      </aside>
+
+      <div className={`transition-[padding] duration-200 ${isCollapsed ? "lg:pl-20" : "lg:pl-72"}`}>
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-emerald-950/10 bg-canvas/85 px-4 py-3 backdrop-blur md:px-8">
+          <button onClick={() => setOpen(true)} className="rounded-lg p-2 hover:bg-white lg:hidden" aria-label="Buka menu"><Icon d="menu" /></button>
+          <div className="flex items-center gap-3">
+            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">AM</div>
+            <div className="leading-tight"><p className="text-sm font-bold">Halo, Ammar</p><p className="text-xs text-muted">Teknik Informatika</p></div>
+          </div>
+          <button className="relative ml-auto rounded-xl border border-emerald-950/10 bg-white p-2.5" aria-label="Notifikasi">
+            <Icon d="bell" className="size-5" /><span className="absolute right-2 top-2 size-2 rounded-full bg-danger ring-2 ring-white" />
+          </button>
+        </header>
+        <main className="mx-auto max-w-screen-2xl p-4 md:p-8">
+          {activeView === "dashboard" && <Dashboard go={go} />}
+          {activeView === "catalog_books" && <BooksView onReserve={handleStudentReserve} />}
+          {activeView === "catalog_erepo" && <RepositoryView onDownload={handleStudentDownload} />}
+          {activeView === "circulation" && <Circulation />}
+          {activeView === "erepo_student" && <ERepo />}
+        </main>
+      </div>
+
+      {toast && (
+        <div role="status" className="fixed bottom-6 left-1/2 z-50 flex max-w-[90vw] -translate-x-1/2 items-center gap-3 rounded-xl bg-forest px-5 py-3 text-sm font-semibold text-white shadow-2xl">
+          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-forest"><Icon d="check" className="size-4" /></span>
+          {toast}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+================================================
+FILE: src/vite-env.d.ts
+================================================
+/// <reference types="vite/client" />
+
+
+
+================================================
+FILE: supabase/functions/server/index.tsx
+================================================
+import { Hono } from "npm:hono";
+import { cors } from "npm:hono/cors";
+import { logger } from "npm:hono/logger";
+import * as kv from "./kv_store.tsx";
+const app = new Hono();
+
+// Enable logger
+app.use('*', logger(console.log));
+
+// Enable CORS for all routes and methods
+app.use(
+  "/*",
+  cors({
+    origin: "*",
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+  }),
+);
+
+// Health check endpoint
+app.get("/make-server-2e23811d/health", (c) => {
+  return c.json({ status: "ok" });
+});
+
+Deno.serve(app.fetch);
+
+
+================================================
+FILE: supabase/functions/server/kv_store.tsx
+================================================
+/* AUTOGENERATED FILE - DO NOT EDIT CONTENTS */
+
+/* Table schema:
+CREATE TABLE kv_store_2e23811d (
+  key TEXT NOT NULL PRIMARY KEY,
+  value JSONB NOT NULL
+);
+*/
+
+// View at https://supabase.com/dashboard/project/ffkwdjttcwtgsbfxyaem/database/tables
+
+// This file provides a simple key-value interface for storing Figma Make data. It should be adequate for most small-scale use cases.
+import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
+
+const client = () => createClient(
+  Deno.env.get("SUPABASE_URL"),
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
+);
+
+// Set stores a key-value pair in the database.
+export const set = async (key: string, value: any): Promise<void> => {
+  const supabase = client()
+  const { error } = await supabase.from("kv_store_2e23811d").upsert({
+    key,
+    value
+  });
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Get retrieves a key-value pair from the database.
+export const get = async (key: string): Promise<any> => {
+  const supabase = client()
+  const { data, error } = await supabase.from("kv_store_2e23811d").select("value").eq("key", key).maybeSingle();
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data?.value;
+};
+
+// Delete deletes a key-value pair from the database.
+export const del = async (key: string): Promise<void> => {
+  const supabase = client()
+  const { error } = await supabase.from("kv_store_2e23811d").delete().eq("key", key);
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Sets multiple key-value pairs in the database.
+export const mset = async (keys: string[], values: any[]): Promise<void> => {
+  const supabase = client()
+  const { error } = await supabase.from("kv_store_2e23811d").upsert(keys.map((k, i) => ({ key: k, value: values[i] })));
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Gets multiple key-value pairs from the database.
+export const mget = async (keys: string[]): Promise<any[]> => {
+  const supabase = client()
+  const { data, error } = await supabase.from("kv_store_2e23811d").select("value").in("key", keys);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data?.map((d) => d.value) ?? [];
+};
+
+// Deletes multiple key-value pairs from the database.
+export const mdel = async (keys: string[]): Promise<void> => {
+  const supabase = client()
+  const { error } = await supabase.from("kv_store_2e23811d").delete().in("key", keys);
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Search for key-value pairs by prefix.
+export const getByPrefix = async (prefix: string): Promise<any[]> => {
+  const supabase = client()
+  const { data, error } = await supabase.from("kv_store_2e23811d").select("key, value").like("key", prefix + "%");
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data?.map((d) => d.value) ?? [];
+};
+
+
+================================================
+FILE: utils/supabase/info.tsx
+================================================
+/* AUTOGENERATED FILE - DO NOT EDIT CONTENTS */
+
+export const projectId = "ffkwdjttcwtgsbfxyaem"
+export const publicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZma3dkanR0Y3d0Z3NiZnh5YWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0ODkwOTUsImV4cCI6MjEwNjA2NTA5NX0.z8BOj6vf5mWPOEFl2l7hCl7pr4TKPvvxX0P8gCEV6aY"
+
+
+================================================
+FILE: .figma/make/analyze-routes
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+
+exec figma-analyze routes "$@"
+
+
+
+================================================
+FILE: .figma/make/deploy
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+pnpm run build
+figma make deploy --build-dir dist
+
+
+
+================================================
+FILE: .figma/make/deploy-preview
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+# Build in development mode to emit sourcemaps.
+pnpm run build --mode development
+figma make deploy-preview --build-dir dist
+
+
+
+================================================
+FILE: .figma/make/dev
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm run dev
+
+
+
+================================================
+FILE: .figma/make/dev.json
+================================================
+{
+  // Files whose changes trigger the install script + dev server restart.
+  // Glob syntax: doublestar (supports **, *, ?, [abc], {a,b}). Paths are
+  // repo-relative and case-sensitive. `.mise.toml` and the scripts under
+  // `.figma/make/` are always watched regardless of these lists.
+  //
+  // Each key accepts a shorthand array of globs:
+  //   "installOn": ["package.json"]
+  // or an object with includes/excludes:
+  //   "installOn": { "includes": ["**/*.json"], "excludes": ["test/**"] }
+  //
+  // Only list files that affect the *toolchain or dependency tree* here —
+  // NOT application source files. Vite's dev server already watches
+  // application code (src/**/*) and config (vite.config.ts) via its own HMR
+  // pipeline, so including them here would cause a redundant full restart.
+  "installOn": [
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  // Files whose changes trigger only a dev server restart (no install).
+  "restartOn": []
+}
+
+
+
+================================================
+FILE: .figma/make/format
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm run format -- "$@"
+
+
+
+================================================
+FILE: .figma/make/import-assets.mjs
+================================================
+import { constants, existsSync, readdirSync } from 'node:fs'
+import { copyFile, mkdir } from 'node:fs/promises'
+import path from 'node:path'
+
+const projectMetadata = new Set([
+  'npm-shrinkwrap.json',
+  'pnpm-lock.yaml',
+  'pnpm-workspace.yaml',
+  'yarn.lock',
+  'bun.lock',
+  'bun.lockb',
+  'agents.md',
+  'claude.md',
+])
+const projectConfiguration =
+  /^(?:package(?:-lock)?\.json|(?:tsconfig|jsconfig)(?:\.[^.]+)*\.json|.*\.config\.[^.]+)$/i
+
+function currentAssets(root, excludedDirectories) {
+  const files = []
+  function visit(directory) {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const filename = path.join(directory, entry.name)
+      if (entry.name.startsWith('.') && entry.name !== '.well-known') continue
+      if (entry.isDirectory()) {
+        if (
+          excludedDirectories.has(filename) ||
+          ['node_modules', 'dist', 'build', 'coverage'].includes(entry.name)
+        )
+          continue
+        if (existsSync(path.join(filename, 'package.json'))) continue
+        visit(filename)
+      } else if (
+        entry.isFile() &&
+        !projectMetadata.has(entry.name.toLowerCase()) &&
+        !projectConfiguration.test(entry.name)
+      ) {
+        files.push(path.relative(root, filename))
+      }
+    }
+  }
+  visit(root)
+  return files
+}
+
+export function frontendAssets() {
+  let root
+  let excludedDirectories
+  let outDir
+  return {
+    name: 'figma-frontend-import-assets',
+    config(config) {
+      root = path.resolve(config.root || '.')
+      outDir = path.resolve(root, config.build?.outDir || 'dist')
+      excludedDirectories = new Set([outDir, path.resolve(root, config.publicDir || 'public')])
+      return {
+        build: {
+          rollupOptions: {
+            input: currentAssets(root, excludedDirectories)
+              .filter((file) => file.endsWith('.html'))
+              .map((file) => path.resolve(root, file)),
+          },
+        },
+      }
+    },
+    configResolved(config) {
+      root = config.root
+      outDir = path.resolve(root, config.build.outDir)
+      excludedDirectories = new Set([outDir, config.publicDir])
+    },
+    async writeBundle() {
+      for (const file of currentAssets(root, excludedDirectories)) {
+        const target = path.resolve(outDir, file)
+        await mkdir(path.dirname(target), { recursive: true })
+        try {
+          await copyFile(path.resolve(root, file), target, constants.COPYFILE_EXCL)
+        } catch (error) {
+          if (error.code !== 'EEXIST') throw error
+        }
+      }
+    },
+  }
+}
+
+
+
+================================================
+FILE: .figma/make/install
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm install --prefer-offline --no-frozen-lockfile
+
+
+
+================================================
+FILE: .figma/make/langserver
+================================================
+#!/usr/bin/env bash
+set -euo pipefail
+exec pnpm dlx --package=@vtsls/language-server@^0.3.0 vtsls --stdio
+
+
+
+================================================
+FILE: .figma/make/site.json
+================================================
+{
+  "description": "Access and manage physical and digital library resources at Politeknik Negeri Lhokseumawe, enabling students to search, reserve books, and download academic works.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
+
