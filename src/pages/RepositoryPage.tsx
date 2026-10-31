@@ -5,9 +5,10 @@ import { SelectField } from "../components/ui/SelectField";
 import { LayoutSwitcher } from "../components/ui/LayoutSwitcher";
 import { RepoCard } from "../components/ui/RepoCard";
 import { Layout } from "../types";
-import { repoItems } from "../data/mockData";
+import { useRepository } from "../lib/useSupabaseData";
 
 export function RepositoryView({ onDownload }: { onDownload: () => void }) {
+  const { repoItems, loading } = useRepository();
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState("");
   const [category, setCategory] = useState<"all" | "nonfiction" | "fiction">("all");
@@ -114,7 +115,7 @@ export function RepositoryView({ onDownload }: { onDownload: () => void }) {
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-forest">Arsip digital mahasiswa</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-ink">
-              {filtered.length} berkas ditemukan
+              {loading ? "Memuat repositori..." : `${filtered.length} berkas ditemukan`}
             </h2>
           </div>
         </div>

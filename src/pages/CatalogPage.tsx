@@ -5,9 +5,11 @@ import { SelectField } from "../components/ui/SelectField";
 import { LayoutSwitcher } from "../components/ui/LayoutSwitcher";
 import { BookCard } from "../components/ui/BookCard";
 import { Layout, Book } from "../types";
-import { books } from "../data/mockData";
+import { useBooks } from "../lib/useSupabaseData";
 
-export function BooksView({ onReserve, items = books, onManage }: { onReserve: () => void; items?: Book[]; onManage?: (book: Book) => void }) {
+export function BooksView({ onReserve, items: customItems, onManage }: { onReserve: () => void; items?: Book[]; onManage?: (book: Book) => void }) {
+  const { books: fetchedBooks, loading } = useBooks();
+  const items = customItems || fetchedBooks;
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState("");
   const [theme, setTheme] = useState("");
@@ -63,7 +65,9 @@ export function BooksView({ onReserve, items = books, onManage }: { onReserve: (
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-forest">Koleksi terbaru</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-ink">{filtered.length} buku ditemukan</h2>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-ink">
+              {loading ? "Memuat katalog..." : `${filtered.length} buku ditemukan`}
+            </h2>
           </div>
           <p className="hidden text-sm text-muted md:block">Diperbarui hari ini, 09.30 WIB</p>
         </div>
