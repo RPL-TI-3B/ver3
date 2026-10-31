@@ -7,7 +7,7 @@ import { Curation } from "./pages/LibrarianCuration";
 import { Fines } from "./pages/LibrarianFines";
 import { Sirkulasi } from "./pages/LibrarianSirkulasi";
 import { Dashboard } from "./pages/LibrarianDashboard";
-import { books as seedBooks } from "./data/mockData";
+import { useBooks } from "./lib/useSupabaseData";
 import { type Book } from "./types";
 
 import { View, CircTab, CatalogTab, Student, FineReq, Submission, initialStudents, initialFines, initialSubs, fmtDate, rupiah } from "./data/librarianData";
@@ -45,10 +45,10 @@ export default function LibrarianPortal({ onLogout }: { onLogout?: () => void })
   const [students, setStudents] = useState(initialStudents);
   const [fines, setFines] = useState(initialFines);
   const [subs, setSubs] = useState(initialSubs);
-  const [items, setItems] = useState<Book[]>(seedBooks);
-  const [txCount, setTxCount] = useState(18);
+  const { books: fetchedBooks, setBooks: setItems } = useBooks();
+  const items = fetchedBooks;
+  const [txCount, setTxCount] = useState(0);
   const [lookup, setLookup] = useState("");
-  const [headerQ, setHeaderQ] = useState("");
   const go = (v: View) => { setActiveView(v); setOpen(false); };
 
   useEffect(() => {
@@ -124,18 +124,13 @@ export default function LibrarianPortal({ onLogout }: { onLogout?: () => void })
       <div className={`transition-[padding] duration-200 ${isCollapsed ? "lg:pl-20" : "lg:pl-72"}`}>
         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-emerald-950/10 bg-canvas/85 px-4 py-3 backdrop-blur md:px-8">
           <button onClick={() => setOpen(true)} className="rounded-lg p-2 hover:bg-white lg:hidden" aria-label="Buka menu"><Icon d="menu" /></button>
-          <form className="relative max-w-xl flex-1" onSubmit={(e) => { e.preventDefault(); if (!headerQ.trim()) return; setLookup(headerQ); go("sirkulasi"); setHeaderQ(""); }}>
-            <Icon d="search" className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted" />
-            <input value={headerQ} onChange={(e) => setHeaderQ(e.target.value)} placeholder="Input NIM atau PIN Hold, e.g. PNL-HOLD-8921..." className="w-full rounded-xl border border-emerald-950/10 bg-white py-2.5 pl-10 pr-14 text-sm outline-none transition focus:border-forest/40 focus:ring-4 focus:ring-accent/30" />
-            <kbd className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md border border-emerald-950/10 px-1.5 py-0.5 font-mono text-[10px] text-muted sm:block">Enter</kbd>
-          </form>
+          <div className="flex items-center gap-3">
+            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">RH</div>
+            <div className="hidden leading-tight md:block"><p className="text-sm font-bold">Rina Hayati</p><p className="text-xs text-muted">Staf Sirkulasi · Lantai 1</p></div>
+          </div>
           <button className="relative ml-auto rounded-xl border border-emerald-950/10 bg-white p-2.5" aria-label="Notifikasi">
             <Icon d="bell" className="size-5" />{fines.length > 0 && <span className="absolute right-2 top-2 size-2 rounded-full bg-danger ring-2 ring-white" />}
           </button>
-          <div className="hidden items-center gap-3 md:flex">
-            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">RH</div>
-            <div className="leading-tight"><p className="text-sm font-bold">Rina Hayati</p><p className="text-xs text-muted">Staf Sirkulasi · Lantai 1</p></div>
-          </div>
         </header>
         <main className="mx-auto max-w-screen-2xl p-4 md:p-8">
           {activeView === "dashboard" && <Dashboard go={go} txCount={txCount} holdCount={holdCount} fines={fines} subs={subs} />}
