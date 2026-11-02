@@ -1,58 +1,147 @@
-# SIPERPUS PNL
+# SIPERPUS-REPO
 
-React 19 + Vite + Tailwind CSS v4 dengan Supabase sebagai sumber data dan autentikasi.
+Sistem informasi perpustakaan Politeknik Negeri Lhokseumawe dengan katalog buku fisik, reservasi, sirkulasi, denda QRIS, dan E-Repository mahasiswa.
 
-## Setup
+## Fitur
 
-1. Salin `.env.example` menjadi `.env` lalu isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_PUBLISHABLE_KEY` (atau `VITE_SUPABASE_ANON_KEY`).
-2. Pada project Supabase kosong, jalankan berurutan: `supabase/schema.sql`, `supabase/migrations/001_fixes.sql`, `supabase/migrations/002_catalog_taxonomy.sql`, `supabase/migrations/20261101232250_student_page_fixes.sql`, lalu `supabase/seed.sql`. Semuanya aman dijalankan ulang; seed memakai `on conflict`/lookup agar tidak menggandakan data.
-3. Jika memakai Supabase CLI, jalankan `supabase db query --linked --file <file>` untuk setiap file dalam urutan di atas. Migrasi katalog menyediakan master jurusan dan tema bertingkat; migration student page memperbaiki PIN reservasi, batas file storage, dan job kedaluwarsa hold.
-4. Setelah seed, upload PDF demo ke Storage dengan CLI (fitur Storage CLI masih experimental):
-   `supabase storage cp --experimental --linked --content-type application/pdf public/demo-pdfs/senja-di-pelabuhan-krueng-geukueh.pdf ss:///repository-files/demo/senja-di-pelabuhan-krueng-geukueh.pdf`
-   Ulangi perintah yang sama untuk dua file PDF lain di `public/demo-pdfs/`.
-   File demo hanya untuk pengujian dan ditandai sebagai karya sintetis. Jangan menghapus atau menimpa file karya pengguna.
-5. Jalankan `npm install` dan `npm run dev`.
+- Katalog buku publik dengan pencarian, filter jurusan, tema utama, subtema, dan tampilan grid/list.
+- Autentikasi Supabase menggunakan NIM/NIP dan password.
+- Portal mahasiswa untuk dashboard, peminjaman, reservasi hold tiga hari, denda, dan unggah karya.
+- Portal pustakawan untuk lookup mahasiswa, handover, pengembalian, verifikasi QRIS, kurasi repository, dan manajemen katalog.
+- E-Repository dengan status `pending_curation`, `published`, dan `revision_needed`.
+- Signed URL untuk file private dan Row Level Security pada data pengguna.
+- Taxonomy katalog bertingkat dengan enam jurusan canonical dan tema lintas jurusan.
 
-## Akun demo
+## Teknologi
 
-Di Dashboard Supabase buka **Authentication → Users → Add user**. Supabase tetap memerlukan email internal, tetapi pengguna login menggunakan NIM/NIP; email ini tidak perlu ditampilkan di UI:
+| Area | Teknologi |
+|---|---|
+| Frontend | React 19, TypeScript, Vite 8 |
+| Styling | Tailwind CSS v4 |
+| Backend | Supabase PostgreSQL, Auth, Storage, RPC |
+| Runtime | Node.js 20+ |
+| Package manager | npm |
 
-- Mahasiswa: `2022573010041@siperpus.pnl.ac.id`, login dengan NIM `2022573010041`
-- Pustakawan: `198503152010011001@siperpus.pnl.ac.id`, login dengan NIP `198503152010011001`
-- Akun Ammar: `2024573010129@siperpus.pnl.ac.id`, login dengan NIM `2024573010129`, prodi `Teknologi Informasi dan Komputer`
+## Persiapan
 
-Tetapkan password masing-masing. Setelah akun dibuat, buka **Edit user → Metadata** dan isi `app_metadata` pustakawan dengan `{"role":"librarian"}`. Jangan menaruh role librarian di `user_metadata`. Jalankan seed ulang untuk data demo.
+```bash
+npm install
+cp .env.example .env
+```
 
-### Student Demo Accounts
+Isi `.env` dengan publishable key Supabase. Jangan pernah menaruh service role key pada variabel `VITE_` atau mengirimkannya ke browser.
 
-Seeder akun mahasiswa hanya boleh dijalankan secara lokal/development. Isi environment berikut tanpa menaruh service role key pada variabel `VITE_`:
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+```
+
+Jalankan aplikasi:
+
+```bash
+npm run dev
+```
+
+## Setup Database
+
+Pada project Supabase kosong, jalankan file berikut secara berurutan:
+
+1. `supabase/schema.sql`
+2. `supabase/migrations/001_fixes.sql`
+3. `supabase/migrations/002_catalog_taxonomy.sql`
+4. `supabase/migrations/20261101232250_student_page_fixes.sql`
+5. `supabase/seed.sql`
+
+Dengan Supabase CLI:
+
+```bash
+supabase link --project-ref YOUR_PROJECT_REF
+supabase db query --linked --file supabase/schema.sql
+supabase db query --linked --file supabase/migrations/001_fixes.sql
+supabase db query --linked --file supabase/migrations/002_catalog_taxonomy.sql
+supabase db query --linked --file supabase/migrations/20261101232250_student_page_fixes.sql
+supabase db query --linked --file supabase/seed.sql
+```
+
+File SQL dirancang untuk dapat dijalankan ulang. `supabase db query` menjalankan SQL langsung dan tidak otomatis mencatat file sebagai migration history.
+
+### Storage PDF demo
+
+Tiga PDF E-Repository demo tersedia di `public/demo-pdfs/`. Upload ke bucket private `repository-files` jika belum tersedia:
+
+```bash
+supabase storage cp --experimental --linked \
+  --content-type application/pdf \
+  public/demo-pdfs/senja-di-pelabuhan-krueng-geukueh.pdf \
+  ss:///repository-files/demo/senja-di-pelabuhan-krueng-geukueh.pdf
+```
+
+Ulangi untuk dua PDF lainnya. File tersebut adalah karya sintetis untuk development, bukan karya mahasiswa asli.
+
+## Akun Demo Mahasiswa
+
+Seeder akun demo hanya boleh dijalankan di lokal/development. Akun yang sudah ada tidak dibuat ulang; password demo diset sama dengan NIM masing-masing. Akun Ammar dan akun pustakawan tidak dikelola oleh script ini.
 
 ```bash
 export SUPABASE_URL="https://your-project.supabase.co"
-export SUPABASE_SERVICE_ROLE_KEY="..."
+export SUPABASE_SERVICE_ROLE_KEY="your-server-only-key"
 export DEMO_SEED_ENABLED=true
 npm run seed:demo-students
 ```
 
-Password setiap akun demo mahasiswa adalah NIM masing-masing. Script tidak membuat duplikat, tidak berjalan saat `NODE_ENV=production`, dan memakai fixture ID deterministik untuk transaksi. Email internal hanya kebutuhan Supabase Auth; login tetap memakai NIM.
+Seeder menolak `NODE_ENV=production`, memakai fixture ID deterministik, membuat akun Auth asli, mengunggah receipt QRIS demo, dan menyiapkan transaksi sesuai skenario.
 
-| Nama | NIM | Email internal | Program Studi | Skenario |
-|---|---|---|---|---|
-| Mahasiswa Demo | 2022573010041 | 2022573010041@siperpus.pnl.ac.id | Teknologi Informasi dan Komputer | Denda belum dibayar |
-| Siti Rahma | 2022573010042 | 2022573010042@siperpus.pnl.ac.id | Bisnis | Akun bersih / empty state |
-| Rafi Akbar | 2022573010043 | 2022573010043@siperpus.pnl.ac.id | Teknik Elektro | Peminjaman aktif |
-| Nur Aini | 2022573010044 | 2022573010044@siperpus.pnl.ac.id | Teknik Mesin | Peminjaman terlambat |
-| Fajar Pratama | 2022573010045 | 2022573010045@siperpus.pnl.ac.id | Teknik Kimia | Reservasi aktif |
-| Nadia Putri | 2022573010046 | 2022573010046@siperpus.pnl.ac.id | Teknik Sipil | Denda menunggu verifikasi |
-| Dimas Saputra | 2022573010047 | 2022573010047@siperpus.pnl.ac.id | Teknologi Informasi dan Komputer | Pembayaran ditolak |
-| Cut Nabila | 2022573010048 | 2022573010048@siperpus.pnl.ac.id | Bisnis | Riwayat dan denda lunas |
-| Muhammad Fajri | 2022573010049 | 2022573010049@siperpus.pnl.ac.id | Teknologi Informasi dan Komputer | E-Repository multi-status |
+| Nama | NIM | Program studi | Skenario |
+|---|---:|---|---|
+| Mahasiswa Demo | 2022573010041 | Teknologi Informasi dan Komputer | Denda belum dibayar |
+| Siti Rahma | 2022573010042 | Bisnis | Akun bersih dan empty state |
+| Rafi Akbar | 2022573010043 | Teknik Elektro | Peminjaman aktif |
+| Nur Aini | 2022573010044 | Teknik Mesin | Peminjaman terlambat |
+| Fajar Pratama | 2022573010045 | Teknik Kimia | Reservasi aktif |
+| Nadia Putri | 2022573010046 | Teknik Sipil | Denda menunggu verifikasi |
+| Dimas Saputra | 2022573010047 | Teknologi Informasi dan Komputer | Pembayaran ditolak |
+| Cut Nabila | 2022573010048 | Bisnis | Riwayat dan denda lunas |
+| Muhammad Fajri | 2022573010049 | Teknologi Informasi dan Komputer | E-Repository multi-status |
 
-Seeder juga mengunggah bukti QRIS sintetis bertanda DEMO, membuat buku fixture, transaksi, dan tiga karya E-Repository Fajri. Jalankan ulang command yang sama untuk mengembalikan seluruh skenario ke keadaan deterministik; akun yang sudah ada tetap memakai password sebelumnya.
+Login tetap menggunakan NIM pada UI. Email internal hanya digunakan oleh Supabase Auth.
+
+## Model Akses
+
+- Guest hanya dapat melihat katalog buku dan repository dengan status `published`.
+- Mahasiswa hanya dapat melihat transaksi, denda, dan karya miliknya.
+- Pustakawan dapat menjalankan operasi sirkulasi dan kurasi melalui role `librarian`.
+- Role otorisasi berasal dari `app_metadata`/profile, bukan metadata user yang dapat diedit mahasiswa.
+- File QRIS dan PDF disimpan pada bucket private dan diakses menggunakan signed URL.
 
 ## Validasi
 
 ```bash
 npx tsc --noEmit
 npm run build
+git diff --check
 ```
+
+## Struktur Utama
+
+```text
+src/
+├── components/ui/       Komponen UI reusable
+├── pages/               Halaman katalog dan portal
+├── lib/                 Auth, Supabase client, dan data hooks
+├── types/               TypeScript types
+├── App.tsx              Guest routing dan session routing
+├── StudentPortal.tsx    Portal mahasiswa
+└── LibrarianPortal.tsx  Portal pustakawan
+
+supabase/
+├── schema.sql
+├── migrations/
+└── seed.sql
+
+scripts/
+└── seed-demo-students.mjs
+```
+
+## Presentasi
+
+Deck presentasi tersedia di `docs/SIPERPUS-REPO-Demo.pptx`.
