@@ -7,7 +7,7 @@ export function AboutView({ onOpenContact }: { onOpenContact: () => void }) {
   const cards = [
     { icon: "building" as IconName, eyebrow: "Profil", title: "Perpustakaan PNL", content: "Pusat literasi dan pengetahuan yang mendukung pendidikan vokasi, penelitian terapan, dan inovasi seluruh sivitas akademika PNL.", tone: "bg-accent text-ink" },
     { icon: "clock" as IconName, eyebrow: "Jam Operasional", title: "Senin – Jumat", content: "08.00 – 16.00 WIB", detail: "Tutup pada Sabtu, Minggu, dan hari libur nasional.", tone: "bg-forest text-accent" },
-    { icon: "map" as IconName, eyebrow: "Peta Rak Fisik", title: "Lantai 1 & Lantai 2", content: "Lantai 1: Sirkulasi, TIK, Bisnis. Lantai 2: Teknik Sipil, Elektro, Mesin, dan Kimia.", tone: "bg-accent-soft text-forest" },
+    { icon: "map" as IconName, eyebrow: "Peta Rak Fisik", title: "Lantai 1", content: "Sirkulasi, TIK, dan Bisnis.", tone: "bg-accent-soft text-forest" },
     { icon: "phone" as IconName, eyebrow: "Kontak", title: "Hubungi Pustakawan", content: "perpustakaan@pnl.ac.id", detail: "(0645) 42785 · Kampus PNL, Buketrata", tone: "bg-forest-light text-white" },
   ];
 

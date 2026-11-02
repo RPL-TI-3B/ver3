@@ -8,6 +8,8 @@
 -- 5. Role & authorization data stored in profiles table / app_metadata
 -- ==============================================================================
 
+create extension if not exists pgcrypto;
+
 -- 1. PROFILES (Extends Supabase auth.users)
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
@@ -25,12 +27,14 @@ create table if not exists public.profiles (
 alter table public.profiles enable row level security;
 
 -- Policies for profiles
+drop policy if exists "Public profiles are viewable by authenticated users" on public.profiles;
 create policy "Public profiles are viewable by authenticated users"
   on public.profiles
   for select
   to authenticated
   using (true);
 
+drop policy if exists "Users can update their own profile" on public.profiles;
 create policy "Users can update their own profile"
   on public.profiles
   for update
@@ -39,12 +43,41 @@ create policy "Users can update their own profile"
   with check ((select auth.uid()) = id);
 
 -- 2. BOOKS (Physical catalog)
+create table if not exists public.departments (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  name text not null unique,
+  sort_order integer not null default 0
+);
+
+create table if not exists public.book_topics (
+  id uuid primary key default gen_random_uuid(),
+  parent_id uuid references public.book_topics(id) on delete cascade,
+  name text not null,
+  slug text not null unique,
+  sort_order integer not null default 0,
+  unique (parent_id, name)
+);
+
+alter table public.departments enable row level security;
+alter table public.book_topics enable row level security;
+
+drop policy if exists "Catalog departments are public" on public.departments;
+create policy "Catalog departments are public"
+  on public.departments for select to public using (true);
+
+drop policy if exists "Catalog topics are public" on public.book_topics;
+create policy "Catalog topics are public"
+  on public.book_topics for select to public using (true);
+
 create table if not exists public.books (
   id uuid primary key default gen_random_uuid(),
   code text unique not null,
   title text not null,
   author text not null,
   category text not null,
+  department_id uuid references public.departments(id),
+  topic_id uuid references public.book_topics(id),
   year int not null,
   stock int not null default 1 check (stock >= 0),
   shelf text not null,
@@ -55,12 +88,14 @@ create table if not exists public.books (
 
 alter table public.books enable row level security;
 
+drop policy if exists "Books are viewable by everyone" on public.books;
 create policy "Books are viewable by everyone"
   on public.books
   for select
   to public
   using (true);
 
+drop policy if exists "Librarians can insert books" on public.books;
 create policy "Librarians can insert books"
   on public.books
   for insert
@@ -72,6 +107,7 @@ create policy "Librarians can insert books"
     )
   );
 
+drop policy if exists "Librarians can update books" on public.books;
 create policy "Librarians can update books"
   on public.books
   for update
@@ -89,6 +125,7 @@ create policy "Librarians can update books"
     )
   );
 
+drop policy if exists "Librarians can delete books" on public.books;
 create policy "Librarians can delete books"
   on public.books
   for delete
@@ -107,12 +144,13 @@ create table if not exists public.holds (
   book_id uuid not null references public.books(id) on delete restrict,
   pin text not null,
   status text not null default 'active' check (status in ('active', 'collected', 'expired', 'cancelled')),
-  expires_at timestamptz not null default (now() + interval '2 days'),
+  expires_at timestamptz not null default (now() + interval '3 days'),
   created_at timestamptz not null default now()
 );
 
 alter table public.holds enable row level security;
 
+drop policy if exists "Users can view their own holds" on public.holds;
 create policy "Users can view their own holds"
   on public.holds
   for select
@@ -125,12 +163,14 @@ create policy "Users can view their own holds"
     )
   );
 
+drop policy if exists "Students can reserve books" on public.holds;
 create policy "Students can reserve books"
   on public.holds
   for insert
   to authenticated
   with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Hold update allowed by student owner or librarian" on public.holds;
 create policy "Hold update allowed by student owner or librarian"
   on public.holds
   for update
@@ -164,6 +204,7 @@ create table if not exists public.loans (
 
 alter table public.loans enable row level security;
 
+drop policy if exists "Users can view their own loans or librarians can view all" on public.loans;
 create policy "Users can view their own loans or librarians can view all"
   on public.loans
   for select
@@ -176,6 +217,7 @@ create policy "Users can view their own loans or librarians can view all"
     )
   );
 
+drop policy if exists "Librarians can insert and update loans" on public.loans;
 create policy "Librarians can insert and update loans"
   on public.loans
   for all
@@ -210,6 +252,7 @@ create table if not exists public.fines (
 
 alter table public.fines enable row level security;
 
+drop policy if exists "Users can view their own fines or librarians view all" on public.fines;
 create policy "Users can view their own fines or librarians view all"
   on public.fines
   for select
@@ -222,6 +265,7 @@ create policy "Users can view their own fines or librarians view all"
     )
   );
 
+drop policy if exists "Users can update fine receipt for verification" on public.fines;
 create policy "Users can update fine receipt for verification"
   on public.fines
   for update
@@ -229,6 +273,7 @@ create policy "Users can update fine receipt for verification"
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Librarians can manage all fines" on public.fines;
 create policy "Librarians can manage all fines"
   on public.fines
   for update
@@ -265,6 +310,7 @@ create table if not exists public.repository_items (
 
 alter table public.repository_items enable row level security;
 
+drop policy if exists "Published repo items viewable by everyone" on public.repository_items;
 create policy "Published repo items viewable by everyone"
   on public.repository_items
   for select
@@ -278,12 +324,14 @@ create policy "Published repo items viewable by everyone"
     )
   );
 
+drop policy if exists "Students can submit repository items" on public.repository_items;
 create policy "Students can submit repository items"
   on public.repository_items
   for insert
   to authenticated
   with check ((select auth.uid()) = author_id);
 
+drop policy if exists "Authors can update pending items" on public.repository_items;
 create policy "Authors can update pending items"
   on public.repository_items
   for update
@@ -291,6 +339,7 @@ create policy "Authors can update pending items"
   using ((select auth.uid()) = author_id)
   with check ((select auth.uid()) = author_id);
 
+drop policy if exists "Librarians can curate repository items" on public.repository_items;
 create policy "Librarians can curate repository items"
   on public.repository_items
   for update
@@ -321,7 +370,7 @@ begin
     new.id,
     coalesce(new.raw_user_meta_data->>'nim', null),
     coalesce(new.raw_user_meta_data->>'full_name', 'Mahasiswa PNL'),
-    coalesce(new.raw_app_meta_data->>'role', coalesce(new.raw_user_meta_data->>'role', 'student')),
+    coalesce(new.raw_app_meta_data->>'role', 'student'),
     coalesce(new.raw_user_meta_data->>'prodi', 'Teknologi Informasi & Komputer')
   );
   return new;

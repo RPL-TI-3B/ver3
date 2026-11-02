@@ -1,85 +1,90 @@
-import { useState, useEffect, ReactNode } from "react";
-import { Icon, Badge, Cover, Title, Stat, useCountdown, btnPrimary, btnSecondary, btnGhost, card, FINE_RATE, rupiah, Modal, UploadModal, QrisModal, Tabs } from "./StudentShared";
-import { StudentBook, Paper, papers, ErepoTab, books } from "../data/portalData";
-import { Icon as GlobalIcon } from "../components/ui/Icon";
-import { Button } from "../components/ui/Button";
+import { FormEvent, useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useAuth } from "../lib/authContext";
+import { supabase } from "../lib/supabase";
+
+type Item = { id: string; title: string; type: string; category: string; status: string; created_at: string };
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+const formatSize = (size: number) => {
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(0)} KB`;
+  return `${(size / 1024 / 1024).toFixed(2)} MB`;
+};
 
 export function ERepo() {
-  const [tab, setTab] = useState<ErepoTab>("upload");
-  const [file, setFile] = useState<string | null>(null);
-  const [drag, setDrag] = useState(false);
-  const [cat, setCat] = useState("Non-Fiksi");
-  const [sent, setSent] = useState(false);
-  const input = "w-full rounded-lg border border-emerald-950/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest focus:ring-2 focus:ring-accent";
-  const works = [
-    { t: "Sistem Rekomendasi Buku Perpustakaan PNL Berbasis Collaborative Filtering", d: "Dr. Muhammad Arhami, M.Kom", date: "28 Sep 2026", s: "pending" },
-    { t: "Implementasi Firewall Mikrotik pada Laboratorium Jaringan", d: "Hendrawaty, S.T., M.T.", date: "14 Jul 2026", s: "ok" },
-    { t: "Analisis Usability Aplikasi SIAKAD Mahasiswa", d: "Azhar, S.T., M.Sc.", date: "02 Sep 2026", s: "rev" },
-  ];
-  const tone = { pending: ["amber", "Pending Kurasi"], ok: ["green", "Disetujui / Published"], rev: ["red", "Perlu Revisi"] } as const;
+  const { user, profile } = useAuth();
+  const [items, setItems] = useState<Item[]>([]);
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("Laporan Magang");
+  const [category, setCategory] = useState<"nonfiction" | "fiction">("nonfiction");
+  const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  return (
-    <>
-      <Title eyebrow="E-Repository & Karya" title="Arsipkan karya ilmiahmu" sub="Karya yang disetujui terbit di repositori terbuka PNL." />
-      <div className="mb-5"><Tabs value={tab} onChange={setTab} items={[["upload", "Unggah Karya Baru"], ["my_works", "Karya Saya & Status Kurasi"], ["downloads", "Riwayat Unduhan"]]} /></div>
+  const load = async () => {
+    if (!user) return;
+    setLoading(true);
+    const { data, error } = await supabase.from("repository_items").select("id,title,type,category,status,created_at").eq("author_id", user.id).order("created_at", { ascending: false });
+    setItems((data ?? []) as Item[]);
+    if (error) setMessage(error.message);
+    setLoading(false);
+  };
+  useEffect(() => { void load(); }, [user]);
 
-      {tab === "upload" && (
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className={`${card} grid gap-6 p-6 lg:grid-cols-2`}>
-          <div className="space-y-4">
-            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Judul Karya</span><input required className={input} placeholder="Contoh: Rancang Bangun Sistem..." /></label>
-            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Dosen Pembimbing</span><input required className={input} placeholder="Nama lengkap & gelar" /></label>
-            <label className="block"><span className="mb-1.5 block text-sm font-semibold">Jurusan</span>
-              <select className={input}><option>Teknologi Informasi dan Komputer</option><option>Teknik Mesin</option><option>Teknik Elektro</option><option>Teknik Sipil</option><option>Teknik Kimia</option><option>Tata Niaga</option></select>
-            </label>
-            <div><span className="mb-1.5 block text-sm font-semibold">Kategori</span>
-              <div className="flex gap-2">{["Non-Fiksi", "Fiksi"].map((c) => (
-                <button type="button" key={c} onClick={() => setCat(c)} className={`flex-1 rounded-lg border px-3 py-2.5 text-sm font-semibold ${cat === c ? "border-forest bg-forest text-white" : "border-emerald-950/15 text-muted"}`}>{c}</button>
-              ))}</div>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="mb-1.5 block text-sm font-semibold">Berkas PDF</span>
-            <label
-              onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-              onDragLeave={() => setDrag(false)}
-              onDrop={(e) => { e.preventDefault(); setDrag(false); setFile(e.dataTransfer.files[0]?.name ?? null); }}
-              className={`flex flex-1 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition ${drag ? "border-forest bg-accent-soft" : "border-emerald-950/20 bg-canvas hover:border-forest-light"}`}
-            >
-              <input type="file" accept="application/pdf" className="hidden" onChange={(e) => setFile(e.target.files?.[0]?.name ?? null)} />
-              <div className="grid size-14 place-items-center rounded-full bg-accent text-forest"><Icon d="upload" className="size-6" /></div>
-              {file ? <p className="mt-4 font-semibold text-forest">{file}</p> : <><p className="mt-4 font-semibold text-ink">Seret & lepas PDF di sini</p><p className="text-sm text-muted">atau klik untuk memilih · maks. 25 MB</p></>}
-            </label>
-            <button className="mt-4 rounded-lg bg-accent py-3 text-sm font-bold text-forest hover:bg-accent-hover">{sent ? "✓ Terkirim untuk Kurasi" : "Kirim untuk Kurasi"}</button>
-          </div>
-        </form>
-      )}
+  const selectFile = (candidate: File | null) => {
+    setFileError(null);
+    if (!candidate) return;
+    const isPdf = candidate.type === "application/pdf" || candidate.name.toLowerCase().endsWith(".pdf");
+    if (!isPdf) {
+      setFile(null);
+      setFileError("File harus berformat PDF.");
+      return;
+    }
+    if (candidate.size > MAX_FILE_SIZE) {
+      setFile(null);
+      setFileError("Ukuran file maksimal 10 MB.");
+      return;
+    }
+    setFile(candidate);
+  };
 
-      {tab === "my_works" && (
-        <div className="grid gap-4 md:grid-cols-3">
-          {works.map((w) => (
-            <div key={w.t} className={`${card} flex flex-col p-5`}>
-              <Badge tone={tone[w.s as keyof typeof tone][0]}>{tone[w.s as keyof typeof tone][1]}</Badge>
-              <p className="mt-4 font-semibold leading-snug text-ink">{w.t}</p>
-              <p className="mt-2 text-sm text-muted">Pembimbing: {w.d}</p>
-              <p className="mt-auto pt-4 text-xs text-muted">Diunggah {w.date}</p>
-              {w.s === "rev" && <p className="mt-3 rounded-lg bg-danger-soft p-3 text-xs text-danger">Catatan kurator: lengkapi lembar pengesahan & abstrak bahasa Inggris.</p>}
-            </div>
-          ))}
-        </div>
-      )}
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    selectFile(event.target.files?.[0] ?? null);
+  };
 
-      {tab === "downloads" && (
-        <div className={`${card} divide-y divide-emerald-950/5`}>
-          {papers.slice(0, 5).map((p, i) => (
-            <div key={p.t} className="flex items-center gap-4 p-4">
-              <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-soft text-forest"><Icon d="file" className="size-5" /></div>
-              <div className="min-w-0 flex-1"><p className="truncate font-semibold text-ink">{p.t}</p><p className="text-xs text-muted">{p.a} · {p.j}</p></div>
-              <span className="hidden text-xs text-muted sm:block">{["03 Okt", "01 Okt", "27 Sep", "20 Sep", "11 Sep"][i]} 2026</span>
-              <button className="rounded-lg p-2 text-forest hover:bg-canvas" aria-label="Unduh ulang"><Icon d="download" className="size-4" /></button>
-            </div>
-          ))}
-        </div>
-      )}
-    </>
-  );
+  const onDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragging(false);
+    selectFile(event.dataTransfer.files[0] ?? null);
+  };
+
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!user || !file || !title.trim()) return setMessage("Judul dan file PDF wajib diisi.");
+    setMessage(null);
+    setSubmitting(true);
+    const path = `${user.id}/${Date.now()}-${file.name}`;
+    const uploadResult = await supabase.storage.from("repository-files").upload(path, file, { upsert: false, contentType: "application/pdf" });
+    if (uploadResult.error) {
+      setSubmitting(false);
+      return setMessage(uploadResult.error.message);
+    }
+    const { error } = await supabase.from("repository_items").insert({
+      author_id: user.id, title: title.trim(), author_name: profile?.full_name, prodi: profile?.prodi ?? "PNL",
+      year: new Date().getFullYear(), abstract: "", category, type, status: "pending_curation", pdf_url: path, file_name: file.name, file_size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+    });
+    if (error) {
+      await supabase.storage.from("repository-files").remove([path]);
+      setSubmitting(false);
+      return setMessage(error.message);
+    }
+    setTitle(""); setFile(null); setFileError(null); setMessage("Karya dikirim untuk kurasi."); setSubmitting(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    await load();
+  };
+
+  return <div className="space-y-5"><header><p className="text-xs font-bold uppercase tracking-wider text-forest">E-Repository & Karya</p><h1 className="mt-1 text-2xl font-black">Arsipkan karya ilmiahmu</h1></header><form onSubmit={(event) => void submit(event)} className="grid gap-4 rounded-2xl border border-emerald-950/10 bg-white p-6"><label className="text-sm font-semibold">Judul karya<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 h-11 w-full rounded-lg border border-emerald-950/15 px-3 outline-none focus:border-accent" /></label><div className="grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Jenis<select value={type} onChange={(event) => setType(event.target.value)} className="mt-2 h-11 w-full rounded-lg border border-emerald-950/15 px-3"><option>Laporan Magang</option><option>Skripsi</option><option>Makalah</option><option>Cerpen</option><option>Karya Kreatif</option></select></label><label className="text-sm font-semibold">Kategori<select value={category} onChange={(event) => setCategory(event.target.value as "nonfiction" | "fiction")} className="mt-2 h-11 w-full rounded-lg border border-emerald-950/15 px-3"><option value="nonfiction">Non-fiksi</option><option value="fiction">Fiksi</option></select></label></div><div><p className="text-sm font-semibold">PDF</p><div role="button" tabIndex={0} onClick={() => fileInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") fileInputRef.current?.click(); }} onDragEnter={(event) => { event.preventDefault(); setDragging(true); }} onDragOver={(event) => event.preventDefault()} onDragLeave={() => setDragging(false)} onDrop={onDrop} className={`mt-2 rounded-2xl border-2 border-dashed p-6 text-center transition ${dragging ? "border-accent bg-accent-soft" : "border-forest/20 bg-canvas"} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}><input ref={fileInputRef} required={!file} type="file" accept="application/pdf,.pdf" onChange={onFileChange} className="sr-only" aria-label="Pilih file PDF" />{file ? <div className="flex flex-wrap items-center justify-center gap-3 text-left"><span className="grid size-12 place-items-center rounded-xl bg-danger-soft text-danger">PDF</span><div className="min-w-0"><p className="truncate font-bold">{file.name}</p><p className="text-sm text-muted">{formatSize(file.size)}</p></div><button type="button" onClick={(event) => { event.stopPropagation(); setFile(null); setFileError(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="rounded-lg border border-forest/15 px-3 py-2 text-sm font-semibold text-forest hover:bg-white">Hapus</button><button type="button" onClick={(event) => { event.stopPropagation(); fileInputRef.current?.click(); }} className="rounded-lg bg-forest px-3 py-2 text-sm font-semibold text-white">Ganti file</button></div> : <div className="space-y-2"><div className="mx-auto grid size-12 place-items-center rounded-xl bg-forest text-lg font-black text-accent">↑</div><p className="font-bold">Pilih atau unggah file PDF</p><p className="text-sm text-muted">Seret file PDF ke sini atau klik untuk memilih dari perangkat.</p><span className="inline-flex rounded-lg bg-forest px-4 py-2 text-sm font-bold text-white">Pilih File PDF</span><p className="text-xs text-muted">PDF, maksimal 10 MB</p></div>}</div>{fileError && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{fileError}</p>}</div><button disabled={submitting} className="rounded-lg bg-forest px-4 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-60" type="submit">{submitting ? "Mengirim..." : "Kirim untuk kurasi"}</button>{message && <p role="status" className="text-sm text-muted">{message}</p>}</form><section className="space-y-3"><h2 className="font-bold">Karya saya</h2>{loading ? <div className="rounded-2xl border border-emerald-950/10 bg-white p-10 text-center text-sm text-muted">Memuat karya...</div> : items.length ? items.map((item) => <article key={item.id} className="rounded-2xl border border-emerald-950/10 bg-white p-5"><p className="font-semibold">{item.title}</p><p className="mt-1 text-sm text-muted">{item.type} · {item.category} · {item.status}</p></article>) : <div className="rounded-2xl border border-dashed border-forest/20 bg-white p-10 text-center text-sm text-muted">Belum ada karya yang diunggah.</div>}</section></div>;
 }

@@ -2,7 +2,7 @@ import { Icon } from "./Icon";
 import { Button } from "./Button";
 import { Layout, RepoItem } from "../../types";
 
-export function RepoCard({ item, layout, onDownload }: { item: RepoItem; layout: Layout; onDownload: () => void }) {
+export function RepoCard({ item, layout, onDownload }: { item: RepoItem; layout: Layout; onDownload: (item: RepoItem) => void }) {
   const list = layout === "list";
   const dense = layout === "grid5" || layout === "grid6";
   return (
@@ -21,7 +21,7 @@ export function RepoCard({ item, layout, onDownload }: { item: RepoItem; layout:
           <span className="flex items-center gap-1.5 font-semibold"><Icon name="file" size="size-4" /> {item.size}</span>
         </div>
       </div>
-      <Button onClick={onDownload} variant="dark" className={`${list ? "w-full sm:w-auto" : dense ? "mt-4 w-full px-2 py-2 text-xs" : "mt-6 w-full"}`}>
+      <Button onClick={() => onDownload(item)} variant="dark" className={`${list ? "w-full sm:w-auto" : dense ? "mt-4 w-full px-2 py-2 text-xs" : "mt-6 w-full"}`}>
         <Icon name="download" size="size-4" /> {dense ? "Download" : "Download PDF"}
       </Button>
     </article>

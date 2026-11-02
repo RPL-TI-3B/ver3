@@ -18,7 +18,7 @@ export function SelectField({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full appearance-none truncate rounded-xl border border-slate-200 bg-white pl-4 pr-9 text-sm font-semibold text-slate-700 outline-none transition focus:border-pnl-yellow focus:ring-4 focus:ring-pnl-yellow/15"
+        className="h-12 w-full appearance-none truncate rounded-xl border border-slate-200 bg-white pl-4 pr-9 text-sm font-semibold text-slate-700 outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15"
       >
         <option value="">{label}</option>
         {options.map((option) => (

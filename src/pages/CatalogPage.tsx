@@ -7,16 +7,17 @@ import { BookCard } from "../components/ui/BookCard";
 import { Layout, Book } from "../types";
 import { useBooks } from "../lib/useSupabaseData";
 
-export function BooksView({ onReserve, items: customItems, onManage }: { onReserve: () => void; items?: Book[]; onManage?: (book: Book) => void }) {
-  const { books: fetchedBooks, loading } = useBooks();
+export function BooksView({ onReserve, items: customItems, onManage }: { onReserve: (book: Book) => void; items?: Book[]; onManage?: (book: Book) => void }) {
+  const { books: fetchedBooks, topics, departments, loading, error } = useBooks();
   const items = customItems || fetchedBooks;
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState("");
   const [theme, setTheme] = useState("");
+  const [subtheme, setSubtheme] = useState("");
   const [layout, setLayout] = useState<Layout>("grid4");
   const filtered = items.filter((book) => {
     const matchesQuery = `${book.title} ${book.author}`.toLowerCase().includes(query.toLowerCase());
-    return matchesQuery && (!department || book.department === department) && (!theme || book.theme === theme);
+    return matchesQuery && (!department || book.department === department) && (!theme || book.mainTheme === theme) && (!subtheme || book.theme === subtheme);
   });
   const gridClass = layout === "grid4"
   ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
@@ -31,7 +32,6 @@ export function BooksView({ onReserve, items: customItems, onManage }: { onReser
       <Hero eyebrow="Katalog Perpustakaan" title="Akses Koleksi Buku Fisik Perpustakaan PNL" subtitle="Cari buku, cek lokasi rak fisik, dan reservasi mandiri." icon="books" />
       <section className="relative z-10 mx-3 -mt-5 rounded-2xl border border-emerald-950/10 bg-white p-4 shadow-xl shadow-emerald-950/10 md:mx-6 md:p-5">
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-  {/* Search Bar dibuat flex-1 (paling dominan/lebar) */}
   <label className="relative min-w-0 flex-1">
     <span className="sr-only">Cari judul atau penulis</span>
     <span className="absolute left-4 top-3.5 text-slate-400">
@@ -41,22 +41,27 @@ export function BooksView({ onReserve, items: customItems, onManage }: { onReser
       value={query}
       onChange={(event) => setQuery(event.target.value)}
       placeholder="Cari judul buku atau nama penulis..."
-      className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-pnl-yellow focus:ring-4 focus:ring-pnl-yellow/15"
+      className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-accent focus:ring-4 focus:ring-accent/15"
     />
   </label>
 
-  {/* Panggil SelectField dengan proporsi fit/pas-pasan */}
   <SelectField
     value={department}
     onChange={setDepartment}
     label="Semua Jurusan"
-    options={["Teknik Informatika (TIK)", "Teknik Sipil", "Teknik Elektro", "Teknik Mesin", "Teknik Kimia", "Tata Niaga / Bisnis"]}
+    options={departments.length ? departments : [...new Set(items.map((book) => book.department))]}
   />
   <SelectField
     value={theme}
-    onChange={setTheme}
+    onChange={(value) => { setTheme(value); setSubtheme(""); }}
     label="Semua Tema Buku"
-    options={["Algoritma & RPL", "Cybersecurity", "Konstruksi", "Kelistrikan", "Manufaktur", "Proses Kimia", "Akuntansi & Bisnis"]}
+    options={[...new Set(topics.filter((topic) => !topic.parentId).map((topic) => topic.name))]}
+  />
+  <SelectField
+    value={subtheme}
+    onChange={setSubtheme}
+    label="Semua Subtema"
+    options={[...new Set(topics.filter((topic) => topic.parentId && (!theme || topic.parentName === theme)).map((topic) => topic.name))]}
   />
   <LayoutSwitcher value={layout} onChange={setLayout} />
 </div>
@@ -69,9 +74,10 @@ export function BooksView({ onReserve, items: customItems, onManage }: { onReser
               {loading ? "Memuat katalog..." : `${filtered.length} buku ditemukan`}
             </h2>
           </div>
-          <p className="hidden text-sm text-muted md:block">Diperbarui hari ini, 09.30 WIB</p>
         </div>
-        {filtered.length ? (
+        {error ? (
+          <div className="rounded-2xl border border-dashed border-red-300 bg-white py-16 text-center text-sm text-red-700">{error}</div>
+        ) : filtered.length ? (
           <div className={`grid ${layout === "grid5" || layout === "grid6" ? "gap-3" : "gap-5"} ${gridClass}`}>{filtered.map((book) => <BookCard key={book.code} book={book} layout={layout} onReserve={onReserve} onManage={onManage} />)}</div>
         ) : (
           <div className="rounded-2xl border border-dashed border-forest/20 bg-white py-16 text-center">

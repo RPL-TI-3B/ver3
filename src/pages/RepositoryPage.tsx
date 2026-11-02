@@ -6,8 +6,10 @@ import { LayoutSwitcher } from "../components/ui/LayoutSwitcher";
 import { RepoCard } from "../components/ui/RepoCard";
 import { Layout } from "../types";
 import { useRepository } from "../lib/useSupabaseData";
+import { RepoItem } from "../types";
+import { fallbackDepartments } from "../lib/catalogTaxonomy";
 
-export function RepositoryView({ onDownload }: { onDownload: () => void }) {
+export function RepositoryView({ onDownload }: { onDownload: (item: RepoItem) => void }) {
   const { repoItems, loading } = useRepository();
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState("");
@@ -64,12 +66,12 @@ export function RepositoryView({ onDownload }: { onDownload: () => void }) {
             onChange={setDepartment}
             label="Semua Jurusan"
             options={[
-              "Teknik Informatika",
-              "Teknik Sipil",
-              "Teknik Elektro",
-              "Teknik Mesin",
-              "Teknik Kimia",
-              "Tata Niaga",
+              ...new Set([
+                ...fallbackDepartments,
+                ...repoItems
+                  .map((item) => item.department)
+                  .filter((department) => department.trim().length > 0),
+              ]),
             ]}
           />
 

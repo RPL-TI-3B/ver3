@@ -1,0 +1,112 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 253 >>
+stream
+BT
+/F1 18 Tf
+72 720 Td
+(DATA DEMO / KARYA SINTETIS) Tj
+0 -28 Td
+(Implementasi Sistem Monitoring Jaringan Berbasis IoT) Tj
+0 -28 Td
+(Laporan Magang - Non-fiksi) Tj
+0 -28 Td
+(Penulis: Muhammad Fajri \(Demo\)) Tj
+0 -28 Td
+(SIPERPUS-REPO PNL) Tj
+0 -28 Td
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 264 >>
+stream
+BT
+/F1 18 Tf
+72 720 Td
+(Ringkasan) Tj
+0 -28 Td
+(Dokumen sintetis ini mencontohkan laporan teknis.) Tj
+0 -28 Td
+(Sistem memantau status perangkat jaringan melalui sensor IoT.) Tj
+0 -28 Td
+(Seluruh nama perangkat, data, dan hasil merupakan data demo.) Tj
+0 -28 Td
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 270 >>
+stream
+BT
+/F1 18 Tf
+72 720 Td
+(Implementasi) Tj
+0 -28 Td
+(Sensor mengirim metrik ke gateway menggunakan protokol ringan.) Tj
+0 -28 Td
+(Dashboard menampilkan status konektivitas dan peringatan gangguan.) Tj
+0 -28 Td
+(Pengujian dilakukan pada lingkungan simulasi.) Tj
+0 -28 Td
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 243 >>
+stream
+BT
+/F1 18 Tf
+72 720 Td
+(Penutup) Tj
+0 -28 Td
+(Pemantauan terpusat membantu teknisi merespons gangguan lebih cepat.) Tj
+0 -28 Td
+(Dokumen ini hanya digunakan untuk pengujian download PDF.) Tj
+0 -28 Td
+(--- Akhir dokumen demo ---) Tj
+0 -28 Td
+ET
+endstream
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000140 00000 n 
+0000000210 00000 n 
+0000000336 00000 n 
+0000000640 00000 n 
+0000000766 00000 n 
+0000001081 00000 n 
+0000001207 00000 n 
+0000001528 00000 n 
+0000001656 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+1951
+%%EOF
