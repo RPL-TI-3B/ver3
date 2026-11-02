@@ -1,11 +1,13 @@
-import { useState, useEffect, ReactNode } from "react";
-import { View, Hold, Loan, Txn, Student, FineReq, Submission, CircTab, CatalogTab, initialStudents, initialFines, initialSubs, fmtDate, rupiah } from "../data/librarianData";
+import { useState, ReactNode } from "react";
+import { fmtDate, rupiah } from "../data/librarianData";
 import { Icon, Badge, Tabs, Btn, PageHead, Modal, Metric, SideLink, P, card, input, ROW, TIP, NavItem } from "./LibrarianShared";
 import { Book } from "../types";
+import { useBooks } from "../lib/useSupabaseData";
 
 
 export function BookForm({ initial, onSave, onClose }: { initial?: Book; onSave: (b: Book) => void; onClose: () => void }) {
-  const [f, setF] = useState<Book>(initial ?? { title: "", author: "", shelf: "", stock: 1, department: "Teknik Informatika (TIK)", theme: "Algoritma & RPL", cover: "from-forest to-emerald-800", code: `BARU / ${Date.now().toString().slice(-4)}` });
+  const { topics, departments } = useBooks();
+  const [f, setF] = useState<Book>(initial ?? { id: "", title: "", author: "", shelf: "", stock: 1, department: "Teknologi Informasi dan Komputer", theme: "Rekayasa Perangkat Lunak", mainTheme: "Ilmu-ilmu Terapan", cover: "", code: `BARU / ${Date.now().toString().slice(-4)}`, year: new Date().getFullYear() });
   const set = <K extends keyof Book>(k: K, v: Book[K]) => setF((p) => ({ ...p, [k]: v }));
   const field = (label: string, el: ReactNode) => <label className="block"><span className="mb-1.5 block text-xs font-semibold text-muted">{label}</span>{el}</label>;
   return (
@@ -25,6 +27,9 @@ export function BookForm({ initial, onSave, onClose }: { initial?: Book; onSave:
           </div>
         ))}
         {field("Lokasi Rak", <input className={`${input} font-mono`} placeholder="B-04 / TIK" value={f.shelf} onChange={(e) => set("shelf", e.target.value)} />)}
+        {field("Jurusan", <select className={input} value={f.department} onChange={(e) => set("department", e.target.value)}>{(departments.length ? departments : ["Teknologi Informasi dan Komputer", "Teknik Elektro", "Teknik Mesin", "Teknik Kimia", "Teknik Sipil", "Bisnis"]).map((name) => <option key={name}>{name}</option>)}</select>)}
+        {field("Tema Utama", <select className={input} value={f.mainTheme ?? ""} onChange={(e) => { set("mainTheme", e.target.value); set("theme", ""); set("topicId", undefined); }}>{topics.filter((topic) => !topic.parentId).map((topic) => <option key={topic.id}>{topic.name}</option>)}</select>)}
+        {field("Subtema", <select className={input} value={f.theme} onChange={(e) => { const topic = topics.find((item) => item.name === e.target.value); set("theme", e.target.value); set("topicId", topic?.id); }}>{topics.filter((topic) => topic.parentId && topic.parentName === f.mainTheme).map((topic) => <option key={topic.id}>{topic.name}</option>)}</select>)}
       </div>
       <div className="mt-6 flex justify-end gap-3">
         <Btn kind="outline" onClick={onClose}>Batal</Btn>

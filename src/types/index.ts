@@ -30,17 +30,32 @@ export type IconName =
   | "user";
 
 export type Book = {
+  id: string;
   title: string;
   author: string;
   shelf: string;
   stock: number;
   department: string;
   theme: string;
+  mainTheme?: string;
+  departmentId?: string;
+  topicId?: string;
   cover: string;
   code: string;
+  year: number;
+};
+
+export type BookTopic = {
+  id: string;
+  name: string;
+  slug: string;
+  parentId: string | null;
+  parentName: string | null;
+  sortOrder: number;
 };
 
 export type RepoItem = {
+  id: string;
   title: string;
   author: string;
   department: string;
@@ -48,4 +63,8 @@ export type RepoItem = {
   category: "nonfiction" | "fiction";
   type: string;
   accent: string;
+  year: string;
+  pdfUrl: string | null;
+  downloadsCount: number;
+  badge?: string;
 };

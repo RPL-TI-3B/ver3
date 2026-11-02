@@ -9,6 +9,9 @@ import { Circulation } from "./pages/StudentCirculation";
 import { Fines } from "./pages/StudentFines";
 import { QrisMock } from "./pages/QrisMock";
 import { Icon, Badge, Modal, UploadModal, QrisModal, Cover, Title, Stat, useCountdown, btnPrimary, btnSecondary, btnGhost, card, FINE_RATE, rupiah } from "./pages/StudentShared";
+import { UserProfile } from "./lib/authContext";
+import { Book, RepoItem } from "./types";
+import { supabase } from "./lib/supabase";
 
 
 
@@ -57,7 +60,7 @@ function SideLink({ item, active, collapsed, onClick }: { item: NavItem; active:
 
 
 
-export default function StudentPortal({ onLogout }: { onLogout?: () => void }) {
+export default function StudentPortal({ profile, onLogout }: { profile: UserProfile; onLogout: () => Promise<void> }) {
   const [activeView, setActiveView] = useState<View>("dashboard");
   const [open, setOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -70,8 +73,20 @@ export default function StudentPortal({ onLogout }: { onLogout?: () => void }) {
     return () => clearTimeout(t);
   }, [toast]);
 
-  const handleStudentReserve = () => setToast("Reservasi berhasil. Tiket hold 3 hari tersedia di Dashboard Utama.");
-  const handleStudentDownload = () => setToast("Unduhan PDF dimulai. Tercatat di Riwayat Unduhan Anda.");
+  const handleStudentReserve = async (book: Book) => {
+    const { error } = await supabase.rpc("reserve_book", { book_id: book.id });
+    setToast(error ? error.message : "Reservasi berhasil. Tiket hold 3 hari tersedia di Dashboard Utama.");
+  };
+  const handleStudentDownload = async (item: RepoItem) => {
+    if (!item.pdfUrl) return setToast("Berkas PDF belum tersedia.");
+    const { data, error } = await supabase.storage.from("repository-files").createSignedUrl(item.pdfUrl, 300);
+    if (error || !data?.signedUrl) return setToast(error?.message ?? "Berkas tidak dapat diakses.");
+    const downloadUrl = new URL(data.signedUrl);
+    downloadUrl.searchParams.set("download", `${item.title.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}.pdf`);
+    const { error: recordError } = await supabase.rpc("record_download", { item_id: item.id });
+    if (recordError) return setToast(recordError.message);
+    window.open(downloadUrl.toString(), "_blank", "noopener,noreferrer");
+  };
 
   const dashboard: NavItem = { key: "dashboard", label: "Dashboard", icon: "grid" };
   const catalog: NavItem[] = [
@@ -126,8 +141,8 @@ export default function StudentPortal({ onLogout }: { onLogout?: () => void }) {
         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-emerald-950/10 bg-canvas/85 px-4 py-3 backdrop-blur md:px-8">
           <button onClick={() => setOpen(true)} className="rounded-lg p-2 hover:bg-white lg:hidden" aria-label="Buka menu"><Icon d="menu" /></button>
           <div className="flex items-center gap-3">
-            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">AM</div>
-            <div className="leading-tight"><p className="text-sm font-bold">Halo, Ammar</p><p className="text-xs text-muted">Teknik Informatika</p></div>
+            <div className="grid size-10 place-items-center rounded-full bg-forest text-sm font-bold text-accent">{(profile.full_name || "?").split(" ").map((word) => word[0]).slice(0, 2).join("").toUpperCase()}</div>
+            <div className="leading-tight"><p className="text-sm font-bold">Halo, {profile.full_name}</p><p className="text-xs text-muted">{profile.nim ?? "Mahasiswa"} · {profile.prodi ?? "PNL"}</p></div>
           </div>
           <button className="relative ml-auto rounded-xl border border-emerald-950/10 bg-white p-2.5" aria-label="Notifikasi">
             <Icon d="bell" className="size-5" /><span className="absolute right-2 top-2 size-2 rounded-full bg-danger ring-2 ring-white" />
