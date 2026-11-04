@@ -62,7 +62,16 @@ export default function LibrarianPortal({ profile, onLogout }: { profile: UserPr
     const { data, error } = await supabase.from("repository_items").select("id,title,type,category,file_size,pdf_url,profiles(full_name,prodi)").eq("status", "pending_curation").order("created_at", { ascending: false });
     if (error) setSubsError(error.message);
     const rows = (data ?? []) as unknown as Array<{ id: string; title: string; type: string; category: "fiction" | "nonfiction"; file_size: string | null; pdf_url: string | null; profiles: Array<{ full_name: string; prodi: string | null }> | null }>;
-    setSubs(rows.map((item) => { const author = item.profiles?.[0]; return { id: item.id, title: item.title, author: author?.full_name ?? "Mahasiswa", major: author?.prodi ?? "PNL", size: item.file_size ?? "Ukuran tidak tersedia", category: item.category === "fiction" ? "Fiksi" : "Non-Fiksi", type: item.type, pdfUrl: item.pdf_url }; }));
+    const mapped: Submission[] = await Promise.all(rows.map(async (item) => {
+      let pdfUrl: string | null = null;
+      if (item.pdf_url) {
+        const { data: signed } = await supabase.storage.from("repository-files").createSignedUrl(item.pdf_url, 3600);
+        pdfUrl = signed?.signedUrl ?? null;
+      }
+      const author = item.profiles?.[0];
+      return { id: item.id, title: item.title, author: author?.full_name ?? "Mahasiswa", major: author?.prodi ?? "PNL", size: item.file_size ?? "Ukuran tidak tersedia", category: item.category === "fiction" ? "Fiksi" : "Non-Fiksi", type: item.type, pdfUrl };
+    }));
+    setSubs(mapped);
     setSubsLoading(false);
   };
 
