@@ -95,6 +95,7 @@ export default function StudentPortal({ profile, onLogout }: { profile: UserProf
   ];
   const others: NavItem[] = [
     { key: "circulation", label: "Sirkulasi", icon: "clock" },
+    { key: "fines", label: "Denda & QRIS", icon: "receipt" },
     { key: "erepo_student", label: "Unggah Karya", icon: "file" },
   ];
   const link = (item: NavItem) => (
@@ -153,6 +154,7 @@ export default function StudentPortal({ profile, onLogout }: { profile: UserProf
           {activeView === "catalog_books" && <BooksView onReserve={handleStudentReserve} />}
           {activeView === "catalog_erepo" && <RepositoryView onDownload={handleStudentDownload} />}
           {activeView === "circulation" && <Circulation />}
+          {activeView === "fines" && <Fines />}
           {activeView === "erepo_student" && <ERepo />}
         </main>
       </div>

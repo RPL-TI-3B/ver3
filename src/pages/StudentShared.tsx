@@ -31,6 +31,8 @@ export const P = {
   chevL: "M15 6l-6 6 6 6",
   chevR: "M9 6l6 6-6 6",
   pin: "M12 21s-7-6.2-7-12a7 7 0 1 1 14 0c0 5.8-7 12-7 12zM12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  receipt: "M5 3h14v18l-2.5-1.5L14 21l-2-1.5L10 21l-2.5-1.5L5 21zM9 8h6M9 12h6M9 16h3",
+  eye: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
 };
 export function Icon({ d, className = "size-5" }: { d: keyof typeof P; className?: string }) {
   return (
